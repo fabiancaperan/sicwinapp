@@ -24,8 +24,6 @@ namespace core.UseCase.ConvertData
             foreach (string line in lines)
             {
                 var parts = SplitInParts(line,123).ToList();
-                var cols = line.Split(':');
-
                 DataRow dr = tbl.NewRow();
                 for (int i = 0; i < parts.Count(); i++)
                 {
