@@ -1,8 +1,10 @@
 ﻿using core.Entities.ConvertData;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace core.UseCase.ConvertData
@@ -10,40 +12,38 @@ namespace core.UseCase.ConvertData
     public class ConvertFileTextToSapModel
     {
 
-        public List<sapModel> build(string filePath, int numberOfColumns)
+        public List<SapModel> build(string filePath)
         {
-            DataTable tbl = new DataTable();
-
-            for (int col = 0; col < 3; col++)
-                tbl.Columns.Add(new DataColumn("Column" + (col + 1).ToString()));
-
-
+            List<SapModel> sap = new List<SapModel>();
             string[] lines = System.IO.File.ReadAllLines(filePath);
-            
-            
+
             foreach (string line in lines)
             {
-                var parts = SplitInParts(line,123).ToList();
-                DataRow dr = tbl.NewRow();
-                for (int i = 0; i < parts.Count(); i++)
-                {
-                    dr[i] = parts[i];
-                }
-                tbl.Rows.Add(dr);
+                sap.Add(buildSap(line));
             }
 
-            return null;
+            return sap;
         }
 
-        private IEnumerable<String> SplitInParts(String s, Int32 partLength)
+        private SapModel buildSap(string line)
         {
-            if (s == null)
-                throw new ArgumentNullException(nameof(s));
-            if (partLength <= 0)
-                throw new ArgumentException("Part length has to be positive.", nameof(partLength));
+            SapModel sapModel = new SapModel();
+            sapModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            int i = 0;
+            foreach (PropertyInfo prop in sapModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                var length = getMaxLength(prop);
+                prop.SetValue(sapModel, line.Substring(i, length).Trim(), null);
+                ;
+                i += length;
+            }
+            return sapModel;
+        }
 
-            for (var i = 0; i < s.Length; i += partLength)
-                yield return s.Substring(i, Math.Min(partLength, s.Length - i));
+        private int getMaxLength(PropertyInfo propInfo)
+        {
+            MaxLengthAttribute attrMaxLength = (MaxLengthAttribute)propInfo.GetCustomAttributes(typeof(MaxLengthAttribute), false).FirstOrDefault();
+            return attrMaxLength != null ? attrMaxLength.Length : 0;
         }
     }
 }

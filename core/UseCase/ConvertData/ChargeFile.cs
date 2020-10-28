@@ -1,4 +1,5 @@
-﻿using System;
+﻿using core.Entities.ConvertData;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,19 +7,19 @@ namespace core.UseCase.ConvertData
 {
     public class ChargeFile
     {
-        public bool build(string path) {
-            if (validateFormat(path))
-            {
-                // leer archivo
-                //convertir archivo
-                //guardar archivo
+        public Boolean build(string path) {
+            if (validateFormat(path)) {
+                List<SapModel> sapModels=new ConvertFileTextToSapModel().build(path);
             }
-     
-          
+            //Validar Path formato
+            // leer archivo
+            //convertir archivo
+            //guardar archivo
+
             return true;
         }
 
-        private bool validateFormat(string path) {
+        private Boolean validateFormat(string path) {
             //validar extension .txt
             return true;
         }

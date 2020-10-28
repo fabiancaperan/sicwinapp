@@ -5,7 +5,7 @@ using System.Text;
 
 namespace core.Entities.ConvertData
 {
-    public class sapModel
+    public class SapModel
     {
         [Display(Name = "Tipo Registro")]
         [MaxLength(2)]
