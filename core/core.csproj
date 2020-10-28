@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+<<<<<<< Updated upstream
   <ItemGroup>
     <Folder Include="Repository\" />
   </ItemGroup>
@@ -12,4 +13,6 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
+=======
+>>>>>>> Stashed changes
 </Project>

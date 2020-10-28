@@ -35,8 +35,14 @@ namespace WinApp
         {
             try
             {
-                
-                var ret = new ChargeFile().build(textBox1.Text);
+                if (textBox1.Text != "")
+                {
+                    var ret = new ChargeFile().build(textBox1.Text);
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un archivo para cargar");
+                }
 
 
             }
