@@ -15,7 +15,7 @@ namespace core.UseCase.ConvertData
                 List<SapModel> sapModels=new ConvertFileTextToSapModel().build(path);
             }
             lst = new SicContext().getAll();
-            new GenerateCarrefourFile().build(lst);
+            new GenerateCarrefourFile().buildstring(lst);
             return true;
         }
 
