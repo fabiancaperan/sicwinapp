@@ -1,4 +1,6 @@
 ﻿using core.Entities.ConvertData;
+using core.Repository.Sic;
+using core.UseCase.Carrefour;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,14 +10,12 @@ namespace core.UseCase.ConvertData
     public class ChargeFile
     {
         public Boolean build(string path) {
+            var lst =new SicContext().getAll();
             if (validateFormat(path)) {
                 List<SapModel> sapModels=new ConvertFileTextToSapModel().build(path);
             }
-            //Validar Path formato
-            // leer archivo
-            //convertir archivo
-            //guardar archivo
-
+            lst = new SicContext().getAll();
+            new GenerateCarrefourFile().build(lst);
             return true;
         }
 

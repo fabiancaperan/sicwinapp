@@ -7,14 +7,16 @@ namespace core.Entities.ConvertData
 {
     public class SapModel
     {
+        [Key]
+        public int Id { get; set; }
         [Display(Name = "Tipo Registro")]
         [MaxLength(2)]
         public string TipoRegistro { get; set; }
-
+        
         [Display(Name = "Fecha Compra")]
         [MaxLength(8)]
         public string FechaCompra { get; set; }
-
+        
         [Display(Name = "Fecha Compra")]
         [MaxLength(13)]
         public string Nit { get; set; }
@@ -59,7 +61,7 @@ namespace core.Entities.ConvertData
         [Display(Name = "Tipo_Mensaje")]
         [MaxLength(4)]
         public string Tipo_Mensaje { get; set; }
-
+        
         [Display(Name = "Cod_Trans")]
         [MaxLength(6)]
         public string Cod_Trans { get; set; }

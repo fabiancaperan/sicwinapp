@@ -1,4 +1,6 @@
 ﻿using core.Entities.ConvertData;
+using core.Repository;
+using core.Repository.Sic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,29 +13,39 @@ namespace core.UseCase.ConvertData
 {
     public class ConvertFileTextToSapModel
     {
+        const int _lengthLine = 369;
 
         public List<SapModel> build(string filePath)
         {
             List<SapModel> sap = new List<SapModel>();
             string[] lines = System.IO.File.ReadAllLines(filePath);
-
-            foreach (string line in lines)
+            for (int i = 0; i < lines.Length; i++)
             {
-                sap.Add(buildSap(line));
+                    sap.Add(buildSap(lines[i],i+1));
             }
-
+            new SicContext().save(sap);
             return sap;
         }
 
-        private SapModel buildSap(string line)
+        private SapModel buildSap(string line,int id)
         {
+            var dif = 0;
+            if (line.Length != _lengthLine)
+            {
+                dif = _lengthLine - line.Length;
+
+            }
             SapModel sapModel = new SapModel();
+            sapModel.Id = id;
             sapModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             int i = 0;
             foreach (PropertyInfo prop in sapModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-                var length = getMaxLength(prop);
-                prop.SetValue(sapModel, line.Substring(i, length).Trim(), null);
+                if (prop.Name == "Id")
+                    continue;
+                
+                var length = dif != 0 && prop.Name == "NombreCadena" ? getMaxLength(prop) - dif : getMaxLength(prop);
+                prop.SetValue(sapModel, line.Substring(i, length), null);
                 ;
                 i += length;
             }
