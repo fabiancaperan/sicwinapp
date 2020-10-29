@@ -13,9 +13,9 @@ namespace core.UseCase.ConvertData
             var lst =new SicContext().getAll();
             if (validateFormat(path)) {
                 List<SapModel> sapModels=new ConvertFileTextToSapModel().build(path);
+                new SicContext().save(sapModels);
             }
-            lst = new SicContext().getAll();
-            new GenerateCarrefourFile().buildstring(lst);
+            
             return true;
         }
 

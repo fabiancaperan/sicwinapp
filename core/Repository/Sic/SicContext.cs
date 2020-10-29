@@ -15,6 +15,8 @@ namespace core.Repository.Sic
             {
                 // Create
                 Console.WriteLine("Inserting a new blog");
+                if (db.sicModels.Any())
+                    db.RemoveRange(db.sicModels);
                 db.AddRange(lstSic);
                 
                 return db.SaveChanges() > 0;

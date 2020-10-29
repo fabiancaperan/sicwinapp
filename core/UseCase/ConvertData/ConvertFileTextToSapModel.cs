@@ -23,7 +23,6 @@ namespace core.UseCase.ConvertData
             {
                     sap.Add(buildSap(lines[i],i+1));
             }
-            new SicContext().save(sap);
             return sap;
         }
 

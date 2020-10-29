@@ -35,21 +35,29 @@ namespace WinApp
         {
             try
             {
+                button2.Enabled = false;
+                Cursor = Cursors.WaitCursor; // change cursor to hourglass type
+                
+                
                 if (textBox1.Text != "")
                 {
                     var ret = new ChargeFile().build(textBox1.Text);
+                    MessageBox.Show("Se ha cargado correctamente");
                 }
                 else
                 {
                     MessageBox.Show("Debe seleccionar un archivo para cargar");
                 }
-
+                Cursor = Cursors.Arrow; // change cursor to normal type
+                button2.Enabled = true;
 
             }
             catch (SecurityException ex)
             {
                 MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
                 $"Details:\n\n{ex.StackTrace}");
+                Cursor = Cursors.Arrow; // change cursor to normal type
+                button2.Enabled = true;
             }
             //ProcessStartInfo psi = new ProcessStartInfo
             //{

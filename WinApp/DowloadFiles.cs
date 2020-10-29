@@ -37,12 +37,15 @@ namespace WinApp
             try
             {
                 var rute = textBox1.Text;
-                List<string> subfolder = checkedListBox1.CheckedItems.OfType<string>().ToList();
+                List<core.Repository.Types.CommerceType> subfolder = checkedListBox1.CheckedItems.OfType<core.Repository.Types.CommerceType>().ToList();
                 if(rute != "")
                 {
                     if(subfolder.Count()!=0)
                     {
+                        button2.Enabled = false;
+                        Cursor = Cursors.WaitCursor; // change cursor to hourglass type
                         var res = new DownloadFiles().build(rute, subfolder);
+                        MessageBox.Show("Se ha generado con Éxito");
                     }
                     else
                     {
@@ -53,12 +56,16 @@ namespace WinApp
                 {
                     MessageBox.Show("No a seleccionado una ruta");
                 }
-                
+                Cursor = Cursors.Arrow; // change cursor to normal type
+                button2.Enabled = true;
+
             }
             catch (SecurityException ex)
             {
                 MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
                 $"Details:\n\n{ex.StackTrace}");
+                button2.Enabled = true;
+                Cursor = Cursors.Arrow; // change cursor to normal type
             }
         }
 

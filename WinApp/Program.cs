@@ -19,7 +19,7 @@ namespace WinApp
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new chargeFile());
             //Application.Run(new login());
-            //Application.Run(new DowloadFiles());
+            Application.Run(new DowloadFiles());
         }
     }
 }
