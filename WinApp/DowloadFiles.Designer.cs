@@ -1,6 +1,6 @@
 ﻿namespace WinApp
 {
-    partial class Form2
+    partial class DowloadFiles
     {
         /// <summary>
         /// Required designer variable.
@@ -42,13 +42,14 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Seleccione Carpeta Destino";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(136, 78);
+            this.textBox1.Location = new System.Drawing.Point(127, 80);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(310, 23);
-            this.textBox1.TabIndex = 1;
+            this.textBox1.Size = new System.Drawing.Size(293, 23);
+            this.textBox1.TabIndex = 5;
             // 
             // button2
             // 
@@ -66,31 +67,22 @@
             // 
             // checkedListBox1
             // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
-            "Comercios",
-            "Éxito",
-            "Falabella",
-            "Cencosud",
-            "Olímpica",
-            "Corresponsales Bancarios",
-            "Tarjetas Privadas"});
-            this.checkedListBox1.Location = new System.Drawing.Point(165, 200);
+            this.checkedListBox1.Location = new System.Drawing.Point(127, 163);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(214, 166);
-            this.checkedListBox1.TabIndex = 4;
+            this.checkedListBox1.Size = new System.Drawing.Size(293, 220);
+            this.checkedListBox1.TabIndex = 0;
             // 
-            // Form2
+            // DowloadFiles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
-            this.ClientSize = new System.Drawing.Size(815, 450);
+            this.ClientSize = new System.Drawing.Size(1008, 450);
             this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
-            this.Name = "Form2";
+            this.Name = "DowloadFiles";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
