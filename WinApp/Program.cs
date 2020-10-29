@@ -17,9 +17,9 @@ namespace WinApp
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new chargeFile());
+            Application.Run(new chargeFile());
             //Application.Run(new login());
-            Application.Run(new DowloadFiles());
+            //Application.Run(new DowloadFiles());
         }
     }
 }
