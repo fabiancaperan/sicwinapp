@@ -7,6 +7,7 @@ namespace core.Entities.MasterData
 {
     public class EntidadesModel
     {
+        [Key]
         [Display(Name = "fiid")]
         [MaxLength(4)]
         public string fiid { get; set; }

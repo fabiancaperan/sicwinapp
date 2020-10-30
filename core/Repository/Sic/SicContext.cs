@@ -15,8 +15,8 @@ namespace core.Repository.Sic
             {
                 // Create
                 Console.WriteLine("Inserting a new blog");
-                if (db.sicModels.Any())
-                    db.RemoveRange(db.sicModels);
+                if (db.sap.Any())
+                    db.RemoveRange(db.sap);
                 db.AddRange(lstSic);
                 
                 return db.SaveChanges() > 0;
@@ -27,7 +27,7 @@ namespace core.Repository.Sic
         {
             using (var db = new ServiceContext())
             {
-                return db.sicModels.ToList();
+                return db.sap.ToList();
             }
         }
     }

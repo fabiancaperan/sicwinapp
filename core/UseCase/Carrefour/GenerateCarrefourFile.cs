@@ -8,7 +8,7 @@ namespace core.UseCase.Carrefour
 {
     public class GenerateCarrefourFile
     {
-        private const string _nit = "8300256388";
+        private const string _nit = "9001551071";
         private const string _con = "150";
         private const string _blank = "      ";
         private const string _tipo = "00";
@@ -62,13 +62,13 @@ namespace core.UseCase.Carrefour
         public List<String> buildstring(List<SapModel> lstSap)
         {
             var lst = lstSap
-            //.Where(s =>
-            //s.Nit == _nit &&
-            //_franquicias.Contains((s.Id_Fran_Hija + s.Filler_Fran_Hija)) &&
-            //s.Cod_Trans.Substring(0, 2) == _codTrans  &&
-            //Convert.ToInt16(s.Cod_Resp.Substring(1, 3)) >= _codResMin &&
-            //Convert.ToInt16(s.Cod_Resp.Substring(1, 3)) <= _codResMax 
-            //)
+            .Where(s =>
+            s.Nit.Trim() == _nit &&
+            _franquicias.Contains((s.Id_Fran_Hija + s.Filler_Fran_Hija)) &&
+            s.Cod_Trans.Substring(0, 2) == _codTrans &&
+            Convert.ToInt16(s.Cod_Resp.Substring(0, 3)) >= _codResMin &&
+            Convert.ToInt16(s.Cod_Resp.Substring(0, 3)) <= _codResMax
+            )
 
             .Select(s => 
             

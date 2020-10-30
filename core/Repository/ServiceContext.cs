@@ -1,4 +1,5 @@
 ﻿using core.Entities.ConvertData;
+using core.Entities.MasterData;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,8 @@ namespace core.Repository
 {
     public class ServiceContext : DbContext
     {
-        public DbSet<SapModel> sicModels { get; set; }
+        public DbSet<SapModel> sap { get; set; }
+        public DbSet<EntidadesModel> entidades { get; set; }
         //public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

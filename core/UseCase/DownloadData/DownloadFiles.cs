@@ -14,9 +14,9 @@ namespace core.UseCase.DownloadData
         {
             foreach (var item in subfolder)
             {
-                string pathString = System.IO.Path.Combine(rute, item.ToString());
-                System.IO.Directory.CreateDirectory(pathString);
-                pathString = System.IO.Path.Combine(pathString, item.ToString());
+                string pathString = Path.Combine(rute, item.ToString());
+                Directory.CreateDirectory(pathString);
+                pathString = Path.Combine(pathString, item.ToString());
                 List<SapModel> lstSap = new SicContext().getAll();
                 List<String> filelst = new GenerateCarrefourFile().buildstring(lstSap);
 
