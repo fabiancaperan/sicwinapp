@@ -3,6 +3,7 @@ using core.Entities.MasterData;
 using core.Repository;
 using core.Repository.Sic;
 using core.UseCase.Carrefour;
+using core.UseCase.Comercios;
 using core.UseCase.Olimpica;
 using System;
 using System.Collections.Generic;
@@ -57,14 +58,18 @@ namespace core.UseCase.DownloadData
         private List<string> getDataFile(Repository.Types.CommerceType item, List<SapModel> lstSap)
         {
             List<string> filelst;
+            List<EntidadesModel> lstEntidades = _db.entidades.ToList();
             switch (item)
             {
                 case Repository.Types.CommerceType.Cencosud:
                     filelst = new GenerateCarrefourFile().buildstring(lstSap);
                     break;
                 case Repository.Types.CommerceType.Olimpica:
-                    List<EntidadesModel> lstEntidades = _db.entidades.ToList();
                     filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
+                    break;
+                case Repository.Types.CommerceType.Comercios:
+                    
+                    filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
                     break;
                 default:
                     filelst = null;
