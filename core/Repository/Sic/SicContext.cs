@@ -11,7 +11,7 @@ namespace core.Repository.Sic
     {
         public bool save(List<SapModel> lstSic)
         {
-            using (var db = new ServiceContext())
+            using (var db = new CacheContext())
             {
                 // Create
                 Console.WriteLine("Inserting a new blog");
@@ -25,7 +25,7 @@ namespace core.Repository.Sic
 
         public List<SapModel> getAll()
         {
-            using (var db = new ServiceContext())
+            using (var db = new CacheContext())
             {
                 return db.sap.ToList();
             }

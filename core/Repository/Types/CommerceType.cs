@@ -6,7 +6,8 @@ namespace core.Repository.Types
 {
     public enum CommerceType
     {
-        Cencosud
+        Cencosud,
+        Olimpica
         
     }
 }

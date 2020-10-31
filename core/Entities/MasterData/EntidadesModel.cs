@@ -18,6 +18,6 @@ namespace core.Entities.MasterData
 
         [Display(Name = "nit")]
         [MaxLength(25)]
-        public int? nit { get; set; }
+        public string nit { get; set; }
     }
 }

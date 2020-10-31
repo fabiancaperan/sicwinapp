@@ -9,7 +9,7 @@ namespace core.UseCase.ConvertData
 {
     public class ChargeFile
     {
-        public Boolean build(string path) {
+        public bool build(string path) {
             var lst =new SicContext().getAll();
             if (validateFormat(path)) {
                 List<SapModel> sapModels=new ConvertFileTextToSapModel().build(path);
@@ -19,7 +19,7 @@ namespace core.UseCase.ConvertData
             return true;
         }
 
-        private Boolean validateFormat(string path) {
+        private bool validateFormat(string path) {
             //validar extension .txt
             return true;
         }

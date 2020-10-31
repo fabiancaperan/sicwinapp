@@ -1,37 +1,77 @@
 ﻿using core.Entities.ConvertData;
+using core.Entities.MasterData;
+using core.Repository;
 using core.Repository.Sic;
 using core.UseCase.Carrefour;
+using core.UseCase.Olimpica;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace core.UseCase.DownloadData
 {
     public class DownloadFiles
     {
-        public bool build(string rute, List<Repository.Types.CommerceType> subfolder)
+        private readonly dbContext _db;
+        public DownloadFiles()
         {
-            foreach (var item in subfolder)
-            {
-                string pathString = Path.Combine(rute, item.ToString());
-                Directory.CreateDirectory(pathString);
-                pathString = Path.Combine(pathString, item.ToString());
-                List<SapModel> lstSap = new SicContext().getAll();
-                List<String> filelst = new GenerateCarrefourFile().buildstring(lstSap);
+            _db = new dbContext();
+        }
+        public bool build(string rute, List<Repository.Types.CommerceType> commerceTypes)
+        {
+            validateInitDatabase();
 
-                // Create a FileStream with mode CreateNew  
-                FileStream stream = new FileStream(pathString, FileMode.OpenOrCreate);
-                // Create a StreamWriter from FileStream  
-                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+            foreach (var commerceType in commerceTypes)
+            {
+                string pathString = Path.Combine(rute, commerceType.ToString());
+                Directory.CreateDirectory(pathString);
+                pathString = Path.Combine(pathString, commerceType.ToString());
+                List<SapModel> lstSap = new SicContext().getAll();
+
+                List<string> filelst = getDataFile(commerceType, lstSap);
+                if (filelst != null)
                 {
-                    filelst.ForEach(s =>writer.WriteLine(s));
+                    FileStream stream = new FileStream(pathString, FileMode.OpenOrCreate);
+                    using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+                    {
+                        filelst.ForEach(s => writer.WriteLine(s));
+                    }
+
                 }
-                
+
             }
-            
+
             return true;
         }
 
+        private void validateInitDatabase()
+        {
+            if (!_db.entidades.Any())
+            {
+                new InitDatabase.InitDb().initDatabase();
+            }
+        }
+
+        private List<string> getDataFile(Repository.Types.CommerceType item, List<SapModel> lstSap)
+        {
+            List<string> filelst;
+            switch (item)
+            {
+                case Repository.Types.CommerceType.Cencosud:
+                    filelst = new GenerateCarrefourFile().buildstring(lstSap);
+                    break;
+                case Repository.Types.CommerceType.Olimpica:
+                    List<EntidadesModel> lstEntidades = _db.entidades.ToList();
+                    filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
+                    break;
+                default:
+                    filelst = null;
+                    break;
+            }
+
+            return filelst;
+        }
     }
 }
