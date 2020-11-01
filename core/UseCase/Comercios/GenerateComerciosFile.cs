@@ -46,37 +46,40 @@ namespace core.UseCase.Comercios
                                   j.s.NombreCadena,
                                   d = new StringBuilder()
                                .Append(_format.formato(j.s.Id_Terminal.Substring(0, 16), 16, _A))
-                               .Append(j.s.COD_DANE)
-                               .Append(j.s.FechaTran)
-                               .Append(j.s.Fiid_Emisor)
-                               .Append(j.s.Abrev_Emisor)//FID_EMISOR
-                               .Append(j.s.Num_Tarjeta)
-                               .Append(j.s.Tipo_Mensaje)
-                               .Append(j.s.Cod_Trans)
-                               .Append(j.s.Num_Secuen)
-                               .Append(j.s.Valor)
-                               .Append(j.s.Comision)
-                               .Append(j.s.Retencion)
-                               .Append(j.s.Propina)
-                               .Append(j.s.Num_Autoriza)
-                               .Append(j.s.Nombre_Establ)
-                               .Append(j.s.Cod_Resp)
-                               .Append(j.s.Adquirida_Por)//RED
-                               .Append(j.s.Adquirida_Para)//RED
-                               .Append(j.s.Fiid_Sponsor)
-                               .Append(j.s.Iva)
-                               .Append(j.s.Id_Fran_Hija)//franquicia
-                               .Append(j.s.Filler_Fran_Hija)//franquicia
-                               .Append(j.s.Valor_Liq_Reteica)
-                               .Append(j.s.Cod_RTL)
-                               .Append(j.s.Base_Devol_Iva)
-                               .Append(j.e.nombre)
-                               .Append(j.f.nombre)//SPONSOR
-                               .Append(j.s.RefUniversal)
+                               .Append(_format.formato(j.s.COD_DANE.Substring(0, 8), 8, _A))
+                               .Append(_format.formato(j.s.FechaTran.Substring(0, 8), 8, _A))
+                               .Append(_format.formato(j.s.HoraTran.Substring(0, 6), 6, _A))
+                               .Append(_format.formato(j.s.Fiid_Emisor.Substring(0, 4), 4, _A))
+                               .Append(_format.formato(j.s.Abrev_Emisor.Substring(0, 3), 3, _A))//FID_EMISOR
+                               .Append(_format.formato(j.s.Num_Tarjeta.Substring(0, 4), 4, _N))
+                               .Append(_format.formato(j.s.Tipo_Mensaje.Substring(0, 4), 4, _N))
+                               .Append(_format.formato(j.s.Cod_Trans.Substring(0, 6), 6, _N))
+                               .Append(_format.formato(j.s.Num_Secuen.Substring(0, 12), 12, _N))
+                               .Append(_format.formato(j.s.Valor.Substring(0, 12), 12, _N))
+                               .Append(_format.formato(j.s.Comision.Substring(0, 8), 8, _N))
+                               .Append(_format.formato(j.s.Retencion.Substring(0, 8), 8, _N))
+                               .Append(_format.formato(j.s.Propina.Substring(0, 8), 8, _N))
+                               .Append(_format.formato(j.s.Num_Autoriza.Substring(0, 6), 6, _A))
+                               .Append(_format.formato(j.s.Nombre_Establ.Substring(0, 19), 19, _A))
+                               .Append(_format.formato(j.s.Cod_Resp.Substring(0, 4), 4, _N))
+                               //.Append(j.s.Adquirida_Por)//RED
+                               //.Append(j.s.Adquirida_Para)//RED
+                               .Append(_format.formato((j.s.Adquirida_Por + j.s.Adquirida_Para).Substring(0, 2), 2, _A))
+                               .Append(_format.formato(j.s.Fiid_Sponsor.Substring(0, 4), 4, _A))
+                               .Append(_format.formato(j.s.Iva.Substring(0, 8), 8, _N))
+                               //.Append(j.s.Id_Fran_Hija)//franquicia
+                               //.Append(j.s.Filler_Fran_Hija)//franquicia
+                               .Append(_format.formato((j.s.Id_Fran_Hija + j.s.Filler_Fran_Hija).Substring(0, 1), 1, _A))
+                               .Append(_format.formato(j.s.Valor_Liq_Reteica.Substring(0, 8), 8, _A))
+                               .Append(_format.formato(j.s.Cod_RTL.Substring(1, 10), 10, _A))
+                               .Append(_format.formato(j.s.Base_Devol_Iva.Substring(0, 12), 12, _N))
+                               .Append(_format.formato(j.e.nombre.Substring(0, 25), 25, _A))
+                               .Append(_format.formato(j.f.nombre.Substring(0, 25), 25, _A))//SPONSOR
+                               .Append(_format.formato(j.s.RefUniversal.Substring(0, 23), 23, _A))
                                .Append((j.s.Adquirida_Por + j.s.Adquirida_Por).Substring(0, 1) == _2 ? _02 : _01)
-                               .Append(j.s.ConvBonos)
-                               .Append(j.s.TextoAdicional)
-                               .Append(j.s.Convtrack)//MICOMPRA
+                               .Append(_format.formato(j.s.ConvBonos.Substring(0, 4), 4, _N))
+                               .Append(_format.formato(j.s.TextoAdicional.Substring(0, 25), 25, _A))
+                               .Append(_format.formato(j.s.Convtrack.Substring(0, 5), 5, _N))//MICOMPRA
                                .ToString()
                               }
                               ).GroupBy(s => s.Cod_RTL)
