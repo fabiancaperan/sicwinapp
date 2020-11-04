@@ -1,12 +1,15 @@
-﻿using core.Entities.ConvertData;
+﻿using core.Entities.ComerciosData;
+using core.Entities.ConvertData;
 using core.Entities.MasterData;
 using core.Repository;
 using core.Repository.Sic;
+using core.Repository.Types;
 using core.UseCase.Carrefour;
 using core.UseCase.Comercios;
 using core.UseCase.Olimpica;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,30 +23,69 @@ namespace core.UseCase.DownloadData
         {
             _db = new dbContext();
         }
-        public bool build(string rute, List<Repository.Types.CommerceType> commerceTypes)
+        public bool build(string rute, List<CommerceType> commerceTypes)
         {
             validateInitDatabase();
 
             foreach (var commerceType in commerceTypes)
             {
-                string pathString = Path.Combine(rute, commerceType.ToString());
-                Directory.CreateDirectory(pathString);
-                pathString = Path.Combine(pathString, commerceType.ToString());
+                
                 List<SapModel> lstSap = new SicContext().getAll();
 
-                List<string> filelst = getDataFile(commerceType, lstSap);
-                if (filelst != null)
+                if (commerceType == CommerceType.Comercios)
                 {
-                    FileStream stream = new FileStream(pathString, FileMode.OpenOrCreate);
-                    using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
-                    {
-                        filelst.ForEach(s => writer.WriteLine(s));
-                    }
-
+                        return ComerciosFile(rute, lstSap);
                 }
+                else
+                {
+                    List<string> filelst = getDataFile(commerceType, lstSap);
+
+                    if (filelst != null)
+                    {
+                        return GenericFile(rute, commerceType, filelst);
+                    }
+                }
+                
 
             }
 
+            return true;
+        }
+        private bool ComerciosFile(string rute, List<SapModel> lstSap) 
+        {
+            List<EntidadesModel> lstEntidades = _db.entidades.ToList();
+            var filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
+            //FileStream stream;
+            foreach (KeyValuePair<string, List<CommerceModel>> item in filelst) 
+            {
+                string path = Path.Combine(rute, CommerceType.Comercios.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
+                Directory.CreateDirectory(path);
+                path = Path.Combine(path, item.Value.FirstOrDefault().Cod_RTL);
+                using (
+                    FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+                    using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+                    {
+                        item.Value.ForEach(s => writer.WriteLine(s.line));
+                    }
+                }
+            }
+                
+            return true;
+        }
+
+        private bool GenericFile(string rute, CommerceType commerceType, List<string> filelst) 
+        {
+            string path = Path.Combine(rute, commerceType.ToString());
+            Directory.CreateDirectory(path);
+            path = Path.Combine(path, "Olimpica");
+
+            FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+            using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+            {
+                filelst.ForEach(s => writer.WriteLine(s));
+            }
             return true;
         }
 
@@ -55,22 +97,22 @@ namespace core.UseCase.DownloadData
             }
         }
 
-        private List<string> getDataFile(Repository.Types.CommerceType item, List<SapModel> lstSap)
+        private List<string> getDataFile(CommerceType item, List<SapModel> lstSap)
         {
             List<string> filelst;
             List<EntidadesModel> lstEntidades = _db.entidades.ToList();
             switch (item)
             {
-                case Repository.Types.CommerceType.Cencosud:
+                case CommerceType.Cencosud:
                     filelst = new GenerateCarrefourFile().buildstring(lstSap);
                     break;
-                case Repository.Types.CommerceType.Olimpica:
+                case CommerceType.Olimpica:
                     filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
                     break;
-                case Repository.Types.CommerceType.Comercios:
+                //case CommerceType.Comercios:
                     
-                    filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
-                    break;
+                //    filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
+                //    break;
                 default:
                     filelst = null;
                     break;
