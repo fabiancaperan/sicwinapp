@@ -8,7 +8,8 @@ namespace core.Repository.Types
     {
         Cencosud,
         Olimpica,
-        Comercios
+        Comercios,
+        Exito
         
     }
 }

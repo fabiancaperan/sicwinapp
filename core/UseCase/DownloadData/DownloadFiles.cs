@@ -6,6 +6,7 @@ using core.Repository.Sic;
 using core.Repository.Types;
 using core.UseCase.Carrefour;
 using core.UseCase.Comercios;
+using core.UseCase.Exito;
 using core.UseCase.Olimpica;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,10 @@ namespace core.UseCase.DownloadData
                 {
                     return ComerciosFile(rute, lstSap, CommerceType.Olimpica);
                 }
+                else if (commerceType == CommerceType.Exito)
+                {
+                    return ComerciosFile(rute, lstSap, CommerceType.Exito);
+                }
                 else
                 {
                     List<string> filelst = getDataFile(commerceType, lstSap);
@@ -68,6 +73,9 @@ namespace core.UseCase.DownloadData
                     break;
                 case CommerceType.Olimpica:
                     filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
+                    break;
+                case CommerceType.Exito:
+                    filelst = new GenerateExitoFile().build(lstSap, lstEntidades);
                     break;
             }
             //FileStream stream;
