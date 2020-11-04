@@ -85,6 +85,8 @@ namespace core.UseCase.Olimpica
                                }
                                ).ToList();
             Dictionary<string, List<CommerceModel>> dict = new Dictionary<string, List<CommerceModel>>();
+            if (!lst.Any())
+                return dict;
             dict.Add(_nit, lst);
             return dict;
         }

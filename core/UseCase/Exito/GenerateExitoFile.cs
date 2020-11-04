@@ -28,8 +28,7 @@ namespace core.UseCase.Exito
 
         public Dictionary<string,List<CommerceModel>> build(List<SapModel> lstSap, List<EntidadesModel> entidades)
         {
-            var lst = lstSap.Where(s => s.Nit.Trim() == _nit.Trim() &&
-                                        s.Cod_Trans.Substring(0,2) != "58")
+            var lst = lstSap
                        .Join(entidades,
                               post => post.Fiid_Emisor,
                               meta => meta.fiid,
@@ -38,6 +37,8 @@ namespace core.UseCase.Exito
                               se => se.s.Fiid_Sponsor,
                               f => f.fiid,
                               (se, f) => new { se.s, se.e, f })
+                        .Where(j => j.s.Nit.Trim() == _nit &&
+                                        j.s.Cod_Trans.Substring(0, 2) != "58")
                               .OrderBy(j => j.s.Cod_RTL)
                               .Select(j => new CommerceModel
                               {
@@ -83,10 +84,13 @@ namespace core.UseCase.Exito
                                .Append(_format.formato(_space, 4, _A))//space
                                .ToString()
                               }
-                              ).GroupBy(s => s.Nit)
-                              .ToDictionary(s => s.Key, s => s.ToList());
-                               
-            return lst;
+                              ).ToList();
+           
+            Dictionary<string, List<CommerceModel>> dict = new Dictionary<string, List<CommerceModel>>();
+            if (!lst.Any())
+                return dict;
+            dict.Add(_nit, lst);
+            return dict;
         }
         public string RemoveSpecialCharacters(string input)
         {

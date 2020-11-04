@@ -14,6 +14,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace core.UseCase.DownloadData
 {
@@ -26,59 +27,35 @@ namespace core.UseCase.DownloadData
         }
         public bool build(string rute, List<CommerceType> commerceTypes)
         {
-            validateInitDatabase();
-
+            List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
+            List<SapModel> lstSap = new SicContext().getAll();
             foreach (var commerceType in commerceTypes)
             {
                 
-                List<SapModel> lstSap = new SicContext().getAll();
-
-                if (commerceType == CommerceType.Comercios)
+                Dictionary<string, List<CommerceModel>> filelst = new Dictionary<string, List<CommerceModel>>();
+                switch (commerceType)
                 {
-                        return ComerciosFile(rute, lstSap, CommerceType.Comercios);
+                    case CommerceType.Comercios:
+                        filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);                        
+                        break;
+                    case CommerceType.Olimpica:
+                        filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
+                        break;
+                    case CommerceType.Exito:
+                        filelst = new GenerateExitoFile().build(lstSap, lstEntidades);
+                        break;
+                    case CommerceType.Cencosud:
+                        filelst = new GenerateCarrefourFile().build(lstSap, lstEntidades);
+                        break;
                 }
-                else if (commerceType == CommerceType.Olimpica)
-                {
-                    return ComerciosFile(rute, lstSap, CommerceType.Olimpica);
-                }
-                else if (commerceType == CommerceType.Exito)
-                {
-                    return ComerciosFile(rute, lstSap, CommerceType.Exito);
-                }
-                else
-                {
-                    List<string> filelst = getDataFile(commerceType, lstSap);
-
-                    if (filelst != null)
-                    {
-                        return GenericFile(rute, commerceType, filelst);
-                    }
-                }
-                
-
+                return ComerciosFile(rute, lstSap, commerceType, filelst);
             }
 
             return true;
         }
-        private bool ComerciosFile(string rute, List<SapModel> lstSap, CommerceType commerceType) 
+        private bool ComerciosFile(string rute, List<SapModel> lstSap, CommerceType commerceType, Dictionary<string, List<CommerceModel>> filelst) 
         {
-            List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
-
-            Dictionary<string, List<CommerceModel>> filelst = new Dictionary<string, List<CommerceModel>>();
-
-            switch (commerceType)
-            {
-                case CommerceType.Comercios:
-                    filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
-                    break;
-                case CommerceType.Olimpica:
-                    filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
-                    break;
-                case CommerceType.Exito:
-                    filelst = new GenerateExitoFile().build(lstSap, lstEntidades);
-                    break;
-            }
-            //FileStream stream;
+           
             foreach (KeyValuePair<string, List<CommerceModel>> item in filelst) 
             {
                 string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());

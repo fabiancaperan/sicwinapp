@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace core.UseCase.ConvertData
 {
@@ -19,10 +20,14 @@ namespace core.UseCase.ConvertData
         {
             List<SapModel> sap = new List<SapModel>();
             string[] lines = System.IO.File.ReadAllLines(filePath);
-            for (int i = 0; i < lines.Length; i++)
+            Parallel.For(0, lines.Length, i => 
             {
-                    sap.Add(buildSap(lines[i],i+1));
-            }
+                sap.Add(buildSap(lines[i], i + 1));
+            });
+            //for (int i = 0; i < lines.Length; i++)
+            //{
+            //        sap.Add(buildSap(lines[i],i+1));
+            //}
             return sap;
         }
 
