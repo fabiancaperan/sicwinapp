@@ -74,51 +74,5 @@ namespace core.UseCase.DownloadData
                 
             return true;
         }
-
-        private bool GenericFile(string rute, CommerceType commerceType, List<string> filelst) 
-        {
-            string path = Path.Combine(rute, commerceType.ToString());
-            Directory.CreateDirectory(path);
-            path = Path.Combine(path, "Olimpica");
-
-            FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
-            using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
-            {
-                filelst.ForEach(s => writer.WriteLine(s));
-            }
-            return true;
-        }
-
-        private void validateInitDatabase()
-        {
-            if (!_db.EntidadesModel.Any())
-            {
-                new InitDatabase.InitDb().initDatabase();
-            }
-        }
-
-        private List<string> getDataFile(CommerceType item, List<SapModel> lstSap)
-        {
-            List<string> filelst;
-            List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
-            switch (item)
-            {
-                case CommerceType.Cencosud:
-                    filelst = new GenerateCarrefourFile().buildstring(lstSap);
-                    break;
-                //case CommerceType.Olimpica:
-                //    filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
-                //    break;
-                //case CommerceType.Comercios:
-                    
-                //    filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
-                //    break;
-                default:
-                    filelst = null;
-                    break;
-            }
-
-            return filelst;
-        }
     }
 }
