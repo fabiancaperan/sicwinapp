@@ -25,8 +25,14 @@ namespace WinApp
 
             if (search.ShowDialog() == DialogResult.OK)
             {
-                textBox1.Text = search.FileName;
-                textBox1.Enabled = true;
+                string ext = Path.GetExtension(search.FileName);
+                if (ext != "")
+                    MessageBox.Show("El archivo no debe tener extensión");
+                else 
+                {
+                    textBox1.Text = search.FileName;
+                    textBox1.Enabled = true;
+                }
             }
 
         }

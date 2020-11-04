@@ -37,6 +37,8 @@ namespace core.UseCase.Exito
                               se => se.s.Fiid_Sponsor,
                               f => f.fiid,
                               (se, f) => new { se.s, se.e, f })
+                        .AsParallel()
+                        .WithDegreeOfParallelism(4)
                         .Where(j => j.s.Nit.Trim() == _nit &&
                                         j.s.Cod_Trans.Substring(0, 2) != "58")
                               .OrderBy(j => j.s.Cod_RTL)
