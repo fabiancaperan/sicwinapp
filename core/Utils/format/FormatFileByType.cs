@@ -40,7 +40,7 @@ namespace core.Utils.format
         private string formatA( int tamaño, string campo)
         {
             var format = campo.Trim();
-            if(format.Length < tamaño)
+            while(format.Length < tamaño)
                 format += _space;
             return format;
         }
@@ -54,7 +54,7 @@ namespace core.Utils.format
                 format = _raya;
                 campo = (_valor * _unonegativo).ToString();
             }
-            if (format.Length < (tamaño - campo.Trim().Length))
+            while(format.Length < (tamaño - campo.Trim().Length))
                 format += _zero;
             format += campo.Trim();
             return format;

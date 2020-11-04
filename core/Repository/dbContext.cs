@@ -1,14 +1,11 @@
 ﻿using core.Entities.MasterData;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace core.Repository
 {
     public class dbContext : DbContext
     {
-        public DbSet<EntidadesModel> entidades { get; set; }
+        public DbSet<EntidadesModel> EntidadesModel { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=sic.db");

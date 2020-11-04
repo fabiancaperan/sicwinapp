@@ -53,7 +53,7 @@ namespace core.UseCase.DownloadData
         }
         private bool ComerciosFile(string rute, List<SapModel> lstSap) 
         {
-            List<EntidadesModel> lstEntidades = _db.entidades.ToList();
+            List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
             var filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
             //FileStream stream;
             foreach (KeyValuePair<string, List<CommerceModel>> item in filelst) 
@@ -91,7 +91,7 @@ namespace core.UseCase.DownloadData
 
         private void validateInitDatabase()
         {
-            if (!_db.entidades.Any())
+            if (!_db.EntidadesModel.Any())
             {
                 new InitDatabase.InitDb().initDatabase();
             }
@@ -100,7 +100,7 @@ namespace core.UseCase.DownloadData
         private List<string> getDataFile(CommerceType item, List<SapModel> lstSap)
         {
             List<string> filelst;
-            List<EntidadesModel> lstEntidades = _db.entidades.ToList();
+            List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
             switch (item)
             {
                 case CommerceType.Cencosud:

@@ -14,8 +14,8 @@ namespace core.Repository.Entidades
             {
                 // Create
                 Console.WriteLine("Inserting a new blog");
-                if (db.entidades.Any())
-                    db.RemoveRange(db.entidades);
+                if (db.EntidadesModel.Any())
+                    db.RemoveRange(db.EntidadesModel);
                 db.AddRange(lstEntidades);
 
                 return db.SaveChanges() > 0;

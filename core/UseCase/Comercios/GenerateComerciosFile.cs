@@ -45,6 +45,7 @@ namespace core.UseCase.Comercios
                                   Cod_RTL = new StringBuilder().Append(j.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.s.NombreCadena.Trim())).Append(j.s.FechaCompra).ToString(),
                                   Nit = j.s.Nit.Trim(),
                                   line = new StringBuilder()
+                               .Append("01")
                                .Append(_format.formato(j.s.Id_Terminal.Substring(0, 16), 16, _A))
                                .Append(_format.formato(j.s.COD_DANE.Substring(0, 8), 8, _A))
                                .Append(_format.formato(j.s.FechaTran.Substring(0, 8), 8, _A))
@@ -61,7 +62,7 @@ namespace core.UseCase.Comercios
                                .Append(_format.formato(j.s.Propina.Substring(0, 8), 8, _N))
                                .Append(_format.formato(j.s.Num_Autoriza.Substring(0, 6), 6, _A))
                                .Append(_format.formato(j.s.Nombre_Establ.Substring(0, 19), 19, _A))
-                               .Append(_format.formato(j.s.Cod_Resp.Substring(0, 3), 3, _N))
+                               .Append(_format.formato(j.s.Cod_Resp.Substring(0, 3), 4, _N))
                                //.Append(j.s.Adquirida_Por)//RED
                                //.Append(j.s.Adquirida_Para)//RED
                                .Append(_format.formato((j.s.Adquirida_Por + j.s.Adquirida_Para).Substring(0, 2), 2, _A))
@@ -80,7 +81,7 @@ namespace core.UseCase.Comercios
                                .Append(_format.formato(j.s.ConvBonos.Substring(0, 4), 4, _N))
                                .Append(_format.formato(j.s.TextoAdicional.Substring(0, 25), 25, _A))
                                .Append(_format.formato(j.s.Convtrack.Substring(0, 5), 5, _N))//MICOMPRA
-                               .Append(_format.formato(_space, 4, _N))//space
+                               .Append(_format.formato(_space, 4, _A))//space
                                .ToString()
                               }
                               ).GroupBy(s => s.Nit)
