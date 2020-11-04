@@ -83,9 +83,10 @@ namespace core.UseCase.Olimpica
                                 .Append(_format.formato(_space, 4, _A))//space
                                 .ToString()
                                }
-                               ).GroupBy(s => s.Nit)
-                              .ToDictionary(s => s.Key, s => s.ToList());
-            return lst;
+                               ).ToList();
+            Dictionary<string, List<CommerceModel>> dict = new Dictionary<string, List<CommerceModel>>();
+            dict.Add(_nit, lst);
+            return dict;
         }
 
         public string RemoveSpecialCharacters(string input)
