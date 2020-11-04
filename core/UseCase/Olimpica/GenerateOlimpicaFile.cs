@@ -80,7 +80,7 @@ namespace core.UseCase.Olimpica
                                 .Append(_format.formato(j.s.ConvBonos.Substring(0, 4), 4, _N))
                                 .Append(_format.formato(j.s.TextoAdicional.Substring(0, 25), 25, _A))
                                 .Append(_format.formato(j.s.Convtrack.Substring(0, 5), 5, _N))//MICOMPRA
-                                .Append(_format.formato(_space, 4, _N))//space
+                                .Append(_format.formato(_space, 4, _A))//space
                                 .ToString()
                                }
                                ).GroupBy(s => s.Nit)
