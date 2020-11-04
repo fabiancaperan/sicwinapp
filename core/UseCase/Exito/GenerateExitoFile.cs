@@ -9,12 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace core.UseCase.Comercios
+namespace core.UseCase.Exito
 {
-    public class GenerateComerciosFile
+    public class GenerateExitoFile
     {
         private readonly FormatFileByType _format;
-        public GenerateComerciosFile()
+        public GenerateExitoFile()
         {
             _format = new FormatFileByType();
         }
@@ -26,9 +26,10 @@ namespace core.UseCase.Comercios
         private const string _2 = "2";
         private const string _space = " ";
 
-        public Dictionary<string, List<CommerceModel>> build(List<SapModel> lstSap, List<EntidadesModel> entidades)
+        public Dictionary<string,List<CommerceModel>> build(List<SapModel> lstSap, List<EntidadesModel> entidades)
         {
-            var lst = lstSap.Where(s => s.Nit.Trim() != _nit.Trim())
+            var lst = lstSap.Where(s => s.Nit.Trim() == _nit.Trim() &&
+                                        s.Cod_Trans.Substring(0,2) != "58")
                        .Join(entidades,
                               post => post.Fiid_Emisor,
                               meta => meta.fiid,
@@ -37,7 +38,6 @@ namespace core.UseCase.Comercios
                               se => se.s.Fiid_Sponsor,
                               f => f.fiid,
                               (se, f) => new { se.s, se.e, f })
-                              //.Where(j => j.s.Cod_RTL.Contains(j.e.fiid.PadRight(3)))
                               .OrderBy(j => j.s.Cod_RTL)
                               .Select(j => new CommerceModel
                               {
@@ -83,11 +83,10 @@ namespace core.UseCase.Comercios
                                .Append(_format.formato(_space, 4, _A))//space
                                .ToString()
                               }
-                              ).ToList();
-
-            Dictionary<string, List<CommerceModel>> dict = new Dictionary<string, List<CommerceModel>>();
-            dict.Add(_nit, lst);
-            return dict;
+                              ).GroupBy(s => s.Nit)
+                              .ToDictionary(s => s.Key, s => s.ToList());
+                               
+            return lst;
         }
         public string RemoveSpecialCharacters(string input)
         {
