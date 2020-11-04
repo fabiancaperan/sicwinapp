@@ -34,7 +34,11 @@ namespace core.UseCase.DownloadData
 
                 if (commerceType == CommerceType.Comercios)
                 {
-                        return ComerciosFile(rute, lstSap);
+                        return ComerciosFile(rute, lstSap, CommerceType.Comercios);
+                }
+                else if (commerceType == CommerceType.Olimpica)
+                {
+                    return ComerciosFile(rute, lstSap, CommerceType.Olimpica);
                 }
                 else
                 {
@@ -51,14 +55,25 @@ namespace core.UseCase.DownloadData
 
             return true;
         }
-        private bool ComerciosFile(string rute, List<SapModel> lstSap) 
+        private bool ComerciosFile(string rute, List<SapModel> lstSap, CommerceType commerceType) 
         {
             List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
-            var filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
+
+            Dictionary<string, List<CommerceModel>> filelst = new Dictionary<string, List<CommerceModel>>();
+
+            switch (commerceType)
+            {
+                case CommerceType.Comercios:
+                    filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
+                    break;
+                case CommerceType.Olimpica:
+                    filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
+                    break;
+            }
             //FileStream stream;
             foreach (KeyValuePair<string, List<CommerceModel>> item in filelst) 
             {
-                string path = Path.Combine(rute, CommerceType.Comercios.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
+                string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
                 Directory.CreateDirectory(path);
                 path = Path.Combine(path, item.Value.FirstOrDefault().Cod_RTL);
                 using (
@@ -106,9 +121,9 @@ namespace core.UseCase.DownloadData
                 case CommerceType.Cencosud:
                     filelst = new GenerateCarrefourFile().buildstring(lstSap);
                     break;
-                case CommerceType.Olimpica:
-                    filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
-                    break;
+                //case CommerceType.Olimpica:
+                //    filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
+                //    break;
                 //case CommerceType.Comercios:
                     
                 //    filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);
