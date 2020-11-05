@@ -61,7 +61,7 @@ namespace core.UseCase.Comercios
                                .Append(_format.formato(j.s.Propina.Substring(0, 8), 8, _N))
                                .Append(_format.formato(j.s.Num_Autoriza.Substring(0, 6), 6, _A))
                                .Append(_format.formato(j.s.Nombre_Establ.Substring(0, 19), 19, _A))
-                               .Append(_format.formato(j.s.Cod_Resp.Substring(0, 3), 4, _N))
+                               .Append(_format.formato((j.s.Responder + j.s.Cod_Resp).Substring(0, 4), 4, _N))
                                //.Append(j.s.Adquirida_Por)//RED
                                //.Append(j.s.Adquirida_Para)//RED
                                .Append(_format.formato((j.s.Adquirida_Por + j.s.Adquirida_Para).Substring(0, 2), 2, _A))
