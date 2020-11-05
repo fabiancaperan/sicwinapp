@@ -7,6 +7,9 @@ namespace core.Entities.MasterData
 {
     public class conveniosModel
     {
+        [Key]
+        public int Id { get; set; }
+
         [Display(Name = "Nemo")]
         [MaxLength(7)]
         public string Nemo { get; set; }
@@ -16,7 +19,7 @@ namespace core.Entities.MasterData
         public string diaini { get; set; }
 
         [Display(Name = "Numdías")]
-        public int? Numdías { get; set; }
+        public string Numdías { get; set; }
 
         [Display(Name = "Descripcion")]
         [MaxLength(20)]
@@ -24,26 +27,26 @@ namespace core.Entities.MasterData
 
         [Display(Name = "emisor")]
         [MaxLength(4)]
-        public int? emisor { get; set; }
+        public string emisor { get; set; }
 
         [Display(Name = "Nit")]
         [MaxLength(12)]
-        public int Nit { get; set; }
+        public string Nit { get; set; }
 
         [Display(Name = "tiponegocio")]
         [MaxLength(4)]
-        public int? tiponegocio { get; set; }
+        public string tiponegocio { get; set; }
 
         [Display(Name = "tipotrans")]
         [MaxLength(4)]
-        public short? tipotrans { get; set; }
+        public string tipotrans { get; set; }
 
         [Display(Name = "Servidor")]
         [MaxLength(30)]
         public string Servidor { get; set; }
 
         [Display(Name = "Usuario")]
-        public int? Usuario { get; set; }
+        public string Usuario { get; set; }
 
         [Display(Name = "Clave")]
         [MaxLength(30)]
@@ -54,6 +57,6 @@ namespace core.Entities.MasterData
         public string CodConcepto { get; set; }
 
         [Display(Name = "bolsillo")]
-        public int bolsillo { get; set; }
+        public string bolsillo { get; set; }
     }
 }
