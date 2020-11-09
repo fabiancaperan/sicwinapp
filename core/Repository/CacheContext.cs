@@ -9,8 +9,8 @@ namespace core.Repository
 {
     public class CacheContext : DbContext
     {
+
         public DbSet<SapModel> sap { get; set; }
-        public DbSet<EntidadesModel> entidades { get; set; }
         //public DbSet<Post> Posts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

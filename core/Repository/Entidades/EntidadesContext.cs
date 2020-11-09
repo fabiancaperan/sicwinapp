@@ -24,9 +24,9 @@ namespace core.Repository.Entidades
 
         public List<EntidadesModel> getAll()
         {
-            using (var db = new CacheContext())
+            using (var db = new dbContext())
             {
-                return db.entidades.ToList();
+                return db.EntidadesModel.ToList();
             }
         }
     }

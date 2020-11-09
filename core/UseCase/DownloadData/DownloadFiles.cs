@@ -48,7 +48,7 @@ namespace core.UseCase.DownloadData
                         filelst = new GenerateCarrefourFile().build(lstSap, lstEntidades);
                         break;
                 }
-                return ComerciosFile(rute, lstSap, commerceType, filelst);
+                ComerciosFile(rute, lstSap, commerceType, filelst);
             }
 
             return true;

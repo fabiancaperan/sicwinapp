@@ -5,6 +5,15 @@ using System.Linq;
 
 namespace core.Repository.Sic
 {
+    public class Singleton
+    {
+        private static readonly Singleton instance = new Singleton();
+        private Singleton()
+        {
+        }
+        public static Singleton Instance => instance;
+    }
+
     public class SicContext
     {
         public bool save(List<SapModel> lstSic)

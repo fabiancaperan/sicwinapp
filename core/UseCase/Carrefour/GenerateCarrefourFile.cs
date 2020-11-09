@@ -57,7 +57,7 @@ namespace core.UseCase.Carrefour
                                 .Append(j.Num_Autoriza)
                                 .Append(_tipo)
                                 .Append(j.Valor)
-                                .Append(_format.formato(j.Iva.Substring(0, 7), 13, _N))
+                                .Append(_format.formato(j.Iva, 13, _N))
                                 .Append(_reteivdescu)
                                 .Append(_reteivdescu)
                                 .Append(j.Retencion)
