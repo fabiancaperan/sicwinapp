@@ -20,10 +20,11 @@ namespace WinApp
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            new core.UseCase.InitDatabase.InitDb().initDatabase();
-            Application.Run(new chargeFile());
+            Application.Run(new login());
+            //new core.UseCase.InitDatabase.InitDb().initDatabase();
+            //Application.Run(new chargeFile());
             //Application.Run(new login());
-            Application.Run(new DowloadFiles());
+            //Application.Run(new DowloadFiles());
         }
     }
 }
