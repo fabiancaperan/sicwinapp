@@ -7,16 +7,17 @@ namespace core.Entities.MasterData
 {
     public class falabellaModel
     {
-        [Display(Name = "codigounico")]
+        [Key]
+        [Display(Name = "CODIGO_UNICO")]
         [MaxLength(10)]
-        public int codigounico { get; set; }
+        public string CODIGO_UNICO { get; set; }
 
-        [Display(Name = "localfalabella")]
+        [Display(Name = "LOCAL_FALABELLA")]
         [MaxLength(4)]
-        public int? localfalabella { get; set; }
+        public string LOCAL_FALABELLA { get; set; }
 
-        [Display(Name = "nombrelocal")]
+        [Display(Name = "NOMBRE_LOCAL")]
         [MaxLength(30)]
-        public string nombrelocal { get; set; }
+        public string NOMBRE_LOCAL { get; set; }
     }
 }

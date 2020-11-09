@@ -5,15 +5,15 @@ using System.Text;
 
 namespace core.Entities.MasterData
 {
-    public class cnbsModel
+    public class redprivadasModel
     {
         [Key]
-        [Display(Name = "CODIGO_UNICO")]
+        [Display(Name = "red")]
         [MaxLength(10)]
-        public string CODIGO_UNICO { get; set; }
+        public string red { get; set; }
 
-        [Display(Name = "NOMBRE")]
+        [Display(Name = "nombre")]
         [MaxLength(50)]
-        public string NOMBRE { get; set; }
+        public string nombre { get; set; }
     }
 }
