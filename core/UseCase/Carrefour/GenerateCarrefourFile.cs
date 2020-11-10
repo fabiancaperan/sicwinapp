@@ -40,9 +40,9 @@ namespace core.UseCase.Carrefour
                                    )
                                .Select(j => new CommerceModel
                                {
-                                   Cod_RTL = new StringBuilder().Append(j.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.NombreCadena.Trim())).Append(j.FechaCompra).ToString(),
+                                   Cod_RTL = new StringBuilder().Append(j.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.NombreCadena.Trim())).Append("-").Append(j.FechaCompra).ToString(),
                                    Nit = j.Nit.Trim(),
-                                   line = new StringBuilder()
+                                   Line = new StringBuilder()
 
                                 .Append("01")
                                 .Append(j.Cod_RTL.Substring(0, 10))
@@ -77,8 +77,12 @@ namespace core.UseCase.Carrefour
 
         public string RemoveSpecialCharacters(string input)
         {
+
             Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
-            return r.Replace(input, String.Empty);
+
+            input = r.Replace(input, String.Empty);
+            input = input.Replace(" ", "_");
+            return input;
         }
 
 
@@ -135,7 +139,7 @@ namespace core.UseCase.Carrefour
         //    )
 
         //    .Select(s => 
-            
+
         //        string.Concat(s.Cod_RTL.Substring(0, 10),
         //        s.FechaTran.Substring(2, 2),
         //        s.FechaTran.Substring(4, 2),

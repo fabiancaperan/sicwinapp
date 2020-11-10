@@ -9,7 +9,10 @@ namespace core.Entities.ComerciosData
         public string Cod_RTL { get; set; }
         public string Nit { get; set; }
         public string NombreCadena { get; set; }
-        public string line { get; set; }
+        public string Line { get; set; }
+        public string Rtl { get; set; }
+
+        public List<StringBuilder> lst { get; set; }
     }
 
 

@@ -27,7 +27,7 @@ namespace WinApp
             if (textuser.Text == "USUARIO")
             {
                 textuser.Text = "";
-                textuser.ForeColor = Color.LightGray;
+                textuser.ForeColor = Color.Black;
             }
         }
 
@@ -36,7 +36,7 @@ namespace WinApp
             if (textuser.Text == "")
             {
                 textuser.Text = "USUARIO";
-                textuser.ForeColor = Color.DimGray;
+                textuser.ForeColor = Color.Black;
             }
         }
 
@@ -45,7 +45,7 @@ namespace WinApp
             if (textpass.Text == "CONTRASEÑA")
             {
                 textpass.Text = "";
-                textpass.ForeColor = Color.LightGray;
+                textpass.ForeColor = Color.Black;
                 textpass.UseSystemPasswordChar = true;
             }
         }
@@ -55,7 +55,7 @@ namespace WinApp
             if (textpass.Text == "")
             {
                 textpass.Text = "CONTRASEÑA";
-                textpass.ForeColor = Color.DimGray;
+                textpass.ForeColor = Color.Black;
                 textpass.UseSystemPasswordChar = false;
             }
         }
@@ -84,9 +84,9 @@ namespace WinApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textuser.Text == "Admin")
+            if (textuser.Text == "admin")
             {
-                if (textpass.Text == "Admin")
+                if (textpass.Text == "admin")
                 {
                     Main charge = new Main();
                     charge.Show();

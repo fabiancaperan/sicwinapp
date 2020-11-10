@@ -33,22 +33,28 @@ namespace core.UseCase.DownloadData
             {
                 
                 Dictionary<string, List<CommerceModel>> filelst = new Dictionary<string, List<CommerceModel>>();
+                List<CommerceModel> res = new List<CommerceModel>();
                 switch (commerceType)
                 {
                     case CommerceType.Comercios:
-                        filelst = new GenerateComerciosFile().build(lstSap, lstEntidades);                        
+                        res = new GenerateComerciosFile().build(lstSap, lstEntidades);
+                        ComerciosFiles(rute, lstSap, commerceType, res);
                         break;
                     case CommerceType.Olimpica:
-                        filelst = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
+                        res = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
+                        ComerciosFileRtc(rute, lstSap, commerceType, res);
                         break;
                     case CommerceType.Exito:
-                        filelst = new GenerateExitoFile().build(lstSap, lstEntidades);
+                        res = new GenerateExitoFile().build(lstSap, lstEntidades);
+                        ComerciosFileRtc(rute, lstSap, commerceType, res);
                         break;
                     case CommerceType.Cencosud:
                         filelst = new GenerateCarrefourFile().build(lstSap, lstEntidades);
+                        ComerciosFile(rute, lstSap, commerceType, filelst);
                         break;
                 }
-                ComerciosFile(rute, lstSap, commerceType, filelst);
+                //ComerciosFiles(rute, lstSap, commerceType, res);
+                //ComerciosFile(rute, lstSap, commerceType, filelst);
             }
 
             return true;
@@ -58,7 +64,8 @@ namespace core.UseCase.DownloadData
            
             foreach (KeyValuePair<string, List<CommerceModel>> item in filelst) 
             {
-                string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
+                //string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
+                string path = Path.Combine(rute, item.Value.FirstOrDefault().Nit.Trim()); 
                 Directory.CreateDirectory(path);
                 path = Path.Combine(path, item.Value.FirstOrDefault().Cod_RTL);
                 using (
@@ -67,11 +74,63 @@ namespace core.UseCase.DownloadData
                     //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
                     using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
                     {
-                        item.Value.ForEach(s => writer.WriteLine(s.line));
+                        item.Value.ForEach(s => writer.WriteLine(s.Line));
                     }
                 }
             }
                 
+            return true;
+        }
+
+        private bool ComerciosFiles(string rute, List<SapModel> lstSap, CommerceType commerceType, List<CommerceModel> filelst)
+        {
+
+            foreach (CommerceModel item in filelst)
+            {
+                //string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
+                string path = Path.Combine(rute, item.Nit.Trim() + "\\" + item.Rtl.Trim());
+                Directory.CreateDirectory(path);
+                path = Path.Combine(path, item.Cod_RTL);
+                using (
+                    FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+                    using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+                    {
+                        //title
+                        writer.WriteLine(item.Line);
+                        //data
+                        item.lst.ForEach(s => writer.WriteLine(s));
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool ComerciosFileRtc(string rute, List<SapModel> lstSap, CommerceType commerceType, List<CommerceModel> filelst)
+        {
+
+            foreach (CommerceModel item in filelst)
+            {
+                //string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
+                string path = Path.Combine(rute, item.Nit.Trim());
+                Directory.CreateDirectory(path);
+                path = Path.Combine(path, item.Cod_RTL);
+                using (
+                    FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+                    using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
+                    {
+                        //title
+                        writer.WriteLine(item.Line);
+                        //data
+                        item.lst.ForEach(s => writer.WriteLine(s));
+                    }
+                }
+            }
+
             return true;
         }
     }
