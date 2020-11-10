@@ -88,7 +88,7 @@ namespace core.UseCase.DownloadData
             foreach (CommerceModel item in filelst)
             {
                 //string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
-                string path = Path.Combine(rute, item.Nit.Trim() + "\\" + item.Rtl.Trim());
+                string path = Path.Combine(rute, item.Nit.Trim());
                 Directory.CreateDirectory(path);
                 path = Path.Combine(path, item.Cod_RTL);
                 using (
