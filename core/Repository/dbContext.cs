@@ -15,6 +15,8 @@ namespace core.Repository
 
         public DbSet<conveniosModel> conveniosModel { get; set; }
 
+        public DbSet<festivoModel> festivoModel { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=sic.db");
 
