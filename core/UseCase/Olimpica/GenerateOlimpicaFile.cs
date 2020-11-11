@@ -42,7 +42,7 @@ namespace core.UseCase.Olimpica
                               {
                                   Rtl = j.Key.Rtl,
                                   Nit = 1+j.Key.Nit,
-                                  Line = new StringBuilder().Append(j.FirstOrDefault().s.TipoRegistro).Append(j.FirstOrDefault().s.FechaCompra)
+                                  Line = new StringBuilder().Append("02").Append(j.FirstOrDefault().s.FechaCompra)
                                                             .Append(_format.formato(j.FirstOrDefault().s.Nit.Trim(), 13, _A)).Append(_format.formato(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()), 30, _A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   Cod_RTL = new StringBuilder().Append(j.FirstOrDefault().s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()))

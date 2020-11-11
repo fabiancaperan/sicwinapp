@@ -31,26 +31,30 @@ namespace core.UseCase.DownloadData
             List<SapModel> lstSap = new SicContext().getAll();
             foreach (var commerceType in commerceTypes)
             {
-                
+
                 Dictionary<string, List<CommerceModel>> filelst = new Dictionary<string, List<CommerceModel>>();
                 List<CommerceModel> res = new List<CommerceModel>();
                 switch (commerceType)
                 {
                     case CommerceType.Comercios:
                         res = new GenerateComerciosFile().build(lstSap, lstEntidades);
-                        ComerciosFiles(rute, lstSap, commerceType, res);
+                        if (res != null && res.Any())
+                            ComerciosFiles(rute, lstSap, commerceType, res);
                         break;
                     case CommerceType.Olimpica:
                         res = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
-                        ComerciosFileRtc(rute, lstSap, commerceType, res);
+                        if (res != null && res.Any())
+                            ComerciosFileRtc(rute, lstSap, commerceType, res);
                         break;
                     case CommerceType.Exito:
                         res = new GenerateExitoFile().build(lstSap, lstEntidades);
-                        ComerciosFileRtc(rute, lstSap, commerceType, res);
+                        if (res != null && res.Any())
+                            ComerciosFileRtc(rute, lstSap, commerceType, res);
                         break;
                     case CommerceType.Cencosud:
                         filelst = new GenerateCarrefourFile().build(lstSap, lstEntidades);
-                        ComerciosFile(rute, lstSap, commerceType, filelst);
+                        if (res != null && res.Any())
+                            ComerciosFile(rute, lstSap, commerceType, filelst);
                         break;
                 }
                 //ComerciosFiles(rute, lstSap, commerceType, res);
@@ -59,13 +63,13 @@ namespace core.UseCase.DownloadData
 
             return true;
         }
-        private bool ComerciosFile(string rute, List<SapModel> lstSap, CommerceType commerceType, Dictionary<string, List<CommerceModel>> filelst) 
+        private bool ComerciosFile(string rute, List<SapModel> lstSap, CommerceType commerceType, Dictionary<string, List<CommerceModel>> filelst)
         {
-           
-            foreach (KeyValuePair<string, List<CommerceModel>> item in filelst) 
+
+            foreach (KeyValuePair<string, List<CommerceModel>> item in filelst)
             {
                 //string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
-                string path = Path.Combine(rute, item.Value.FirstOrDefault().Nit.Trim()); 
+                string path = Path.Combine(rute, item.Value.FirstOrDefault().Nit.Trim());
                 Directory.CreateDirectory(path);
                 path = Path.Combine(path, item.Value.FirstOrDefault().Cod_RTL);
                 using (
@@ -78,7 +82,7 @@ namespace core.UseCase.DownloadData
                     }
                 }
             }
-                
+
             return true;
         }
 
