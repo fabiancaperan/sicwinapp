@@ -5,6 +5,8 @@ using core.Repository;
 using core.Repository.Sic;
 using core.Repository.Types;
 using core.UseCase.Carrefour;
+using core.UseCase.Cnb;
+using core.UseCase.CnbSpecial;
 using core.UseCase.Comercios;
 using core.UseCase.Exito;
 using core.UseCase.Olimpica;
@@ -28,6 +30,7 @@ namespace core.UseCase.DownloadData
         public bool build(string rute, List<CommerceType> commerceTypes)
         {
             List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
+            List<cnbsModel> lstCnb = _db.cnbsModel.ToList();
             List<SapModel> lstSap = new SicContext().getAll();
             foreach (var commerceType in commerceTypes)
             {
@@ -51,9 +54,19 @@ namespace core.UseCase.DownloadData
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, lstSap, commerceType, res);
                         break;
+                    case CommerceType.Cnb:
+                        res = new GenerateCnb().build(lstSap, lstEntidades, lstCnb);
+                        if (res != null && res.Any())
+                            ComerciosFile(rute, lstSap, commerceType, filelst);
+                        break;
+                    case CommerceType.CnbSpecial:
+                        res = new GenerateCnbSpecial().build(lstSap, lstEntidades, lstCnb);
+                        if (res != null && res.Any())
+                            ComerciosFile(rute, lstSap, commerceType, filelst);
+                        break;
                     case CommerceType.Cencosud:
                         filelst = new GenerateCarrefourFile().build(lstSap, lstEntidades);
-                        if (res != null && res.Any())
+                        if (filelst != null && res.Any())
                             ComerciosFile(rute, lstSap, commerceType, filelst);
                         break;
                 }
