@@ -31,6 +31,8 @@ namespace core.UseCase.Falabella
 
         public List<CommerceModel> build(List<SapModel> lstSap, List<falabellaModel> falabella)
         {
+            var date = DateTime.Now;
+            var dat = date.Day + date.Month + date.Year;
             long total = 0;
             var lst = lstSap
                        .Join(falabella,
@@ -66,7 +68,7 @@ namespace core.UseCase.Falabella
                                 .Append(cod)
                                 .Append(i + 1)
                                 .Append("|")
-                                .Append("fecha_festivo")
+                                .Append(dat)
                                 .Append("|")
                                 .Append(total)
                                 .Append(".00|RED")

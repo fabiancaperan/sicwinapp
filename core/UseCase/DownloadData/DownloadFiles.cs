@@ -9,6 +9,7 @@ using core.UseCase.Cnb;
 using core.UseCase.CnbSpecial;
 using core.UseCase.Comercios;
 using core.UseCase.Exito;
+using core.UseCase.Falabella;
 using core.UseCase.Olimpica;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace core.UseCase.DownloadData
         public bool build(string rute, List<CommerceType> commerceTypes)
         {
             List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
+            List<falabellaModel> lstFalabella =  _db.falabellaModel.ToList();
             List<cnbsModel> lstCnb = _db.cnbsModel.ToList();
             List<SapModel> lstSap = new SicContext().getAll();
             foreach (var commerceType in commerceTypes)
@@ -41,6 +43,11 @@ namespace core.UseCase.DownloadData
                 {
                     case CommerceType.Comercios:
                         res = new GenerateComerciosFile().build(lstSap, lstEntidades);
+                        if (res != null && res.Any())
+                            ComerciosFiles(rute, lstSap, commerceType, res);
+                        break;
+                    case CommerceType.Falabella:
+                        res = new GenerateFalabellaFile().build(lstSap, lstFalabella);
                         if (res != null && res.Any())
                             ComerciosFiles(rute, lstSap, commerceType, res);
                         break;
