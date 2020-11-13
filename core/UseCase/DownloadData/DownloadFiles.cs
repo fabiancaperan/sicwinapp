@@ -57,12 +57,12 @@ namespace core.UseCase.DownloadData
                     case CommerceType.Cnb:
                         res = new GenerateCnb().build(lstSap, lstEntidades, lstCnb);
                         if (res != null && res.Any())
-                            ComerciosFile(rute, lstSap, commerceType, filelst);
+                            ComerciosFiles(rute, lstSap, commerceType, res);
                         break;
                     case CommerceType.CnbSpecial:
                         res = new GenerateCnbSpecial().build(lstSap, lstEntidades, lstCnb);
                         if (res != null && res.Any())
-                            ComerciosFile(rute, lstSap, commerceType, filelst);
+                            ComerciosFiles(rute, lstSap, commerceType, res);
                         break;
                     case CommerceType.Cencosud:
                         filelst = new GenerateCarrefourFile().build(lstSap, lstEntidades);

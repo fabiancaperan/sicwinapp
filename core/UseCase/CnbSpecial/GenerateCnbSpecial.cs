@@ -19,7 +19,7 @@ namespace core.UseCase.CnbSpecial
         {
             _format = new FormatFileByType();
         }
-        private const string _nit = "8909006089";
+        private const string _nit = "8600073354";
         private const string _A = "A";
         private const string _N = "N";
         private const string _01 = "0001";
@@ -51,7 +51,7 @@ namespace core.UseCase.CnbSpecial
                                   Rtl = j.Key.Rtl,
                                   Nit = j.Key.Nit,
                                   Line = new StringBuilder().Append("02").Append(j.FirstOrDefault().s.FechaCompra)
-                                                            .Append(_format.formato(j.FirstOrDefault().s.Nit.Trim(), 13, _A)).Append(_format.formato(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()), 30, _A))
+                                                            .Append(_format.formato(j.FirstOrDefault().s.Nit.Trim(), 13, _N)).Append(_format.formato(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()), 30, _A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   Cod_RTL = new StringBuilder().Append(j.FirstOrDefault().s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()))
                                                                 .Append("-").Append(j.FirstOrDefault().s.FechaCompra).Append("-").Append(j.FirstOrDefault().s.Nit.Trim()).ToString(),
