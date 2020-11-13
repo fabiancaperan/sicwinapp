@@ -32,6 +32,7 @@ namespace core.UseCase.DownloadData
         {
             List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
             List<falabellaModel> lstFalabella =  _db.falabellaModel.ToList();
+            List<conveniosModel> lstConv = _db.conveniosModel.ToList();
             List<cnbsModel> lstCnb = _db.cnbsModel.ToList();
             List<SapModel> lstSap = new SicContext().getAll();
             foreach (var commerceType in commerceTypes)
@@ -61,6 +62,11 @@ namespace core.UseCase.DownloadData
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, lstSap, commerceType, res);
                         break;
+                    case CommerceType.ExitoConciliacion:
+                        res = new GenerateConcilationFile().build(lstSap, lstConv);
+                        if (res != null && res.Any())
+                            ComerciosFileRtc(rute, lstSap, commerceType, res);
+                        break;
                     case CommerceType.Cnb:
                         res = new GenerateCnb().build(lstSap, lstEntidades, lstCnb);
                         if (res != null && res.Any())
@@ -72,9 +78,9 @@ namespace core.UseCase.DownloadData
                             ComerciosFiles(rute, lstSap, commerceType, res);
                         break;
                     case CommerceType.Cencosud:
-                        filelst = new GenerateCarrefourFile().build(lstSap, lstEntidades);
-                        if (filelst != null && res.Any())
-                            ComerciosFile(rute, lstSap, commerceType, filelst);
+                        res = new GenerateCarrefourFile().build(lstSap, lstEntidades);
+                        if (res != null && res.Any())
+                            ComerciosFiles(rute, lstSap, commerceType, res);
                         break;
                 }
                 //ComerciosFiles(rute, lstSap, commerceType, res);
@@ -122,6 +128,7 @@ namespace core.UseCase.DownloadData
                     using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
                     {
                         //title
+                        if(item.Line.Trim()!=string.Empty)
                         writer.WriteLine(item.Line);
                         //data
                         item.lst.ForEach(s => writer.WriteLine(s));
@@ -148,7 +155,8 @@ namespace core.UseCase.DownloadData
                     using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
                     {
                         //title
-                        writer.WriteLine(item.Line);
+                        if (item.Line.Trim() != string.Empty)
+                            writer.WriteLine(item.Line);
                         //data
                         item.lst.ForEach(s => writer.WriteLine(s));
                     }

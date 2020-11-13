@@ -2,6 +2,7 @@
 using core.Entities.ConvertData;
 using core.Entities.MasterData;
 using core.Utils.format;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,19 +19,18 @@ namespace core.UseCase.Carrefour
             _format = new FormatFileByType();
         }
         private const string _nit = "9001551071";
-        private const string _con = "150";
-        private const string _blank = "      ";
-        private const string _tipo = "00";
-        private const string _reteivdescu = "00000000";
-        private const string _reteica = "00";
-        private List<string> _franquicias = new List<string> { "009","013","007"};
+        private const string _A = "A";
+        private const string _N = "N";
+        private const string _01 = "0001";
+        private List<string> _franquicias = new List<string> { "009", "013", "007" };
         private const string _codTrans = "10";
         private const short _codResMin = 000;
         private const short _codResMax = 009;
-        private const string _N = "N";
+        private const string _02 = "0002";
+        private const string _2 = "2";
+        private const string _space = " ";
 
-
-        public Dictionary<string, List<CommerceModel>> build(List<SapModel> lstSap, List<EntidadesModel> entidades)
+        public List<CommerceModel> build(List<SapModel> lstSap, List<EntidadesModel> entidades)
         {
             var lst = lstSap.Where(s => s.Nit.Trim() == _nit &&
                                         _franquicias.Contains((s.Id_Fran_Hija + s.Filler_Fran_Hija)) &&
@@ -38,46 +38,71 @@ namespace core.UseCase.Carrefour
                                         Convert.ToInt16(s.Cod_Resp.Substring(0, 3)) >= _codResMin &&
                                         Convert.ToInt16(s.Cod_Resp.Substring(0, 3)) <= _codResMax
                                    )
-                               .Select(j => new CommerceModel
-                               {
-                                   Cod_RTL = new StringBuilder().Append(j.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.NombreCadena.Trim())).Append("-").Append(j.FechaCompra).ToString(),
-                                   Nit = j.Nit.Trim(),
-                                   Line = new StringBuilder()
+                       .Join(entidades,
+                              post => post.Fiid_Emisor,
+                              meta => meta.fiid,
+                              (s, e) => new { s, e })
+                        .Join(entidades,
+                              se => se.s.Fiid_Sponsor,
+                              f => f.fiid,
+                              (se, f) => new { se.s, se.e, f })
+                              .GroupBy(g => g.s.Nit.Trim())
+                              .Select(j => new CommerceModel
+                              {
+                                  Nit = j.Key,
+                                  Line = new StringBuilder().Append("02").Append(j.FirstOrDefault().s.FechaCompra)
+                                                            .Append(_format.formato(j.Key, 13, _A)).Append(_format.formato(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()), 30, _A))
+                                                            .Append("RMC").Append(new String(' ',244)).ToString(),
+                                  Cod_RTL = new StringBuilder().Append(j.FirstOrDefault().s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()))
+                                                                .Append("-").Append(j.FirstOrDefault().s.FechaCompra).Append("-").Append(j.Key).ToString(),
+                                  lst = j.Select(l =>
+                                  new StringBuilder()
+                                 .Append("01")
+                                 .Append(_format.formato(l.s.Id_Terminal.Substring(0, 16), 16, _A))
+                                 .Append(_format.formato(l.s.COD_DANE.Substring(0, 8), 8, _A))
+                                 .Append(_format.formato(l.s.FechaTran.Substring(0, 8), 8, _A))
+                                 .Append(_format.formato(l.s.HoraTran.Substring(0, 6), 6, _A))
+                                 .Append(_format.formato(l.s.Fiid_Emisor.Substring(0, 4), 4, _A))
+                                 .Append(_format.formato(l.s.Abrev_Emisor.Substring(0, 3), 3, _A))//FID_EMISOR
+                                 .Append(_format.formato(l.s.Num_Tarjeta.Substring(0, 4), 4, _N))
+                                 .Append(_format.formato(l.s.Tipo_Mensaje.Substring(0, 4), 4, _N))
+                                 .Append(_format.formato(l.s.Cod_Trans.Substring(0, 6), 6, _N))
+                                 .Append(_format.formato(l.s.Num_Secuen.Substring(0, 12), 12, _N))
+                                 .Append(_format.formato(l.s.Valor.Substring(0, 12), 12, _N))
+                                 .Append(_format.formato(l.s.Comision.Substring(0, 8), 8, _N))
+                                 .Append(_format.formato(l.s.Retencion.Substring(0, 8), 8, _N))
+                                 .Append(_format.formato(l.s.Propina.Substring(0, 8), 8, _N))
+                                 .Append(_format.formato(l.s.Num_Autoriza.Substring(0, 6), 6, _A))
+                                 .Append(_format.formato(l.s.Nombre_Establ.Substring(0, 19), 19, _A))
+                                 .Append(_format.formato((l.s.Responder + l.s.Cod_Resp).Substring(0, 4), 4, _N))
+                                 //.Append(l.s.Adquirida_Por)//RED
+                                 //.Append(l.s.Adquirida_Para)//RED
+                                 .Append(_format.formato((l.s.Adquirida_Por + l.s.Adquirida_Para).Substring(0, 2), 2, _A))
+                                 .Append(_format.formato(l.s.Fiid_Sponsor.Substring(0, 4), 4, _A))
+                                 .Append(_format.formato(l.s.Iva.Substring(0, 8), 8, _N))
+                                 //.Append(l.s.Id_Fran_Hija)//franquicia
+                                 //.Append(l.s.Filler_Fran_Hija)//franquicia
+                                 .Append(_format.formato((l.s.Id_Fran_Hija + l.s.Filler_Fran_Hija).Substring(0, 3), 3, _A))
+                                 .Append(_format.formato(l.s.Valor_Liq_Reteica.Substring(0, 8), 8, _A))
+                                 .Append(_format.formato(l.s.Cod_RTL.Substring(0, 10), 10, _A))
+                                 .Append(_format.formato(l.s.Base_Devol_Iva.Substring(0, 12), 12, _N))
+                                 .Append(_format.formato(l.e.nombre.Substring(0, 25), 25, _A))
+                                 .Append(_format.formato(l.f.nombre.Substring(0, 25), 25, _A))//SPONSOR
+                                 .Append(_format.formato(l.s.RefUniversal.Substring(0, 23), 23, _A))
+                                 .Append((l.s.Adquirida_Por + l.s.Adquirida_Por).Substring(0, 1) == _2 ? _02 : _01)
+                                 .Append(_format.formato(l.s.ConvBonos.Substring(0, 4), 4, _N))
+                                 .Append(_format.formato(l.s.TextoAdicional.Substring(0, 25), 25, _A))
+                                 .Append(_format.formato(l.s.Convtrack.Substring(0, 5), 5, _N))//MICOMPRA
+                                 .Append(_format.formato(_space, 4, _A))//space
+                                                                        //.ToString()
+                               ).ToList()
+                              }).ToList();
 
-                                .Append("01")
-                                .Append(j.Cod_RTL.Substring(0, 10))
-                                .Append(j.FechaTran.Substring(2, 2))
-                                .Append(j.FechaTran.Substring(4, 2))
-                                .Append(j.FechaTran.Substring(6, 2))
-                                .Append(_blank)
-                                .Append(j.Id_Terminal.Substring(3, 5))
-                                .Append(_con)
-                                .Append(j.Num_Secuen.Substring(8, 4))
-                                .Append(_format.formato(j.Num_Tarjeta, 19, _N))
-                                .Append(j.Num_Autoriza)
-                                .Append(_tipo)
-                                .Append(j.Valor)
-                                .Append(_format.formato(j.Iva, 13, _N))
-                                .Append(_reteivdescu)
-                                .Append(_reteivdescu)
-                                .Append(j.Retencion)
-                                .Append(_reteica)
-                                .Append(_blank)
-                                .Append(j.FechaCompra.Substring(2, 2))
-                                .Append(j.FechaCompra.Substring(4, 2))
-                                .Append(j.FechaCompra.Substring(6, 2))
-                                .Append(j.Id_Fran_Hija + j.Filler_Fran_Hija)
-                                .ToString()
-                               }
-                               ).ToList();
-            Dictionary<string, List<CommerceModel>> dict = new Dictionary<string, List<CommerceModel>>();
-            dict.Add(_nit, lst);
-            return dict;
+            return lst;
         }
-
         public string RemoveSpecialCharacters(string input)
         {
-
+            
             Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
             input = r.Replace(input, String.Empty);
@@ -85,86 +110,5 @@ namespace core.UseCase.Carrefour
             return input;
         }
 
-
-
-
-        //public List<Object> build(List<SapModel> lstSap) 
-        //{
-        //    var lst = lstSap
-        //        //.Where(s =>
-        //    //s.Nit == _nit &&
-        //    //_franquicias.Contains((s.Id_Fran_Hija + s.Filler_Fran_Hija)) &&
-        //    //s.Cod_Trans.Substring(0, 2) == _codTrans  &&
-        //    //Convert.ToInt16(s.Cod_Resp.Substring(1, 3)) >= _codResMin &&
-        //    //Convert.ToInt16(s.Cod_Resp.Substring(1, 3)) <= _codResMax 
-        //    //)
-        //    .Select(s => new  
-        //    {
-        //        Cod_RTL= s.Cod_RTL.Substring(0,10),
-        //        an1 = s.FechaTran.Substring(2, 2),
-        //        m1 = s.FechaTran.Substring(4, 2),
-        //        d1 = s.FechaTran.Substring(6, 2),
-        //        blanc = _blank,
-        //        ter = s.Id_Terminal.Substring(3, 5),
-        //        con = _con,
-        //        seq = s.Num_Secuen.Substring(8, 4),
-        //        NUM_TARJETA = s.Num_Tarjeta,
-        //        NUM_AUTORIZA = s.Num_Autoriza,
-        //        tipo = _tipo,
-        //        VALOR = s.Valor,
-        //        VALOR_IVA = s.Iva,
-        //        reteiv = _reteivdescu,
-        //        descu = _reteivdescu,
-        //        RETENCION = s.Retencion,
-        //        RETEICA = _reteica,
-        //        blanc2 =_blank,
-        //        an2 = s.FechaCompra.Substring(2, 2),
-        //        m2 = s.FechaCompra.Substring(4, 2),
-        //        d2 = s.FechaCompra.Substring(6, 2),
-        //        FRANQUICIA = s.Id_Fran_Hija + s.Filler_Fran_Hija
-
-        //    }).ToList();
-        //    return null;
-        //}
-
-        //public List<String> buildstring(List<SapModel> lstSap)
-        //{
-        //    var lst = lstSap
-        //    .Where(s =>
-        //    s.Nit.Trim() == _nit &&
-        //    _franquicias.Contains((s.Id_Fran_Hija + s.Filler_Fran_Hija)) &&
-        //    s.Cod_Trans.Substring(0, 2) == _codTrans &&
-        //    Convert.ToInt16(s.Cod_Resp.Substring(0, 3)) >= _codResMin &&
-        //    Convert.ToInt16(s.Cod_Resp.Substring(0, 3)) <= _codResMax
-        //    )
-
-        //    .Select(s => 
-
-        //        string.Concat(s.Cod_RTL.Substring(0, 10),
-        //        s.FechaTran.Substring(2, 2),
-        //        s.FechaTran.Substring(4, 2),
-        //        s.FechaTran.Substring(6, 2),
-        //        _blank,
-        //        s.Id_Terminal.Substring(3, 5),
-        //        _con,
-        //        s.Num_Secuen.Substring(8, 4),
-        //        s.Num_Tarjeta,
-        //        s.Num_Autoriza,
-        //        _tipo,
-        //        s.Valor,
-        //        s.Iva,
-        //        _reteivdescu,
-        //        _reteivdescu,
-        //        s.Retencion,
-        //        _reteica,
-        //        _blank,
-        //        s.FechaCompra.Substring(2, 2),
-        //        s.FechaCompra.Substring(4, 2),
-        //        s.FechaCompra.Substring(6, 2),
-        //        s.Id_Fran_Hija, s.Filler_Fran_Hija)
-
-        //    ).ToList();
-        //    return lst;
-        //}
     }
 }

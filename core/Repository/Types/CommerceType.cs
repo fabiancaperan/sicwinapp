@@ -12,7 +12,8 @@ namespace core.Repository.Types
         Exito,
         Cnb,
         CnbSpecial,
-        Falabella
+        Falabella,
+        ExitoConciliacion
         
     }
 }

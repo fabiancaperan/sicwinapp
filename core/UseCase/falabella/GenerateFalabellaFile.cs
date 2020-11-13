@@ -27,7 +27,7 @@ namespace core.UseCase.Falabella
         private const string _space = " ";
         private const string _dinner = "03";
         private const string _amex = "07";
-        
+
 
         public List<CommerceModel> build(List<SapModel> lstSap, List<falabellaModel> falabella)
         {
@@ -40,61 +40,58 @@ namespace core.UseCase.Falabella
                               meta => _format.formato(meta.CODIGO_UNICO.Substring(0, 10), 10, _A),
                               (s, e) => new { s, e })
                         .Where(j => j.s.Nit.Trim() == _nit &&
-                                    Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3))> 0 &&
+                                    Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) > 0 &&
                                     Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) < 9 &&
                                     j.s.Num_Autoriza != string.Empty)
-                        .GroupBy(g => new { Rtl = g.s.Cod_RTL.Trim(), Nit = g.s.Nit.Trim() })
-                        .Select((j, i) => 
+                        .Select((l, i) =>
                         {
-                            
-                            return new CommerceModel
-                            {
-                                Rtl = j.Key.Rtl,
-                                Nit = 1 + j.Key.Nit,
-                                Line = new StringBuilder().Append(j.FirstOrDefault().s.TipoRegistro).Append(j.FirstOrDefault().s.FechaCompra)
-                                                     .Append(_format.formato(j.FirstOrDefault().s.Nit.Trim(), 13, _A)).Append(_format.formato(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()), 30, _A))
-                                                     .Append("RMC").Append(new String(' ', 244)).ToString(),
-                                Cod_RTL = new StringBuilder().Append(j.FirstOrDefault().s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()))
-                                                         .Append("-").Append(j.FirstOrDefault().s.FechaCompra).Append("-").Append(j.FirstOrDefault().s.Nit.Trim()).ToString(),
-                                lst = j.Select(l =>
-                                {
-                                    var codigo = l.s.Adquirida_Por + l.s.Adquirida_Para == _dinner ? "09" :
-                                            l.s.Adquirida_Por + l.s.Adquirida_Para == _amex ? "11" : "13";
-                                    var cod = codigo == "13" ? "|" : codigo + "|";
-                                    var fecComp = l.s.FechaCompra.Substring(0, 8);
-                                    var codTrans = l.s.Cod_Trans.Substring(0, 2);
-                                    var valor = Convert.ToInt64(l.s.Valor.Substring(0, 10));
-                                    total += codTrans == "14" ?-(valor): valor;
-                                    return new StringBuilder()
-                                .Append("650RE")
-                                .Append(l.e.LOCAL_FALABELLA.Substring(1, 3))
-                                .Append(cod)
-                                .Append(i + 1)
-                                .Append("|")
-                                .Append(dat)
-                                .Append("|")
-                                .Append(total)
-                                .Append(".00|RED")
-                                .Append(fecComp)
-                                .Append(l.e.LOCAL_FALABELLA)
-                                .Append(codigo)
-                                .Append("|COP|830070527-1|")
-                                .Append(dat)
-                                .Append("|IC")
-                                .Append(fecComp)
-                                .Append(l.e.LOCAL_FALABELLA)
-                                .Append(codigo+"|")
-                                .Append(total)
-                                .Append(".00|||19|CO|||||||||||FACOLOCREDAR")
-                                .Append(fecComp)
-                                .Append("00000000|FACOLOCREDAR");
-                                }
-                         ).ToList()
-                            };
-                        }).ToList();
-            return lst;
-        }
 
+                            {
+                                var codigo = l.s.Adquirida_Por + l.s.Adquirida_Para == _dinner ? "09" :
+                                        l.s.Adquirida_Por + l.s.Adquirida_Para == _amex ? "11" : "13";
+                                var cod = codigo == "13" ? "|" : codigo + "|";
+                                var fecComp = l.s.FechaCompra.Substring(0, 8);
+                                var codTrans = l.s.Cod_Trans.Substring(0, 2);
+                                var valor = Convert.ToInt64(l.s.Valor.Substring(0, 10));
+                                total += codTrans == "14" ? -(valor) : valor;
+                                return new StringBuilder()
+                            .Append("650RE")
+                            .Append(l.e.LOCAL_FALABELLA.Substring(1, 3))
+                            .Append(cod)
+                            .Append(i + 1)
+                            .Append("|")
+                            .Append(dat)
+                            .Append("|")
+                            .Append(total)
+                            .Append(".00|RED")
+                            .Append(fecComp)
+                            .Append(l.e.LOCAL_FALABELLA)
+                            .Append(codigo)
+                            .Append("|COP|830070527-1|")
+                            .Append(dat)
+                            .Append("|IC")
+                            .Append(fecComp)
+                            .Append(l.e.LOCAL_FALABELLA)
+                            .Append(codigo + "|")
+                            .Append(total)
+                            .Append(".00|||19|CO|||||||||||FACOLOCREDAR")
+                            .Append(fecComp)
+                            .Append("00000000|FACOLOCREDAR");
+                            }
+
+                        }).ToList();
+            var rs = new CommerceModel()
+            {
+                Rtl = "",
+                Nit = 1+_nit,
+                Line = "",
+                Cod_RTL = new StringBuilder().Append("XREDCO_01_").Append(dat).Append(".txt").ToString(),
+                lst = lst
+            };
+            var lstres = new List<CommerceModel>();
+            lstres.Add(rs);
+            return lstres;
+        }
         public string RemoveSpecialCharacters(string input)
         {
 
