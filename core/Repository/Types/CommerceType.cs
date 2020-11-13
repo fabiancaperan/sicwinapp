@@ -11,7 +11,8 @@ namespace core.Repository.Types
         Comercios,
         Exito,
         Cnb,
-        CnbSpecial
+        CnbSpecial,
+        Falabella
         
     }
 }
