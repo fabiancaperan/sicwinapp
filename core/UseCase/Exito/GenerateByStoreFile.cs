@@ -25,23 +25,23 @@ namespace core.UseCase.Exito
         private const string _02 = "0002";
         private const string _2 = "2";
         private const string _space = " ";
-        private List<string> _lstNoCodTrans = new List<string>() { "17", "45", "49", "58", "59"};
+        private List<string> _lstNoCodTrans = new List<string>() { "17", "45", "49", "58", "59" };
         private List<string> _lstTx = new List<string>() { "10", "35", "59", "66", "68" };
 
-        public List<CommerceModel> build(List<SapModel> lstSap,List<conveniosModel> lstConv)
+        public List<CommerceModel> build(List<SapModel> lstSap, List<conveniosModel> lstConv)
         {
             var date = DateTime.Now;
             var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
             double total = 0;
             var lst = lstSap
-                       //.Join(lstConv,
-                       //       post => (post.Id_Fran_Hija + post.Filler_Fran_Hija),
-                       //       meta => meta.emisor.Trim(),
-                       //       (s, e) => new { s, e })
+                        //.Join(lstConv,
+                        //       post => (post.Id_Fran_Hija + post.Filler_Fran_Hija),
+                        //       meta => meta.emisor.Trim(),
+                        //       (s, e) => new { s, e })
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
                         .Where(s => s.Nit.Trim() == _nit &&
-                                    (s.Adquirida_Por + s.Adquirida_Para).Substring(1,1) =="B"&&
+                                    (s.Adquirida_Por + s.Adquirida_Para).Substring(1, 1) == "B" &&
                                     Convert.ToInt32(s.Cod_Resp.Substring(1, 3)) > 0 &&
                                     Convert.ToInt32(s.Cod_Resp.Substring(1, 3)) < 9 &&
                                     !_lstNoCodTrans.Contains(s.Cod_Trans.Substring(0, 2)))
@@ -51,7 +51,7 @@ namespace core.UseCase.Exito
                                   {
                                       {
                                           var val = Convert.ToInt64(s.Valor);
-                                          
+
                                           if (s.Tipo_Mensaje.Substring(1, 3) == "210")
                                           {
                                               if (s.Cod_Trans.Substring(0, 2) == "14")
@@ -81,28 +81,13 @@ namespace core.UseCase.Exito
                                    .Append("\t")
                                    .Append(dat)
                                    .Append("\t")
-                                   //.Append()
+                                   .Append(_format.formato(i.ToString(), 12, _N))
                                    .Append("\t")
+                                   .Append(_format.formato(total.ToString(), 12, _N))
                                    .Append("\t")
+                                   .Append("01")
                                    .Append("\t")
-                                   .Append("\t")
-                                   .Append(Convert.ToInt64(s.Num_Secuen.Trim()))//CONSECUTIVO
-                                   .Append("|")
-                                   .Append(s.FechaCompra)//fecha contrato
-                                   .Append("|")
-                                   .Append(s.FechaTran)
-                                   .Append("|")
-                                   .Append(s.HoraTran)
-                                   .Append("|")
-                                   .Append(s.Bin_Tarjeta)//BIN
-                                   .Append("|")
-                                   .Append(s.Cod_Trans.Substring(3, 2))//BOLSILLO
-                                   .Append("|")
-                                   .Append(s.Id_Fran_Hija + s.Filler_Fran_Hija)//CONVENIO
-                                   .Append("|")
-                                   
-                                   .Append("|0|")
-                                   .Append(s.Num_Autoriza);
+                                   .Append("04");
                                       }
 
                                   }).ToList();

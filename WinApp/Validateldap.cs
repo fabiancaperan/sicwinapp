@@ -10,29 +10,31 @@ namespace WinApp
     public class Validateldap
     {
 
-        public void validate()
+        public string validate(string user, string pass)
         {
             try
             {
                 //Dominio =rbm
                 //IPLDAP 192.168.1.49
                 //puertoLdap = 389
+                var dominio = "rbm";
 
-               // LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier("192.168.1.49",389),null , AuthType.Basic);
-                LdapConnection connection = new LdapConnection("ingetec.loc");
-                NetworkCredential credential = new NetworkCredential("sccmadmin", "1nfradddg");
+                LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier("192.168.1.49",389),null , AuthType.Basic);
+                //LdapConnection connection = new LdapConnection("ingetec.loc");
+                //NetworkCredential credential = new NetworkCredential("sccmadmin", "1nfradddg");
+                NetworkCredential credential = new NetworkCredential(user, pass+"@"+dominio);
                 connection.Credential = credential;
                 connection.Bind();
-                Console.WriteLine("logged in");
+                return "LOGIN";                
             }
             catch (LdapException lexc)
             {
                 String error = lexc.ServerErrorMessage;
-                Console.WriteLine(lexc);
+                return lexc.Message;
             }
             catch (Exception exc)
             {
-                Console.WriteLine(exc);
+                return exc.Message;
             }
         }
 

@@ -100,5 +100,13 @@ namespace WinApp
                 }
             }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor; // change cursor to hourglass type
+            var res =new Validateldap().validate(textuser.Text, textpass.Text);
+            Cursor = Cursors.Arrow; // change cursor to normal type
+            MessageBox.Show(res);
+        }
     }
 }
