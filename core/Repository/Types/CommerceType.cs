@@ -13,7 +13,7 @@ namespace core.Repository.Types
         Cnb,
         CnbSpecial,
         Falabella,
-        ExitoConciliacion
+        ExitoTarjetasPrivadas
         
     }
 }

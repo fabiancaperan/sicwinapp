@@ -4,6 +4,7 @@ using core.Entities.MasterData;
 using core.Utils.format;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,6 @@ namespace core.UseCase.Cnb
         {
             _format = new FormatFileByType();
         }
-        private const string _nit = "8909006089";
         private const string _A = "A";
         private const string _N = "N";
         private const string _01 = "0001";
@@ -27,6 +27,8 @@ namespace core.UseCase.Cnb
         private const string _2 = "2";
         private const string _space = " ";
 
+
+        
         public List<CommerceModel> build(List<SapModel> lstSap, List<EntidadesModel> entidades, List<cnbsModel> cnbs)
         {
             var lst = lstSap
@@ -40,7 +42,7 @@ namespace core.UseCase.Cnb
                               (se, f) => new { se.s, se.e, f })
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
-                        .Where(j => EF.Functions.Like(j.s.Cod_RTL, (j.e.fiid.PadRight(3) + "%")))
+                        .Where(j => EF.Functions.Like(j.s.Cod_RTL, (3 + Right(j.e.fiid, 3) + "%")))
                               //.Where(j => j.s.Nit.Trim() == _nit)
                               .GroupBy(g => new { Rtl = g.s.Cod_RTL.Trim(), Nit = g.s.Nit.Trim() })
                               .Select(j => new CommerceModel
@@ -95,6 +97,10 @@ namespace core.UseCase.Cnb
                                ).ToList()
                               }).ToList();
             return lst;
+        }
+        private string Right(string value, int length)
+        {
+            return value.Substring(value.Length - length);
         }
         public string RemoveSpecialCharacters(string input)
         {

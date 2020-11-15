@@ -62,7 +62,7 @@ namespace core.UseCase.DownloadData
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, lstSap, commerceType, res);
                         break;
-                    case CommerceType.ExitoConciliacion:
+                    case CommerceType.ExitoTarjetasPrivadas:
                         res = new GenerateConcilationFile().build(lstSap, lstConv);
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, lstSap, commerceType, res);

@@ -18,8 +18,8 @@ namespace WinApp
                 //IPLDAP 192.168.1.49
                 //puertoLdap = 389
 
-                LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier("192.168.1.49",389),null , AuthType.Basic);
-                //LdapConnection connection = new LdapConnection("ingetec.loc");
+               // LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier("192.168.1.49",389),null , AuthType.Basic);
+                LdapConnection connection = new LdapConnection("ingetec.loc");
                 NetworkCredential credential = new NetworkCredential("sccmadmin", "1nfradddg");
                 connection.Credential = credential;
                 connection.Bind();
