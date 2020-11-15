@@ -35,6 +35,8 @@ namespace core.UseCase.DownloadData
             List<conveniosModel> lstConv = _db.conveniosModel.ToList();
             List<cnbsModel> lstCnb = _db.cnbsModel.ToList();
             List<SapModel> lstSap = new SicContext().getAll();
+            List<binesespModel> lstBinesesp;
+            List<redprivadasModel> lstRedPrivadas;
             foreach (var commerceType in commerceTypes)
             {
 
@@ -64,6 +66,11 @@ namespace core.UseCase.DownloadData
                         break;
                     case CommerceType.ExitoTarjetasPrivadas:
                         res = new GenerateConcilationFile().build(lstSap, lstConv);
+                        if (res != null && res.Any())
+                            ComerciosFileRtc(rute, lstSap, commerceType, res);
+                        break;
+                    case CommerceType.ExitoRedebanmvtos:
+                        res = new GenerateRedebanmvtosFile().build(lstSap, lstBinesesp, lstRedPrivadas);
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, lstSap, commerceType, res);
                         break;
