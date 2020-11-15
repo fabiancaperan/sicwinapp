@@ -84,6 +84,7 @@ namespace WinApp
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //new Validateldap().validate();
             if (textuser.Text == "admin")
             {
                 if (textpass.Text == "admin")
