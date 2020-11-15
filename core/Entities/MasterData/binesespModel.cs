@@ -10,7 +10,7 @@ namespace core.Entities.MasterData
     {
         [Display(Name = "Fiid")]
         [MaxLength(4)]
-        public int Fiid { get; set; }
+        public string Fiid { get; set; }
 
         [Display(Name = "NombreTar")]
         [MaxLength(50)]
