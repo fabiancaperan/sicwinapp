@@ -330,6 +330,24 @@ namespace core.UseCase.InitDatabase
             return lst;
         }
 
+        public List<binesespModel> uploadbineses()
+        {
+            var json = @"[{'FIID':'0806','Nombre Tar':'CODENSA},
+                          {'FIID':'0808','Nombre Tar':'PREPAGO'},
+                          {'FIID':'0819','Nombre Tar':'COMFENALCO'},
+                          {'FIID':'0820','Nombre Tar':'COOMEVA'},
+                          {'FIID':'0828','Nombre Tar':'ASOPAGOS'},
+                          {'FIID':'0822','Nombre Tar':'COMBARRANQUILLA'},
+                          {'FIID':'0823','Nombre Tar':'COMFAMILIAR ATLANTICO'},
+                          {'FIID':'0825','Nombre Tar':'COMFENALCO ANTIOQUIA'},
+                          {'FIID':'0814','Nombre Tar':'COMFAMA'},
+                          {'FIID':'0815','Nombre Tar':'FESA ASSENDA'},
+                          {'FIID':'0821','Nombre Tar':'TUYA ALKOSTO'}
+                        ]";
+            List<binesespModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<binesespModel>>(json);
+            return lst;
+        }
+
     }
 }
 
