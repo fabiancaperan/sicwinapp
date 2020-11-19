@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace core.Entities.MasterData
 {
-    public class establecimientos_sic4Model
+    public class EstablecimientosSic4Model
     {
         [Display(Name = "nombre")]
         [MaxLength(30)]
@@ -23,7 +20,7 @@ namespace core.Entities.MasterData
         [MaxLength(255)]
         public string email { get; set; }
 
-        [Display(Name = "formato")]
+        [Display(Name = "Formato")]
         [MaxLength(20)]
         public string formato { get; set; }
     }

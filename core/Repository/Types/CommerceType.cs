@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace core.Repository.Types
+﻿namespace core.Repository.Types
 {
     public enum CommerceType
     {

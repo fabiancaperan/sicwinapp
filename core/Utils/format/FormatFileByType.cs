@@ -1,32 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace core.Utils.format
 {
     public class FormatFileByType
     {
-        private readonly long _unonegativo = -1;
-        private readonly string _vacio = "";
-        private readonly string A = "A";
-        private readonly string N = "N";
-        private readonly string _space = " ";
-        private readonly string _raya = "_";
-        private readonly string _zero = "0";
-        private long _valor = 0;
+        private const long Unonegativo = -1;
+        private const string Vacio = "";
+        private const string A = "A";
+        private const string N = "N";
+        private const string Space = " ";
+        private const string Raya = "_";
+        private const string Zero = "0";
+        private long _valor;
 
-        public string formato(string campo, int tamaño, string tipo)
+        public string Formato(string campo, int tamaño, string tipo)
         {
             try
             {
-                string formateado = _vacio;
+                string formateado = Vacio;
                 if (tipo == A)
                 {
                     return formatA(tamaño, campo);
                 }
                 else if (tipo == N)
                 {
-                    return formatN(tamaño, campo);
+                    return FormatN(tamaño, campo);
                 }
                 return formateado;
 
@@ -34,7 +32,7 @@ namespace core.Utils.format
 
             catch (Exception)
             {
-                return _vacio;
+                return Vacio;
             }
         }
 
@@ -42,21 +40,21 @@ namespace core.Utils.format
         {
             var format = campo.Trim();
             while(format.Length < tamaño)
-                format += _space;
+                format += Space;
             return format;
         }
-        private string formatN(int tamaño,string campo) 
+        private string FormatN(int tamaño,string campo) 
         {
-            string format = _vacio;
+            string format = Vacio;
             if (!long.TryParse(campo.Trim(), out _valor))
-                return _vacio;
+                return Vacio;
             if (_valor < 0)
             {
-                format = _raya;
-                campo = (_valor * _unonegativo).ToString();
+                format = Raya;
+                campo = (_valor * Unonegativo).ToString();
             }
             while(format.Length < (tamaño - campo.Trim().Length))
-                format += _zero;
+                format += Zero;
             format += campo.Trim();
             return format;
         }

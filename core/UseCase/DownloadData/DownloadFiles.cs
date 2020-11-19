@@ -1,6 +1,4 @@
 ﻿using core.Entities.ComerciosData;
-using core.Entities.ConvertData;
-using core.Entities.MasterData;
 using core.Repository;
 using core.Repository.Sic;
 using core.Repository.Types;
@@ -27,13 +25,13 @@ namespace core.UseCase.DownloadData
         }
         public bool Build(string rute, List<CommerceType> commerceTypes)
         {
-            List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
-            List<FalabellaModel> lstFalabella = _db.FalabellaModel.ToList();
-            List<ConveniosModel> lstConv = _db.ConveniosModel.ToList();
-            List<CnbsModel> lstCnb = _db.CnbsModel.ToList();
-            List<SapModel> lstSap = new SicContext().GetAll();
-            List<BinesespModel> lstBinesesp = _db.BinesesModel.ToList();
-            List<RedprivadasModel> lstRedPrivadas = _db.RedprivadasModel.ToList();
+            var lstEntidades = _db.EntidadesModel.ToList();
+            var lstFalabella = _db.FalabellaModel.ToList();
+            var lstConv = _db.ConveniosModel.ToList();
+            var lstCnb = _db.CnbsModel.ToList();
+            var lstSap = new SicContext().GetAll();
+            var lstBinesesp = _db.BinesesModel.ToList();
+            var lstRedPrivadas = _db.RedprivadasModel.ToList();
             foreach (var commerceType in commerceTypes)
             {
 

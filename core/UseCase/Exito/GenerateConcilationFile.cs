@@ -1,8 +1,6 @@
 ﻿using core.Entities.ComerciosData;
 using core.Entities.ConvertData;
 using core.Entities.MasterData;
-using core.Utils.format;
-using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,26 +11,19 @@ namespace core.UseCase.Exito
 {
     public class GenerateConcilationFile
     {
-        private readonly FormatFileByType _format;
-        public GenerateConcilationFile()
-        {
-            _format = new FormatFileByType();
-        }
-        private const string _nit = "8909006089";
-        private const string _A = "A";
-        private const string _N = "N";
-        private const string _01 = "0001";
-        private const string _02 = "0002";
-        private const string _2 = "2";
-        private const string _space = " ";
+        //private readonly FormatFileByType _format;
+        //public GenerateConcilationFile()
+        //{
+        //    //_format = new FormatFileByType();
+        //}
+        private const string Nit = "8909006089";
         private readonly List<string> _lstNoCodTrans = new List<string>() { "17", "31", "32", "33", "36", "37", "49", "58", "89" };
         private readonly List<string> _lstTx = new List<string>() { "10", "35", "59", "66", "68" };
 
-        public List<CommerceModel> build(List<SapModel> lstSap,List<ConveniosModel> lstConv)
+        public List<CommerceModel> Build(List<SapModel> lstSap,List<ConveniosModel> lstConv)
         {
             var date = DateTime.Now;
             var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
-            double total = 0;
             var lst = lstSap
                        .Join(lstConv,
                               post => (post.Id_Fran_Hija + post.Filler_Fran_Hija),
@@ -40,7 +31,7 @@ namespace core.UseCase.Exito
                               (s, e) => new { s, e })
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
-                        .Where(j => j.s.Nit.Trim() == _nit &&
+                        .Where(j => j.s.Nit.Trim() == Nit &&
                                     !_lstNoCodTrans.Contains(j.s.Cod_Trans.Substring(0, 2)))
                               //.GroupBy(g => new { Rtl = g.s.Cod_RTL.Trim(), Nit = g.s.Nit.Trim() })
                               .Select(l =>
@@ -54,7 +45,6 @@ namespace core.UseCase.Exito
                                           _lstTx.Contains(l.s.Cod_Trans.Substring(0, 2)))
                                           ? -1 : 1;
                                           var tx = signo * Convert.ToDouble(l.s.Valor) / 100;
-                                          total += tx;
 
                                           return new StringBuilder()
                                    .Append("0|")
@@ -83,7 +73,7 @@ namespace core.UseCase.Exito
             var rs = new CommerceModel()
             {
                 Rtl = "",
-                Nit = 2 + _nit,
+                Nit = 2 + Nit,
                 Line = "",
                 CodRtl = new StringBuilder().Append("TPRIVADAS").Append(dat).Append(".txt").ToString(),
                 Lst = lst

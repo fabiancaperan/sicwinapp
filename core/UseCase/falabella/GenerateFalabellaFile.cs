@@ -18,18 +18,13 @@ namespace core.UseCase.Falabella
         {
             _format = new FormatFileByType();
         }
-        private const string _nit = "9000174478";
-        private const string _A = "A";
-        private const string _N = "N";
-        private const string _01 = "0001";
-        private const string _02 = "0002";
-        private const string _2 = "2";
-        private const string _space = " ";
-        private const string _dinner = "03";
-        private const string _amex = "07";
+        private const string Nit = "9000174478";
+        private const string A = "A";
+        private const string Dinner = "03";
+        private const string Amex = "07";
 
 
-        public List<CommerceModel> build(List<SapModel> lstSap, List<FalabellaModel> falabella)
+        public List<CommerceModel> Build(List<SapModel> lstSap, List<FalabellaModel> falabella)
         {
             var date = DateTime.Now;
             var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
@@ -37,9 +32,9 @@ namespace core.UseCase.Falabella
             var lst = lstSap
                        .Join(falabella,
                               post => post.Cod_RTL.Trim(),
-                              meta => _format.formato(meta.CODIGO_UNICO.Substring(0, 10), 10, _A),
+                              meta => _format.Formato(meta.CODIGO_UNICO.Substring(0, 10), 10, A),
                               (s, e) => new { s, e })
-                        .Where(j => j.s.Nit.Trim() == _nit &&
+                        .Where(j => j.s.Nit.Trim() == Nit &&
                                     Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) > 0 &&
                                     Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) < 9 &&
                                     j.s.Num_Autoriza != string.Empty)
@@ -47,8 +42,8 @@ namespace core.UseCase.Falabella
                         {
 
                             {
-                                var codigo = l.s.Adquirida_Por + l.s.Adquirida_Para == _dinner ? "09" :
-                                        l.s.Adquirida_Por + l.s.Adquirida_Para == _amex ? "11" : "13";
+                                var codigo = l.s.Adquirida_Por + l.s.Adquirida_Para == Dinner ? "09" :
+                                        l.s.Adquirida_Por + l.s.Adquirida_Para == Amex ? "11" : "13";
                                 var cod = codigo == "13" ? "|" : codigo + "|";
                                 var fecComp = l.s.FechaCompra.Substring(0, 8);
                                 var codTrans = l.s.Cod_Trans.Substring(0, 2);
@@ -83,7 +78,7 @@ namespace core.UseCase.Falabella
             var rs = new CommerceModel()
             {
                 Rtl = "",
-                Nit = 1+_nit,
+                Nit = 1+Nit,
                 Line = "",
                 CodRtl = new StringBuilder().Append("XREDCO_01_").Append(dat).Append(".txt").ToString(),
                 Lst = lst

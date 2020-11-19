@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace core.Entities.MasterData
 {
-    public class establecimientosModel
+    public class EstablecimientosModel
     {
         [Display(Name = "nombre")]
         [MaxLength(30)]

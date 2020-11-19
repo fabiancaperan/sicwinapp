@@ -2,13 +2,8 @@
 using core.UseCase.DownloadData;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Security;
-using System.Text;
 using System.Windows.Forms;
 
 namespace WinApp
@@ -22,11 +17,6 @@ namespace WinApp
         }
 
         private void Main_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
         }
@@ -47,16 +37,6 @@ namespace WinApp
 
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void btnChargeFileInput_Click(object sender, EventArgs e)
         {
             OpenFileDialog search = new OpenFileDialog();
@@ -65,7 +45,10 @@ namespace WinApp
             {
                 string ext = Path.GetExtension(search.FileName);
                 if (ext != "")
-                    MessageBox.Show("El archivo no debe tener extensión");
+                {
+                    const string txtExtension = "El archivo no debe tener extensión";
+                    MessageBox.Show(txtExtension);
+                }
                 else
                 {
                     textBoxInput.Text = search.FileName;
@@ -89,14 +72,20 @@ namespace WinApp
 
                 if (textBoxInput.Text != "")
                 {
-                    var ret = new ChargeFile().build(textBoxInput.Text);
-                    MessageBox.Show("Se ha cargado correctamente");
+                    var ret = new ChargeFile().Build(textBoxInput.Text);
+                    if (ret)
+                    {
+                        var txtCheck = "Se ha cargado correctamente";
+                        MessageBox.Show(txtCheck);
+                    }
+
                     button3.Enabled = true;
 
                 }
                 else
                 {
-                    MessageBox.Show("Debe seleccionar un archivo para cargar");
+                    const string selectFile = "Debe seleccionar un archivo para cargar";
+                    MessageBox.Show(selectFile);
                 }
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
@@ -112,7 +101,7 @@ namespace WinApp
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -133,16 +122,22 @@ namespace WinApp
                         button2.Enabled = false;
                         Cursor = Cursors.WaitCursor; // change cursor to hourglass type
                         var res = new DownloadFiles().Build(rute, subfolder);
-                        MessageBox.Show("Se ha generado con Éxito");
+                        if (res)
+                        {
+                            var txtFine = "Se ha generado con Éxito";
+                            MessageBox.Show(txtFine);
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Debe seleccionar al menos un item");
+                        var selectItem = "Debe seleccionar al menos un item";
+                        MessageBox.Show(selectItem);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("No a seleccionado una ruta");
+                    var selectRute = "No a seleccionado una ruta";
+                    MessageBox.Show(selectRute);
                 }
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
@@ -159,7 +154,8 @@ namespace WinApp
         private static void MessageError(Exception ex)
         {
             Console.WriteLine(ex.Message);
-            MessageBox.Show("Hubo un error comuniquese con el administrador");
+            var txtError = "Hubo un error comuniquese con el administrador";
+            MessageBox.Show(txtError);
         }
     }
 }

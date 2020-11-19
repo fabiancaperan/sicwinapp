@@ -6,9 +6,8 @@ namespace core.UseCase.ConvertData
 {
     public class ChargeFile
     {
-        public bool build(string path) {
-            var lst =new SicContext().GetAll();
-            if (validateFormat(path)) {
+        public bool Build(string path) {
+            if (ValidateFormat(path)) {
                 List<SapModel> sapModels=new ConvertFileTextToSapModel().Build(path);
                 new SicContext().Save(sapModels);
             }
@@ -16,7 +15,7 @@ namespace core.UseCase.ConvertData
             return true;
         }
 
-        private bool validateFormat(string path) {
+        private bool ValidateFormat(string path) {
             return true;
         }
     }
