@@ -14,6 +14,10 @@ namespace WinApp
         {
             InitializeComponent();
             checkedListBox1.DataSource = Enum.GetValues(typeof(core.Repository.Types.CommerceType));
+            for (int count = 0; count < checkedListBox1.Items.Count; count++)
+            {
+                checkedListBox1.SetItemChecked(count, true);
+            }
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -73,14 +77,16 @@ namespace WinApp
                 if (textBoxInput.Text != "")
                 {
                     var ret = new ChargeFile().Build(textBoxInput.Text);
-                    if (ret)
+                    if (ret == "TRUE")
                     {
                         var txtCheck = "Se ha cargado correctamente";
                         MessageBox.Show(txtCheck);
+                        button3.Enabled = true;
                     }
-
-                    button3.Enabled = true;
-
+                    else
+                    {
+                        MessageBox.Show(ret);
+                    }
                 }
                 else
                 {
@@ -155,7 +161,7 @@ namespace WinApp
         {
             Console.WriteLine(ex.Message);
             var txtError = "Hubo un error comuniquese con el administrador";
-            MessageBox.Show(txtError);
+            MessageBox.Show(ex.Message);
         }
     }
 }

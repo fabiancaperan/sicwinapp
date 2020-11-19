@@ -14,7 +14,7 @@ namespace core.Entities.ConvertData
         [MaxLength(8)]
         public string FechaCompra { get; set; }
         
-        [Display(Name = "Fecha Compra")]
+        [Display(Name = "Nit")]
         [MaxLength(13)]
         public string Nit { get; set; }
 
