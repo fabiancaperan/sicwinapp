@@ -88,6 +88,7 @@ namespace WinApp
         {
             try
             {
+                Cursor = Cursors.WaitCursor; // change cursor to hourglass type
                 const string admin = "admin";
                 if (textuser.Text == admin)
                 {
@@ -97,15 +98,25 @@ namespace WinApp
                         charge.Show();
                         this.Hide();
                     }
-                    else
-                    {
-                        textpass.Clear();
-                        textuser.Focus();
-                    }
                 }
+
+                else
+                {
+                    string login = "LOGIN";
+                   
+                    var res = new ValidateLdap().Validate(textuser.Text, textpass.Text);
+                    
+                    MessageBox.Show(res);
+                    if (login != res) return;
+                    Main charge = new Main();
+                    charge.Show();
+                    this.Hide();
+                }
+                Cursor = Cursors.Arrow; // change cursor to normal type
             }
             catch (Exception ex)
             {
+                Cursor = Cursors.Arrow; // change cursor to normal type
                 MessageError(ex);
             }
         }

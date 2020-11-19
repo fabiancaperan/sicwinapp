@@ -31,6 +31,9 @@ namespace core.UseCase.Carrefour
 
         public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades)
         {
+            var date = DateTime.Now;
+            var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
+
             var lst = lstSap.Where(s => s.Nit.Trim() == Nit &&
                                         _franquicias.Contains((s.Id_Fran_Hija + s.Filler_Fran_Hija)) &&
                                         s.Cod_Trans.Substring(0, 2) == CodTrans &&
@@ -49,11 +52,11 @@ namespace core.UseCase.Carrefour
                               .Select(j => new CommerceModel
                               {
                                   Nit = j.Key,
-                                  Line = new StringBuilder().Append("02").Append(j.FirstOrDefault()?.s.FechaCompra)
-                                                            .Append(_format.Formato(j.Key, 13, A)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
+                                  Line = new StringBuilder().Append("02").Append(dat)
+                                                            .Append(_format.Formato(j.Key, 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ',244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
-                                                                .Append("-").Append(j.FirstOrDefault()?.s.FechaCompra).Append("-").Append(j.Key).ToString(),
+                                                                .Append("-").Append(dat).Append("-").Append(j.Key).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
                                  .Append("01")

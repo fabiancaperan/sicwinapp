@@ -9,6 +9,7 @@ namespace core.Entities.ComerciosData
         public string Nit { get; set; }
         public string NombreCadena { get; set; }
         public string Line { get; set; }
+        public string FinalLine { get; set; }
         public string Rtl { get; set; }
 
         public List<StringBuilder> Lst { get; set; }

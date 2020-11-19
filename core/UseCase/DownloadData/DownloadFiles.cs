@@ -106,6 +106,9 @@ namespace core.UseCase.DownloadData
                     writer.WriteLine(item.Line);
                 //data
                 item.Lst.ForEach(s => { writer.WriteLine(s); });
+                //num regis
+                if (item.FinalLine.Trim() != string.Empty)
+                    writer.WriteLine(item.FinalLine);
             }
         }
 
@@ -125,6 +128,9 @@ namespace core.UseCase.DownloadData
                     writer.WriteLine(item.Line);
                 //data
                 item.Lst.ForEach(s => { writer.WriteLine(s); });
+                //num regis
+                if (item.FinalLine.Trim() != string.Empty)
+                    writer.WriteLine(item.FinalLine);
             }
         }
     }

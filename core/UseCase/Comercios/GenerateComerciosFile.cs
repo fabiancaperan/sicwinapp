@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace core.UseCase.Comercios
 {
@@ -27,7 +28,10 @@ namespace core.UseCase.Comercios
 
         public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades)
         {
-            var lst = lstSap.Where(s => s.Nit.Trim() != Nit.Trim())
+            var date = DateTime.Now;
+            var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
+           
+            var lst = lstSap.Where(s => s.Nit.Trim() != Nit.Trim()).OrderBy(s => s.Nit).ThenBy(s=>s.Cod_RTL).Select(s=>s)
                        .Join(entidades,
                               post => post.Fiid_Emisor,
                               meta => meta.fiid,
@@ -37,16 +41,18 @@ namespace core.UseCase.Comercios
                               f => f.fiid,
                               (se, f) => new { se.s, se.e, f })
                               //.Where(j => j.s.Cod_RTL.Contains(j.e.fiid.PadRight(3)))
-                              //.OrderBy(j => j.s.Cod_RTL)
+                              //.OrderBy(j => j.s.Nit)
                               .GroupBy(g => g.s.Nit.Trim())
+                              .OrderByOrdinal(s=>s.Key)
                               .Select(j => new CommerceModel
                               {
                                   Nit = j.Key,
-                                  Line = new StringBuilder().Append("02").Append(j.FirstOrDefault()?.s.FechaCompra)
-                                                            .Append(_format.Formato(j.Key, 13, A)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
-                                                            .Append("RMC").Append(new String(' ',244)).ToString(),
+                                  Line = new StringBuilder().Append("02").Append(dat)
+                                                            .Append(_format.Formato(j.Key, 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
+                                                            .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
-                                                                .Append("-").Append(j.FirstOrDefault()?.s.FechaCompra).Append("-").Append(j.Key).ToString(),
+                                                                .Append("-").Append(dat).Append("-").Append(j.Key).ToString(),
+                                  FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
                                  .Append("01")
@@ -86,7 +92,7 @@ namespace core.UseCase.Comercios
                                  .Append(_format.Formato(l.s.TextoAdicional.Substring(0, 25), 25, A))
                                  .Append(_format.Formato(l.s.Convtrack.Substring(0, 5), 5, N))//MICOMPRA
                                  .Append(_format.Formato(Space, 4, A))//space
-                                                                        //.ToString()
+                                                                      //.ToString()
                                ).ToList()
                               }).ToList();
 
@@ -95,7 +101,7 @@ namespace core.UseCase.Comercios
 
         private string RemoveSpecialCharacters(string input)
         {
-            
+
             Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
             input = r.Replace(input, String.Empty);

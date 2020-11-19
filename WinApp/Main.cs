@@ -160,7 +160,7 @@ namespace WinApp
         private static void MessageError(Exception ex)
         {
             Console.WriteLine(ex.Message);
-            var txtError = "Hubo un error comuniquese con el administrador";
+            //var txtError = "Hubo un error comuniquese con el administrador";
             MessageBox.Show(ex.Message);
         }
     }

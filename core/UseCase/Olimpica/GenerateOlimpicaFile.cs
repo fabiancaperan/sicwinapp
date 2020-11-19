@@ -27,6 +27,8 @@ namespace core.UseCase.Olimpica
 
         public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades)
         {
+            var date = DateTime.Now;
+            var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
             var lst = lstSap.Where(s => s.Nit.Trim() == Nit)
                         .Join(entidades,
                                post => post.Fiid_Emisor,
@@ -41,11 +43,11 @@ namespace core.UseCase.Olimpica
                               {
                                   Rtl = j.Key.Rtl,
                                   Nit = 1+j.Key.Nit,
-                                  Line = new StringBuilder().Append("02").Append(j.FirstOrDefault()?.s.FechaCompra)
+                                  Line = new StringBuilder().Append("02").Append(dat)
                                                             .Append(_format.Formato(j.FirstOrDefault()?.s.Nit.Trim(), 13, A)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
-                                                                .Append("-").Append(j.FirstOrDefault()?.s.FechaCompra).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
+                                                                .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
                                  .Append("01")

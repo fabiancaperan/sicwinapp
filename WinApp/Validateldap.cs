@@ -25,12 +25,12 @@ namespace WinApp
             catch (LdapException ex)
             {
                 Console.WriteLine(ex.Message);
-                return ErrorUser;
+                return ex.Message;
             }
             catch (Exception exc)
             {
                 Console.WriteLine(exc.Message);
-                return ErrorServer;
+                return exc.Message;
             }
         }
 
