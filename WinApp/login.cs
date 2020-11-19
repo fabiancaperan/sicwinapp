@@ -1,30 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
 
 namespace WinApp
 {
-    public partial class login : Form
+    public partial class Login : Form
     {
-        public login()
+        private const string ErrorMessage = "Hubo un error comuniquese con el administrador";
+
+        public Login()
         {
             InitializeComponent();
         }
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
-        private extern static void ReleaseCapture();
+        private static extern void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-        private extern static void SendMessage(System.IntPtr hwnd, int wmsg, int wparam, int lparam);
+        private static extern void SendMessage(IntPtr hwnd, int wmsg, int wparam, int lparam);
 
         private void textuser_Enter(object sender, EventArgs e)
         {
-            if (textuser.Text == "USUARIO")
+            string usuario = "USUARIO";
+            if (textuser.Text == usuario)
             {
                 textuser.Text = "";
                 textuser.ForeColor = Color.Black;
@@ -35,14 +34,16 @@ namespace WinApp
         {
             if (textuser.Text == "")
             {
-                textuser.Text = "USUARIO";
+                const string usuario = "USUARIO";
+                textuser.Text = usuario;
                 textuser.ForeColor = Color.Black;
             }
         }
 
         private void textpass_Enter(object sender, EventArgs e)
         {
-            if (textpass.Text == "CONTRASEÑA")
+            const string contraseña = @"CONTRASEÑA";
+            if (textpass.Text == contraseña)
             {
                 textpass.Text = "";
                 textpass.ForeColor = Color.Black;
@@ -54,7 +55,8 @@ namespace WinApp
         {
             if (textpass.Text == "")
             {
-                textpass.Text = "CONTRASEÑA";
+                var textpassText = "CONTRASEÑA";
+                textpass.Text = textpassText;
                 textpass.ForeColor = Color.Black;
                 textpass.UseSystemPasswordChar = false;
             }
@@ -84,29 +86,49 @@ namespace WinApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //new Validateldap().validate();
-            if (textuser.Text == "admin")
+            try
             {
-                if (textpass.Text == "admin")
+                const string admin = "admin";
+                if (textuser.Text == admin)
                 {
-                    Main charge = new Main();
-                    charge.Show();
-                    this.Hide();
-                }
-                else
-                {
-                    textpass.Clear();
-                    textuser.Focus();
+                    if (textpass.Text == admin)
+                    {
+                        Main charge = new Main();
+                        charge.Show();
+                        this.Hide();
+                    }
+                    else
+                    {
+                        textpass.Clear();
+                        textuser.Focus();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageError(ex);
+            }
+        }
+
+        private static void MessageError(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            MessageBox.Show(ErrorMessage);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            string login = "LOGIN";
             Cursor = Cursors.WaitCursor; // change cursor to hourglass type
-            var res =new Validateldap().validate(textuser.Text, textpass.Text);
+            var res = new ValidateLdap().Validate(textuser.Text, textpass.Text);
             Cursor = Cursors.Arrow; // change cursor to normal type
             MessageBox.Show(res);
+            if (login != res) return;
+            Main charge = new Main();
+            charge.Show();
+            this.Hide();
+
+
         }
     }
 }

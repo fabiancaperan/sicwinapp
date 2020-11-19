@@ -5,7 +5,7 @@ using System.Text;
 
 namespace core.Entities.MasterData
 {
-    public class falabellaModel
+    public class FalabellaModel
     {
         [Key]
         [Display(Name = "CODIGO_UNICO")]

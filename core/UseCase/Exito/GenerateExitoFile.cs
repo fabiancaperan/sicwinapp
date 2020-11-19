@@ -49,9 +49,9 @@ namespace core.UseCase.Exito
                                   Line = new StringBuilder().Append("02").Append(j.FirstOrDefault().s.FechaCompra)
                                                             .Append(_format.formato(j.FirstOrDefault().s.Nit.Trim(), 13, _A)).Append(_format.formato(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()), 30, _A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
-                                  Cod_RTL = new StringBuilder().Append(j.FirstOrDefault().s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()))
+                                  CodRtl = new StringBuilder().Append(j.FirstOrDefault().s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault().s.NombreCadena.Trim()))
                                                                 .Append("-").Append(j.FirstOrDefault().s.FechaCompra).Append("-").Append(j.FirstOrDefault().s.Nit.Trim()).ToString(),
-                                  lst = j.Select(l =>
+                                  Lst = j.Select(l =>
                                   new StringBuilder()
                                  .Append("01")
                                  .Append(_format.formato(l.s.Id_Terminal.Substring(0, 16), 16, _A))
@@ -95,7 +95,8 @@ namespace core.UseCase.Exito
                               }).ToList();
             return lst;
         }
-        public string RemoveSpecialCharacters(string input)
+
+        private string RemoveSpecialCharacters(string input)
         {
 
             Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);

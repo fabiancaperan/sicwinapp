@@ -1,38 +1,33 @@
 ﻿using core.Entities.MasterData;
 using core.Repository;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Internal;
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace core.UseCase.InitDatabase
 {
     public class InitDb
     {
       
-        public bool initDatabase()
+        public bool InitDatabase()
         {
-            var res = false;
-            using (var db = new dbContext())
+            using var db = new dbContext();
+            db.Database.EnsureDeleted();
+            if (!((RelationalDatabaseCreator) db.Database.GetService<IDatabaseCreator>()).Exists())
             {
-                db.Database.EnsureDeleted();
-                if (!(db.Database.GetService<Microsoft.EntityFrameworkCore.Storage.IDatabaseCreator>() as Microsoft.EntityFrameworkCore.Storage.RelationalDatabaseCreator).Exists())
-                {
-                    res = db.Database.EnsureCreated();
-                    db.EntidadesModel.AddRange(uploadEntidades());
-                    db.falabellaModel.AddRange(uploadFalabella());
-                    db.cnbsModel.AddRange(uploadCNBS());
-                    db.redprivadasModel.AddRange(uploadredprivadas());
-                    db.conveniosModel.AddRange(uploadconvenios());
-                    db.SaveChanges();
-                }
+                db.Database.EnsureCreated();
+                db.EntidadesModel.AddRange(UploadEntidades());
+                db.FalabellaModel.AddRange(uploadFalabella());
+                db.CnbsModel.AddRange(uploadCNBS());
+                db.RedprivadasModel.AddRange(uploadredprivadas());
+                db.ConveniosModel.AddRange(uploadconvenios());
+                db.SaveChanges();
             }
 
             return true;
         }
 
-        public List<EntidadesModel> uploadEntidades() 
+        private List<EntidadesModel> UploadEntidades() 
         {
 
             var json = @"[{'FIID':'0832','NOMBRE':'NUEVA ENTIDAD            ','NIT':'                         '},
@@ -133,7 +128,7 @@ namespace core.UseCase.InitDatabase
             return lst;
         }
 
-        public List<falabellaModel> uploadFalabella()
+        public List<FalabellaModel> uploadFalabella()
         {
             var json = @"[{'CODIGO_UNICO':'0012347498','LOCAL_FALABELLA':'0037','NOMBRE_LOCAL':'Santiago de Cali'},
                           {'CODIGO_UNICO':'0011802790','LOCAL_FALABELLA':'0183','NOMBRE_LOCAL':'Santa Fe'},
@@ -150,11 +145,11 @@ namespace core.UseCase.InitDatabase
                           {'CODIGO_UNICO':'0012055885','LOCAL_FALABELLA':'0036','NOMBRE_LOCAL':'San Diego Medellin'},
                           {'CODIGO_UNICO':'0012817441','LOCAL_FALABELLA':'0062','NOMBRE_LOCAL':'PARQUE ARBOLEDA PEREIRA'}
             ]";
-            List<falabellaModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<falabellaModel>>(json);
+            List<FalabellaModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<FalabellaModel>>(json);
             return lst;
         }
 
-        public List<cnbsModel> uploadCNBS()
+        public List<CnbsModel> uploadCNBS()
         {
             var json = @"[{'CODIGO_UNICO':'3082000013','NOMBRE':'SUPERTIENDA TROPICANA'},
                           {'CODIGO_UNICO':'3082000039','NOMBRE':'SUPERMERCADO DONALDO'},
@@ -223,20 +218,20 @@ namespace core.UseCase.InitDatabase
                           {'CODIGO_UNICO':'3180300125','NOMBRE':'OLIMPICA'}
             ]";
 
-            List<cnbsModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<cnbsModel>>(json);
+            List<CnbsModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CnbsModel>>(json);
             return lst;
         }
 
-        public List<redprivadasModel> uploadredprivadas()
+        public List<RedprivadasModel> uploadredprivadas()
         {
             var json = @"[{'red':'0F','nombre':'CREDIBANCO CREDIUNO'},
                           {'red':'0G','nombre':'CREDIBANCO BIGPASS'}
             ]";
-            List<redprivadasModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<redprivadasModel>>(json);
+            List<RedprivadasModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<RedprivadasModel>>(json);
             return lst;
         }
 
-        public List<conveniosModel> uploadconvenios()
+        public List<ConveniosModel> uploadconvenios()
         {
             var json = @"[{'Id':'1','Nemo':'CONVSA1','diaini':'JU','Numdías':'7','Descripcion':'Comfama debito','emisor':'004','Nit':'8909008419','tiponegocio':'501','tipotrans':'2','Servidor':'localhost','Usuario':'1','Clave':'','CodConcepto':'SA','bolsillo':'2'},
                           {'Id':'2','Nemo':'CONVSA2','diaini':'LU','Numdías':'7','Descripcion':'Comfenalco Ctgena D','emisor':'005','Nit':'8904800237','tiponegocio':'502','tipotrans':'2','Servidor':'localhost','Usuario':'1','Clave':'','CodConcepto':'SA','bolsillo':'2'},
@@ -265,11 +260,11 @@ namespace core.UseCase.InitDatabase
                           {'Id':'25','Nemo':'CONVSP6','diaini':'LU','Numdías':'7','Descripcion':'Comfamiliar Huila','emisor':'053','Nit':'00','tiponegocio':'953','tipotrans':'2','Servidor':'localhost','Usuario':'1','Clave':'','CodConcepto':'SP','bolsillo':'1'},
                           {'Id':'26','Nemo':'CONVSAA','diaini':'LU','Numdías':'7','Descripcion':'Comfandi Muj Ahorr','emisor':'057','Nit':'8903032085','tiponegocio':'2054','tipotrans':'2','Servidor':'localhost','Usuario':'1','Clave':'','CodConcepto':'SA','bolsillo':'1'}
             ]";
-            List<conveniosModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<conveniosModel>>(json);
+            List<ConveniosModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ConveniosModel>>(json);
             return lst;
         }
 
-        public List<festivoModel> uploadfestivo()
+        public List<FestivoModel> Uploadfestivo()
         {
             var json = @"[{'FESTIVO':'20100104','DIAHABIL':'20100104'},
                           {'FESTIVO':'20100112','DIAHABIL':'20100112'},
@@ -326,28 +321,9 @@ namespace core.UseCase.InitDatabase
                           {'FESTIVO':'20101220','DIAHABIL':'20101220'},
                           {'FESTIVO':'20101227','DIAHABIL':'20101227'}
                         ]";
-            List<festivoModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<festivoModel>>(json);
+            List<FestivoModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<FestivoModel>>(json);
             return lst;
         }
-
-        public List<binesespModel> uploadbineses()
-        {
-            var json = @"[{'FIID':'0806','Nombre Tar':'CODENSA},
-                          {'FIID':'0808','Nombre Tar':'PREPAGO'},
-                          {'FIID':'0819','Nombre Tar':'COMFENALCO'},
-                          {'FIID':'0820','Nombre Tar':'COOMEVA'},
-                          {'FIID':'0828','Nombre Tar':'ASOPAGOS'},
-                          {'FIID':'0822','Nombre Tar':'COMBARRANQUILLA'},
-                          {'FIID':'0823','Nombre Tar':'COMFAMILIAR ATLANTICO'},
-                          {'FIID':'0825','Nombre Tar':'COMFENALCO ANTIOQUIA'},
-                          {'FIID':'0814','Nombre Tar':'COMFAMA'},
-                          {'FIID':'0815','Nombre Tar':'FESA ASSENDA'},
-                          {'FIID':'0821','Nombre Tar':'TUYA ALKOSTO'}
-                        ]";
-            List<binesespModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<binesespModel>>(json);
-            return lst;
-        }
-
     }
 }
 

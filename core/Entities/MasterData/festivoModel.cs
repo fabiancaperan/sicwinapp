@@ -5,7 +5,7 @@ using System.Text;
 
 namespace core.Entities.MasterData
 {
-    public class festivoModel
+    public class FestivoModel
     {
         [Key]
         [Display(Name = "FESTIVO")]

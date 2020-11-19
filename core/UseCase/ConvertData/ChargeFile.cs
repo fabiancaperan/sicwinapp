@@ -1,26 +1,22 @@
 ﻿using core.Entities.ConvertData;
 using core.Repository.Sic;
-using core.UseCase.Carrefour;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace core.UseCase.ConvertData
 {
     public class ChargeFile
     {
         public bool build(string path) {
-            var lst =new SicContext().getAll();
+            var lst =new SicContext().GetAll();
             if (validateFormat(path)) {
-                List<SapModel> sapModels=new ConvertFileTextToSapModel().build(path);
-                new SicContext().save(sapModels);
+                List<SapModel> sapModels=new ConvertFileTextToSapModel().Build(path);
+                new SicContext().Save(sapModels);
             }
             
             return true;
         }
 
         private bool validateFormat(string path) {
-            //validar extension .txt
             return true;
         }
     }

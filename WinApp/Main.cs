@@ -102,12 +102,11 @@ namespace WinApp
                 button2.Enabled = true;
 
             }
-            catch (SecurityException ex)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
-                $"Details:\n\n{ex.StackTrace}");
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
+                MessageError(ex);
             }
         }
 
@@ -133,7 +132,7 @@ namespace WinApp
                     {
                         button2.Enabled = false;
                         Cursor = Cursors.WaitCursor; // change cursor to hourglass type
-                        var res = new DownloadFiles().build(rute, subfolder);
+                        var res = new DownloadFiles().Build(rute, subfolder);
                         MessageBox.Show("Se ha generado con Éxito");
                     }
                     else
@@ -149,13 +148,18 @@ namespace WinApp
                 button2.Enabled = true;
 
             }
-            catch (SecurityException ex)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
-                $"Details:\n\n{ex.StackTrace}");
                 button2.Enabled = true;
                 Cursor = Cursors.Arrow; // change cursor to normal type
+                MessageError(ex);
             }
+        }
+
+        private static void MessageError(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            MessageBox.Show("Hubo un error comuniquese con el administrador");
         }
     }
 }

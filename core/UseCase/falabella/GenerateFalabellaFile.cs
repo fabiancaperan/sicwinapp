@@ -29,7 +29,7 @@ namespace core.UseCase.Falabella
         private const string _amex = "07";
 
 
-        public List<CommerceModel> build(List<SapModel> lstSap, List<falabellaModel> falabella)
+        public List<CommerceModel> build(List<SapModel> lstSap, List<FalabellaModel> falabella)
         {
             var date = DateTime.Now;
             var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
@@ -85,11 +85,10 @@ namespace core.UseCase.Falabella
                 Rtl = "",
                 Nit = 1+_nit,
                 Line = "",
-                Cod_RTL = new StringBuilder().Append("XREDCO_01_").Append(dat).Append(".txt").ToString(),
-                lst = lst
+                CodRtl = new StringBuilder().Append("XREDCO_01_").Append(dat).Append(".txt").ToString(),
+                Lst = lst
             };
-            var lstres = new List<CommerceModel>();
-            lstres.Add(rs);
+            var lstres = new List<CommerceModel> {rs};
             return lstres;
         }
         public string RemoveSpecialCharacters(string input)

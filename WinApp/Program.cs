@@ -1,9 +1,4 @@
-using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Caching;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinApp
@@ -16,12 +11,12 @@ namespace WinApp
         [STAThread]
         static void Main()
         {
-            
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            new core.UseCase.InitDatabase.InitDb().initDatabase();
-            Application.Run(new login());
+            new core.UseCase.InitDatabase.InitDb().InitDatabase();
+            Application.Run(new Login());
             //Application.Run(new chargeFile());
             //Application.Run(new login());
             //Application.Run(new DowloadFiles());

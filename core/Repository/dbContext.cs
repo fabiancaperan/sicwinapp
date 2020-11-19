@@ -7,17 +7,17 @@ namespace core.Repository
     {
         public DbSet<EntidadesModel> EntidadesModel { get; set; }
 
-        public DbSet<falabellaModel> falabellaModel { get; set; }
+        public DbSet<FalabellaModel> FalabellaModel { get; set; }
 
-        public DbSet<cnbsModel> cnbsModel { get; set; }
+        public DbSet<CnbsModel> CnbsModel { get; set; }
 
-        public DbSet<redprivadasModel> redprivadasModel { get; set; }
+        public DbSet<RedprivadasModel> RedprivadasModel { get; set; }
 
-        public DbSet<conveniosModel> conveniosModel { get; set; }
+        public DbSet<ConveniosModel> ConveniosModel { get; set; }
 
-        public DbSet<festivoModel> festivoModel { get; set; }
+        public DbSet<FestivoModel> FestivoModel { get; set; }
 
-        public DbSet<binesespModel> binesesModel { get; set; }
+        public DbSet<BinesespModel> BinesesModel { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=sic.db");

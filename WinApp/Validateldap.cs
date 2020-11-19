@@ -1,40 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
 using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace WinApp
 {
-    public class Validateldap
+    public class ValidateLdap
     {
+        private const string Login = "LOGIN";
+        private const string ErrorServer = "No se ha podido conectar con el servidor";
+        private const string ErrorUser = "Usuario o Contraseña Inválido";
+        private const string UrlServer = "192.168.1.49";
+        private const int PortServer = 389;
 
-        public string validate(string user, string pass)
+        public string Validate(string user, string pass)
         {
             try
             {
-                //Dominio =rbm
-                //IPLDAP 192.168.1.49
-                //puertoLdap = 389
-                var dominio = "rbm";
-
-                LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier("192.168.1.49",389),null , AuthType.Basic);
-                //LdapConnection connection = new LdapConnection("ingetec.loc");
-                //NetworkCredential credential = new NetworkCredential("sccmadmin", "1nfradddg");
-                NetworkCredential credential = new NetworkCredential(user, pass+"@"+dominio);
+                LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier(UrlServer, PortServer),null , AuthType.Basic);
+                NetworkCredential credential = new NetworkCredential(user, pass);
                 connection.Credential = credential;
                 connection.Bind();
-                return "LOGIN";                
+                return Login;                
             }
-            catch (LdapException lexc)
+            catch (LdapException ex)
             {
-                String error = lexc.ServerErrorMessage;
-                return lexc.Message;
+                Console.WriteLine(ex.Message);
+                return ErrorUser;
             }
             catch (Exception exc)
             {
-                return exc.Message;
+                Console.WriteLine(exc.Message);
+                return ErrorServer;
             }
         }
 

@@ -25,10 +25,10 @@ namespace core.UseCase.Exito
         private const string _02 = "0002";
         private const string _2 = "2";
         private const string _space = " ";
-        private List<string> _lstNoCodTrans = new List<string>() { "17", "31", "32", "33", "36", "37", "49", "58", "89" };
-        private List<string> _lstTx = new List<string>() { "10", "35", "59", "66", "68" };
+        private readonly List<string> _lstNoCodTrans = new List<string>() { "17", "31", "32", "33", "36", "37", "49", "58", "89" };
+        private readonly List<string> _lstTx = new List<string>() { "10", "35", "59", "66", "68" };
 
-        public List<CommerceModel> build(List<SapModel> lstSap,List<conveniosModel> lstConv)
+        public List<CommerceModel> build(List<SapModel> lstSap,List<ConveniosModel> lstConv)
         {
             var date = DateTime.Now;
             var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
@@ -85,11 +85,10 @@ namespace core.UseCase.Exito
                 Rtl = "",
                 Nit = 2 + _nit,
                 Line = "",
-                Cod_RTL = new StringBuilder().Append("TPRIVADAS").Append(dat).Append(".txt").ToString(),
-                lst = lst
+                CodRtl = new StringBuilder().Append("TPRIVADAS").Append(dat).Append(".txt").ToString(),
+                Lst = lst
             };
-            var lstres = new List<CommerceModel>();
-            lstres.Add(rs);
+            var lstres = new List<CommerceModel> {rs};
             return lstres;
         }
         public string RemoveSpecialCharacters(string input)

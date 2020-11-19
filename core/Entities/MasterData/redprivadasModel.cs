@@ -5,7 +5,7 @@ using System.Text;
 
 namespace core.Entities.MasterData
 {
-    public class redprivadasModel
+    public class RedprivadasModel
     {
         [Key]
         [Display(Name = "red")]

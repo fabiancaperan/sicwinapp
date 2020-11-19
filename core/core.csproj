@@ -14,4 +14,9 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <Folder Include="Repository\Entidades\" />
+  </ItemGroup>
+
+
 </Project>

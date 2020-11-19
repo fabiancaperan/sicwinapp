@@ -5,7 +5,7 @@ using System.Text;
 
 namespace core.Entities.MasterData
 {
-    public class cnbsModel
+    public class CnbsModel
     {
         [Key]
         [Display(Name = "CODIGO_UNICO")]

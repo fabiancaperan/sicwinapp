@@ -5,7 +5,7 @@ using System.Text;
 
 namespace core.Entities.MasterData
 {
-    public class conveniosModel
+    public class ConveniosModel
     {
         [Key]
         public int Id { get; set; }

@@ -11,13 +11,10 @@ using core.UseCase.Comercios;
 using core.UseCase.Exito;
 using core.UseCase.Falabella;
 using core.UseCase.Olimpica;
-using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace core.UseCase.DownloadData
 {
@@ -28,98 +25,73 @@ namespace core.UseCase.DownloadData
         {
             _db = new dbContext();
         }
-        public bool build(string rute, List<CommerceType> commerceTypes)
+        public bool Build(string rute, List<CommerceType> commerceTypes)
         {
             List<EntidadesModel> lstEntidades = _db.EntidadesModel.ToList();
-            List<falabellaModel> lstFalabella =  _db.falabellaModel.ToList();
-            List<conveniosModel> lstConv = _db.conveniosModel.ToList();
-            List<cnbsModel> lstCnb = _db.cnbsModel.ToList();
-            List<SapModel> lstSap = new SicContext().getAll();
-            List<binesespModel> lstBinesesp;
-            List<redprivadasModel> lstRedPrivadas;
+            List<FalabellaModel> lstFalabella = _db.FalabellaModel.ToList();
+            List<ConveniosModel> lstConv = _db.ConveniosModel.ToList();
+            List<CnbsModel> lstCnb = _db.CnbsModel.ToList();
+            List<SapModel> lstSap = new SicContext().GetAll();
+            List<BinesespModel> lstBinesesp = _db.BinesesModel.ToList();
+            List<RedprivadasModel> lstRedPrivadas = _db.RedprivadasModel.ToList();
             foreach (var commerceType in commerceTypes)
             {
 
-                Dictionary<string, List<CommerceModel>> filelst = new Dictionary<string, List<CommerceModel>>();
-                List<CommerceModel> res = new List<CommerceModel>();
+                List<CommerceModel> res;
                 switch (commerceType)
                 {
                     case CommerceType.Comercios:
                         res = new GenerateComerciosFile().build(lstSap, lstEntidades);
                         if (res != null && res.Any())
-                            ComerciosFiles(rute, lstSap, commerceType, res);
+                            ComerciosFiles(rute, res);
                         break;
                     case CommerceType.Falabella:
                         res = new GenerateFalabellaFile().build(lstSap, lstFalabella);
                         if (res != null && res.Any())
-                            ComerciosFiles(rute, lstSap, commerceType, res);
+                            ComerciosFiles(rute, res);
                         break;
                     case CommerceType.Olimpica:
-                        res = new GenerateOlimpicaFile().build(lstSap, lstEntidades);
+                        res = new GenerateOlimpicaFile().Build(lstSap, lstEntidades);
                         if (res != null && res.Any())
-                            ComerciosFileRtc(rute, lstSap, commerceType, res);
+                            ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.Exito:
                         res = new GenerateExitoFile().build(lstSap, lstEntidades);
                         if (res != null && res.Any())
-                            ComerciosFileRtc(rute, lstSap, commerceType, res);
+                            ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.ExitoTarjetasPrivadas:
                         res = new GenerateConcilationFile().build(lstSap, lstConv);
                         if (res != null && res.Any())
-                            ComerciosFileRtc(rute, lstSap, commerceType, res);
+                            ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.ExitoRedebanmvtos:
-                        res = new GenerateRedebanmvtosFile().build(lstSap, lstBinesesp, lstRedPrivadas);
+                        res = new GenerateRedebanmvtosFile().Build(lstSap, lstBinesesp, lstRedPrivadas);
                         if (res != null && res.Any())
-                            ComerciosFileRtc(rute, lstSap, commerceType, res);
+                            ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.Cnb:
-                        res = new GenerateCnb().build(lstSap, lstEntidades, lstCnb);
+                        res = new GenerateCnb().Build(lstSap, lstEntidades, lstCnb);
                         if (res != null && res.Any())
-                            ComerciosFiles(rute, lstSap, commerceType, res);
+                            ComerciosFiles(rute, res);
                         break;
                     case CommerceType.CnbSpecial:
-                        res = new GenerateCnbSpecial().build(lstSap, lstEntidades, lstCnb);
+                        res = new GenerateCnbSpecial().Build(lstSap, lstEntidades, lstCnb);
                         if (res != null && res.Any())
-                            ComerciosFiles(rute, lstSap, commerceType, res);
+                            ComerciosFiles(rute, res);
                         break;
                     case CommerceType.Cencosud:
-                        res = new GenerateCarrefourFile().build(lstSap, lstEntidades);
+                        res = new GenerateCarrefourFile().Build(lstSap, lstEntidades);
                         if (res != null && res.Any())
-                            ComerciosFiles(rute, lstSap, commerceType, res);
+                            ComerciosFiles(rute, res);
                         break;
                 }
-                //ComerciosFiles(rute, lstSap, commerceType, res);
-                //ComerciosFile(rute, lstSap, commerceType, filelst);
-            }
-
-            return true;
-        }
-        private bool ComerciosFile(string rute, List<SapModel> lstSap, CommerceType commerceType, Dictionary<string, List<CommerceModel>> filelst)
-        {
-
-            foreach (KeyValuePair<string, List<CommerceModel>> item in filelst)
-            {
-                //string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
-                string path = Path.Combine(rute, item.Value.FirstOrDefault().Nit.Trim());
-                Directory.CreateDirectory(path);
-                path = Path.Combine(path, item.Value.FirstOrDefault().Cod_RTL);
-                using (
-                    FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
-                {
-                    //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
-                    using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
-                    {
-                        item.Value.ForEach(s => writer.WriteLine(s.Line));
-                    }
-                }
             }
 
             return true;
         }
 
-        private bool ComerciosFiles(string rute, List<SapModel> lstSap, CommerceType commerceType, List<CommerceModel> filelst)
+        private void ComerciosFiles(string rute, List<CommerceModel> filelst)
         {
 
             foreach (CommerceModel item in filelst)
@@ -127,50 +99,39 @@ namespace core.UseCase.DownloadData
                 //string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
                 string path = Path.Combine(rute, item.Nit.Trim());
                 Directory.CreateDirectory(path);
-                path = Path.Combine(path, item.Cod_RTL);
-                using (
-                    FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
+                path = Path.Combine(path, item.CodRtl);
+                using FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
+                //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
+                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
                 {
-                    //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
-                    using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
-                    {
-                        //title
-                        if(item.Line.Trim()!=string.Empty)
+                    //title
+                    if (item.Line.Trim() != string.Empty)
                         writer.WriteLine(item.Line);
-                        //data
-                        item.lst.ForEach(s => writer.WriteLine(s));
-                    }
+                    //data
+                    item.Lst.ForEach(s => { writer.WriteLine(s); });
                 }
             }
-
-            return true;
         }
 
-        private bool ComerciosFileRtc(string rute, List<SapModel> lstSap, CommerceType commerceType, List<CommerceModel> filelst)
+        private void ComerciosFileRtc(string rute,
+            List<CommerceModel> filelst)
         {
 
             foreach (CommerceModel item in filelst)
             {
-                //string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
                 string path = Path.Combine(rute, item.Nit.Trim());
                 Directory.CreateDirectory(path);
-                path = Path.Combine(path, item.Cod_RTL);
-                using (
-                    FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
+                path = Path.Combine(path, item.CodRtl);
+                using FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
+                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
                 {
-                    //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
-                    using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
-                    {
-                        //title
-                        if (item.Line.Trim() != string.Empty)
-                            writer.WriteLine(item.Line);
-                        //data
-                        item.lst.ForEach(s => writer.WriteLine(s));
-                    }
+                    //title
+                    if (item.Line.Trim() != string.Empty)
+                        writer.WriteLine(item.Line);
+                    //data
+                    item.Lst.ForEach(s => { writer.WriteLine(s); });
                 }
             }
-
-            return true;
         }
     }
 }

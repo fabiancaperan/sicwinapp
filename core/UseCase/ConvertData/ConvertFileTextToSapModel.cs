@@ -1,28 +1,23 @@
 ﻿using core.Entities.ConvertData;
-using core.Repository;
-using core.Repository.Sic;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace core.UseCase.ConvertData
 {
     public class ConvertFileTextToSapModel
     {
-        const int _lengthLine = 369;
+        const int LengthLine = 369;
 
-        public List<SapModel> build(string filePath)
+        public List<SapModel> Build(string filePath)
         {
             List<SapModel> sap = new List<SapModel>();
             string[] lines = System.IO.File.ReadAllLines(filePath);
             Parallel.For(0, lines.Length, i => 
             {
-                sap.Add(buildSap(lines[i], i + 1));
+                sap.Add(BuildSap(lines[i], i + 1));
             });
             //for (int i = 0; i < lines.Length; i++)
             //{
@@ -31,35 +26,34 @@ namespace core.UseCase.ConvertData
             return sap;
         }
 
-        private SapModel buildSap(string line,int id)
+        private SapModel BuildSap(string line,int id)
         {
             var dif = 0;
-            if (line.Length != _lengthLine)
+            if (line.Length != LengthLine)
             {
-                dif = _lengthLine - line.Length;
+                dif = LengthLine - line.Length;
 
             }
-            SapModel sapModel = new SapModel();
-            sapModel.Id = id;
-            sapModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            SapModel sapModel = new SapModel {Id = id};
+            var propertyInfos = sapModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             int i = 0;
-            foreach (PropertyInfo prop in sapModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (PropertyInfo prop in propertyInfos)
             {
                 if (prop.Name == "Id")
                     continue;
                 
-                var length = dif != 0 && prop.Name == "NombreCadena" ? getMaxLength(prop) - dif : getMaxLength(prop);
+                var length = dif != 0 && prop.Name == "NombreCadena" ? GetMaxLength(prop) - dif : GetMaxLength(prop);
                 prop.SetValue(sapModel, line.Substring(i, length), null);
-                ;
                 i += length;
             }
             return sapModel;
         }
 
-        private int getMaxLength(PropertyInfo propInfo)
+        private int GetMaxLength(PropertyInfo propInfo)
         {
             MaxLengthAttribute attrMaxLength = (MaxLengthAttribute)propInfo.GetCustomAttributes(typeof(MaxLengthAttribute), false).FirstOrDefault();
-            return attrMaxLength != null ? attrMaxLength.Length : 0;
+            return attrMaxLength?.Length ?? 0;
         }
     }
 }

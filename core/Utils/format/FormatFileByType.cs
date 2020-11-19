@@ -31,7 +31,8 @@ namespace core.Utils.format
                 return formateado;
 
             }
-            catch (Exception ex)
+
+            catch (Exception)
             {
                 return _vacio;
             }
