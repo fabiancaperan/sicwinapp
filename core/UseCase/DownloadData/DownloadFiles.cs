@@ -39,7 +39,7 @@ namespace core.UseCase.DownloadData
                 switch (commerceType)
                 {
                     case CommerceType.Comercios:
-                        res = new GenerateComerciosFile().build(lstSap, lstEntidades);
+                        res = new GenerateComerciosFile().Build(lstSap, lstEntidades);
                         if (res != null && res.Any())
                             ComerciosFiles(rute, res);
                         break;

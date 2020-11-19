@@ -25,7 +25,7 @@ namespace core.UseCase.Comercios
         private const string _2 = "2";
         private const string Space = " ";
 
-        public List<CommerceModel> build(List<SapModel> lstSap, List<EntidadesModel> entidades)
+        public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades)
         {
             var lst = lstSap.Where(s => s.Nit.Trim() != Nit.Trim())
                        .Join(entidades,
