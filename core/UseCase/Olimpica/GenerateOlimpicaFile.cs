@@ -48,6 +48,7 @@ namespace core.UseCase.Olimpica
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
+                                  FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
                                  .Append("01")
