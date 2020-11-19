@@ -2,7 +2,7 @@
 
 namespace core.Entities.MasterData
 {
-    public class codconceptoModel
+    public class CodconceptoModel
     {
         [Display(Name = "CodConcepto")]
         [MaxLength(8)]

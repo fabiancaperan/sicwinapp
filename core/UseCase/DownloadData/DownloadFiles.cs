@@ -44,7 +44,7 @@ namespace core.UseCase.DownloadData
                             ComerciosFiles(rute, res);
                         break;
                     case CommerceType.Falabella:
-                        res = new GenerateFalabellaFile().build(lstSap, lstFalabella);
+                        res = new GenerateFalabellaFile().Build(lstSap, lstFalabella);
                         if (res != null && res.Any())
                             ComerciosFiles(rute, res);
                         break;
@@ -54,12 +54,12 @@ namespace core.UseCase.DownloadData
                             ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.Exito:
-                        res = new GenerateExitoFile().build(lstSap, lstEntidades);
+                        res = new GenerateExitoFile().Build(lstSap, lstEntidades);
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.ExitoTarjetasPrivadas:
-                        res = new GenerateConcilationFile().build(lstSap, lstConv);
+                        res = new GenerateConcilationFile().Build(lstSap, lstConv);
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, res);
                         break;
@@ -100,14 +100,12 @@ namespace core.UseCase.DownloadData
                 path = Path.Combine(path, item.CodRtl);
                 using FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
                 //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
-                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
-                {
-                    //title
-                    if (item.Line.Trim() != string.Empty)
-                        writer.WriteLine(item.Line);
-                    //data
-                    item.Lst.ForEach(s => { writer.WriteLine(s); });
-                }
+                using StreamWriter writer = new StreamWriter(stream, Encoding.UTF8);
+                //title
+                if (item.Line.Trim() != string.Empty)
+                    writer.WriteLine(item.Line);
+                //data
+                item.Lst.ForEach(s => { writer.WriteLine(s); });
             }
         }
 
@@ -121,14 +119,12 @@ namespace core.UseCase.DownloadData
                 Directory.CreateDirectory(path);
                 path = Path.Combine(path, item.CodRtl);
                 using FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
-                using (StreamWriter writer = new StreamWriter(stream, Encoding.UTF8))
-                {
-                    //title
-                    if (item.Line.Trim() != string.Empty)
-                        writer.WriteLine(item.Line);
-                    //data
-                    item.Lst.ForEach(s => { writer.WriteLine(s); });
-                }
+                using StreamWriter writer = new StreamWriter(stream, Encoding.UTF8);
+                //title
+                if (item.Line.Trim() != string.Empty)
+                    writer.WriteLine(item.Line);
+                //data
+                item.Lst.ForEach(s => { writer.WriteLine(s); });
             }
         }
     }

@@ -17,10 +17,10 @@ namespace core.UseCase.InitDatabase
             {
                 db.Database.EnsureCreated();
                 db.EntidadesModel.AddRange(UploadEntidades());
-                db.FalabellaModel.AddRange(uploadFalabella());
-                db.CnbsModel.AddRange(uploadCNBS());
-                db.RedprivadasModel.AddRange(uploadredprivadas());
-                db.ConveniosModel.AddRange(uploadconvenios());
+                db.FalabellaModel.AddRange(UploadFalabella());
+                db.CnbsModel.AddRange(UploadCnbs());
+                db.RedprivadasModel.AddRange(Uploadredprivadas());
+                db.ConveniosModel.AddRange(Uploadconvenios());
                 db.SaveChanges();
             }
 
@@ -128,7 +128,7 @@ namespace core.UseCase.InitDatabase
             return lst;
         }
 
-        public List<FalabellaModel> uploadFalabella()
+        private List<FalabellaModel> UploadFalabella()
         {
             var json = @"[{'CODIGO_UNICO':'0012347498','LOCAL_FALABELLA':'0037','NOMBRE_LOCAL':'Santiago de Cali'},
                           {'CODIGO_UNICO':'0011802790','LOCAL_FALABELLA':'0183','NOMBRE_LOCAL':'Santa Fe'},
@@ -149,7 +149,7 @@ namespace core.UseCase.InitDatabase
             return lst;
         }
 
-        public List<CnbsModel> uploadCNBS()
+        private List<CnbsModel> UploadCnbs()
         {
             var json = @"[{'CODIGO_UNICO':'3082000013','NOMBRE':'SUPERTIENDA TROPICANA'},
                           {'CODIGO_UNICO':'3082000039','NOMBRE':'SUPERMERCADO DONALDO'},
@@ -222,7 +222,7 @@ namespace core.UseCase.InitDatabase
             return lst;
         }
 
-        public List<RedprivadasModel> uploadredprivadas()
+        private List<RedprivadasModel> Uploadredprivadas()
         {
             var json = @"[{'red':'0F','nombre':'CREDIBANCO CREDIUNO'},
                           {'red':'0G','nombre':'CREDIBANCO BIGPASS'}
@@ -231,7 +231,7 @@ namespace core.UseCase.InitDatabase
             return lst;
         }
 
-        public List<ConveniosModel> uploadconvenios()
+        private List<ConveniosModel> Uploadconvenios()
         {
             var json = @"[{'Id':'1','Nemo':'CONVSA1','diaini':'JU','Numdías':'7','Descripcion':'Comfama debito','emisor':'004','Nit':'8909008419','tiponegocio':'501','tipotrans':'2','Servidor':'localhost','Usuario':'1','Clave':'','CodConcepto':'SA','bolsillo':'2'},
                           {'Id':'2','Nemo':'CONVSA2','diaini':'LU','Numdías':'7','Descripcion':'Comfenalco Ctgena D','emisor':'005','Nit':'8904800237','tiponegocio':'502','tipotrans':'2','Servidor':'localhost','Usuario':'1','Clave':'','CodConcepto':'SA','bolsillo':'2'},
@@ -264,7 +264,7 @@ namespace core.UseCase.InitDatabase
             return lst;
         }
 
-        public List<FestivoModel> Uploadfestivo()
+        private List<FestivoModel> Uploadfestivo()
         {
             var json = @"[{'FESTIVO':'20100104','DIAHABIL':'20100104'},
                           {'FESTIVO':'20100112','DIAHABIL':'20100112'},
