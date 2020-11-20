@@ -65,7 +65,7 @@ namespace core.UseCase.Exito
         }
 
 
-        public StringBuilder BuildStep1(List<SapModel> lstSap, string codRtl)
+        private StringBuilder BuildStep1(List<SapModel> lstSap, string codRtl)
         {
             double total = 0;
             var filter = lstSap

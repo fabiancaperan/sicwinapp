@@ -4,8 +4,7 @@ namespace core.Entities.ConvertData
 {
     public class SapModel
     {
-        [Key]
-        public int Id { get; set; }
+     
         [Display(Name = "Tipo Registro")]
         [MaxLength(2)]
         public string TipoRegistro { get; set; }
@@ -13,7 +12,7 @@ namespace core.Entities.ConvertData
         [Display(Name = "Fecha Compra")]
         [MaxLength(8)]
         public string FechaCompra { get; set; }
-        
+        [Key]
         [Display(Name = "Nit")]
         [MaxLength(13)]
         public string Nit { get; set; }
@@ -54,7 +53,7 @@ namespace core.Entities.ConvertData
         [Display(Name = "Num_Tarjeta")]
         [MaxLength(4)]
         public string Num_Tarjeta { get; set; }
-
+        
         [Display(Name = "Tipo_Mensaje")]
         [MaxLength(4)]
         public string Tipo_Mensaje { get; set; }
@@ -62,7 +61,7 @@ namespace core.Entities.ConvertData
         [Display(Name = "Cod_Trans")]
         [MaxLength(6)]
         public string Cod_Trans { get; set; }
-
+        [Key]
         [Display(Name = "Num_Secuen")]
         [MaxLength(12)]
         public string Num_Secuen { get; set; }
@@ -130,7 +129,7 @@ namespace core.Entities.ConvertData
         [Display(Name = "Base_Devol_Iva")]
         [MaxLength(12)]
         public string Base_Devol_Iva { get; set; }
-
+        
         [Display(Name = "RefUniversal")]
         [MaxLength(23)]
         public string RefUniversal { get; set; }

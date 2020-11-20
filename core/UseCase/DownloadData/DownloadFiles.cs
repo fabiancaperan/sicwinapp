@@ -102,12 +102,12 @@ namespace core.UseCase.DownloadData
                 //FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
                 using StreamWriter writer = new StreamWriter(stream, Encoding.UTF8);
                 //title
-                if (item.Line.Trim() != string.Empty)
+                if (item.Line != null && item.Line.Trim() != string.Empty)
                     writer.WriteLine(item.Line);
                 //data
                 item.Lst.ForEach(s => { writer.WriteLine(s); });
                 //num regis
-                if (item.FinalLine.Trim() != string.Empty)
+                if (item.FinalLine != null && item.FinalLine.Trim() != string.Empty)
                     writer.WriteLine(item.FinalLine);
             }
         }
@@ -124,12 +124,12 @@ namespace core.UseCase.DownloadData
                 using FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
                 using StreamWriter writer = new StreamWriter(stream, Encoding.UTF8);
                 //title
-                if (item.Line.Trim() != string.Empty)
+                if (item.Line != null && item.Line.Trim() != string.Empty)
                     writer.WriteLine(item.Line);
                 //data
                 item.Lst.ForEach(s => { writer.WriteLine(s); });
                 //num regis
-                if (item.FinalLine.Trim() != string.Empty)
+                if (item.FinalLine!= null && item.FinalLine.Trim() != string.Empty)
                     writer.WriteLine(item.FinalLine);
             }
         }

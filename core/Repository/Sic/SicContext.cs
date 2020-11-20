@@ -8,14 +8,21 @@ namespace core.Repository.Sic
 
     public class SicContext
     {
-        public bool Save(List<SapModel> lstSic)
+        public bool Save(List<SapModel> lstSic , DateTime dat)
         {
             using var db = new CacheContext();
             // Create
             Console.WriteLine("Inserting a new blog");
             if (db.Sap.Any())
+            {
                 db.RemoveRange(db.Sap);
-            db.AddRange(lstSic);
+                db.RemoveRange(db.DateComp);
+            }
+
+            var dateComp = new DateCompModel();
+            dateComp.Dat = dat;
+            db.DateComp.Add(dateComp);
+            db.Sap.AddRange(lstSic);
                 
             return db.SaveChanges() > 0;
         }

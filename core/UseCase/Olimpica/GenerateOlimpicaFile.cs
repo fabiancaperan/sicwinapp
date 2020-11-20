@@ -94,7 +94,7 @@ namespace core.UseCase.Olimpica
             return lst;
         }
 
-        public string RemoveSpecialCharacters(string input)
+        private string RemoveSpecialCharacters(string input)
         {
 
             Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);

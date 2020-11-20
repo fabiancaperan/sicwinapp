@@ -1,24 +1,36 @@
-﻿using core.Entities.ConvertData;
+﻿using System;
+using core.Entities.ConvertData;
 using core.Repository.Sic;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace core.UseCase.ConvertData
 {
     public class ChargeFile
     {
+        private const int LengthPath = 11;
+
         public string Build(string path)
         {
-            string[] lines = System.IO.File.ReadAllLines(path);
+            var ret =ValidatePath(path, out var dateOut);
+            if (ret != String.Empty)
+            {
+                return ret;
+            }
+
+            string[] lines = File.ReadAllLines(path);
+
             if (ValidateFormat(lines))
             {
-                FileChargeModel fileChargeModel = new ConvertFileTextToSapModel().Build(lines);
+                FileChargeModel fileChargeModel = new ConvertFileTextToSapModel().Build(lines, dateOut);
                 if (!string.IsNullOrEmpty(fileChargeModel.Message))
                 {
                     return fileChargeModel.Message;
                 }
 
-                new SicContext().Save(fileChargeModel.List);
+                //new SicContext().Save(fileChargeModel.List, dateOut);
                 return "TRUE";
             }
 
@@ -31,13 +43,33 @@ namespace core.UseCase.ConvertData
             if (lines.Length > 0)
                 return true;
             return false;
-            //Parallel.ForEach(lines, (s, state) =>
-            //{
-            //    if (s.Length > 371 && s.Length < 360)
-            //        state.Break();
+        }
+        private string ValidatePath(string path, out DateTime dateOut)
+        {
+            dateOut= new DateTime();
+            var filename = Path.GetFileName(path);
+            if (filename.Length != LengthPath)
+            {
+                var formatNoValid = "Nombre de archivo no válido";
+                return formatNoValid;
+            }
 
-            //});
-            //return true;
+            if (!ValidateDate(filename,out dateOut))
+            {
+                var message = "Fecha de archivo no válida";
+                return message;
+            }
+
+            return String.Empty;
+        }
+
+        private bool ValidateDate(string filename, out DateTime dateOut)
+        {
+            var dat =filename.Substring(4, 6);
+            var dateString = $"{dat.Substring(4, 2)}/{dat.Substring(2, 2)} /{dat.Substring(0,2)}";
+
+            return (DateTime.TryParse(dateString, CultureInfo.CurrentCulture, DateTimeStyles.None, out dateOut));
+
         }
     }
 }

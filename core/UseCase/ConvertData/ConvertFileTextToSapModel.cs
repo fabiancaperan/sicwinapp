@@ -1,9 +1,11 @@
-﻿using core.Entities.ConvertData;
+﻿using System;
+using core.Entities.ConvertData;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using core.Repository;
 
 namespace core.UseCase.ConvertData
 {
@@ -13,38 +15,47 @@ namespace core.UseCase.ConvertData
         //private const string noLength = "El archivo tiene líneas que no estan entre 360 y 371 caracteres";
         private const string NoLength = "El archivo tiene líneas que son vacías o no tienen el formato válido";
         private const string NodatesValid = "El archivo tiene campos de fecha con formato no válido";
-        private readonly List<string> _lstDates = new List<string>(){ "FechaCompra", "FechaTran" }; 
+        //private readonly List<string> _lstDates = new List<string>(){ "FechaCompra", "FechaTran" }; 
 
-        public FileChargeModel Build(string[] lines)
+        public FileChargeModel Build(string[] lines, DateTime dateOut)
         {
+            using var db = new CacheContext();
+            if (db.Sap.Any())
+            {
+                db.RemoveRange(db.Sap);
+                db.RemoveRange(db.DateComp);
+            }
+            var dateComp = new DateCompModel();
+            dateComp.Dat = dateOut;
+            db.DateComp.Add(dateComp);
             var ret = new FileChargeModel();
             List<SapModel> sap = new List<SapModel>();
-            Parallel.For(0, lines.Length, (i,state) =>
+            
+            foreach (var t in lines)
             {
-                var le = lines[i].Length;
+                var le = t.Length;
                 if (le > 373 || le < 360)
                 {
                     ret.Message = NoLength;
-                    state.Break();
-                    return;
+                    break;
                 }
 
-                var sa = BuildSap(lines[i], i + 1);
+                var sa = BuildSap(t);
                 if (sa == null)
                 {
                     ret.Message = NodatesValid;
-                    state.Break();
-                    return;
+                    break;
                 }
-                sap.Add(sa);
-            });
-            
-            
-            ret.List = sap;
+
+                db.Sap.Add(sa);
+            }
+
+            db.SaveChanges();
+            db.Dispose();
             return ret;
         }
 
-        private SapModel BuildSap(string line,int id)
+        private SapModel BuildSap(string line)
         {
             var dif = 0;
             if (line.Length != LengthLine)
@@ -53,23 +64,13 @@ namespace core.UseCase.ConvertData
 
             }
 
-            SapModel sapModel = new SapModel {Id = id};
+            SapModel sapModel = new SapModel();
             var propertyInfos = sapModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             int i = 0;
             foreach (PropertyInfo prop in propertyInfos)
             {
-                if (prop.Name == "Id")
-                    continue;
-
+                
                 var length = dif != 0 && prop.Name == "NombreCadena" ? GetMaxLength(prop) - dif : GetMaxLength(prop);
-                if (_lstDates.Contains(prop.Name))
-                {
-                    if (!System.Text.RegularExpressions.Regex.IsMatch(line.Substring(i, length), "^[0-9]*$"))
-                    {
-
-                        return null;
-                    }
-                }
                 prop.SetValue(sapModel, line.Substring(i, length), null);
                 i += length;
             }

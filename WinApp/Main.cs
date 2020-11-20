@@ -2,9 +2,11 @@
 using core.UseCase.DownloadData;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.EntityFrameworkCore;
 
 namespace WinApp
 {
@@ -97,11 +99,25 @@ namespace WinApp
                 button2.Enabled = true;
 
             }
+            catch (InvalidOperationException ex)
+            {
+                var mess =
+                    "The instance of entity type 'SapModel' cannot be tracked because another instance with the same key value for";
+                var message = ex.Message;
+                if (ex.Message.Contains(mess))
+                {
+                    message = "El Arhivo tiene lineas duplicadas";
+                }
+
+                Cursor = Cursors.Arrow; // change cursor to normal type
+                button2.Enabled = true;
+                MessageError(message);
+            }
             catch (Exception ex)
             {
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
-                MessageError(ex);
+                MessageError(ex.Message);
             }
         }
 
@@ -153,15 +169,15 @@ namespace WinApp
             {
                 button2.Enabled = true;
                 Cursor = Cursors.Arrow; // change cursor to normal type
-                MessageError(ex);
+                MessageError(ex.Message);
             }
         }
 
-        private static void MessageError(Exception ex)
+        private static void MessageError(string message)
         {
-            Console.WriteLine(ex.Message);
+            
             //var txtError = "Hubo un error comuniquese con el administrador";
-            MessageBox.Show(ex.Message);
+            MessageBox.Show(message);
         }
     }
 }
