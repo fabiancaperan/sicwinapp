@@ -1,10 +1,8 @@
 ﻿using System;
 using core.Entities.ConvertData;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using core.Repository;
 
 namespace core.UseCase.ConvertData
@@ -29,7 +27,6 @@ namespace core.UseCase.ConvertData
             dateComp.Dat = dateOut;
             db.DateComp.Add(dateComp);
             var ret = new FileChargeModel();
-            List<SapModel> sap = new List<SapModel>();
             
             foreach (var t in lines)
             {
