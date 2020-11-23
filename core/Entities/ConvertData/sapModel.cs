@@ -4,7 +4,9 @@ namespace core.Entities.ConvertData
 {
     public class SapModel
     {
-     
+        [Key]
+        public int Id { get; set; }
+
         [Display(Name = "Tipo Registro")]
         [MaxLength(2)]
         public string TipoRegistro { get; set; }

@@ -100,7 +100,7 @@ namespace core.UseCase.Falabella
             var lstFilter = lstSap
                 .Join(falabella,
                     post => post.Cod_RTL.Trim(),
-                    meta => meta.CODIGO_UNICO.Trim(),
+                    meta => _format.Formato(meta.CODIGO_UNICO.Substring(0, 10), 10, A),
                     (s, e) => new { s, e })
                 .Where(j => j.s.Nit.Trim() == Nit &&
                             Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) >= 0 &&
@@ -111,10 +111,20 @@ namespace core.UseCase.Falabella
                     Cod_RTL = m.s.Cod_RTL.Trim(),
                     //usamos Nombre cadena como localFalabella
                     NombreCadena = m.e.LOCAL_FALABELLA,
-                    Cod_Trans = m.s.Cod_Trans
+                    Cod_Trans = m.s.Cod_Trans,
+                    FechaCompra = m.s.FechaCompra,
+                    Valor = m.s.Valor
                 })
                 .GroupBy(g => new { g.Cod_RTL, g.NombreCadena }).ToList();
-
+            var lst = lstSap
+                .Join(falabella,
+                    post => post.Cod_RTL.Trim(),
+                    meta => _format.Formato(meta.CODIGO_UNICO.Substring(0, 10), 10, A),
+                    (s, e) => new {s, e})
+                .Where(j => j.s.Nit.Trim() == Nit &&
+                            Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) > 0 &&
+                            Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) < 9 &&
+                            j.s.Num_Autoriza != string.Empty);
             var lstText = new List<StringBuilder>();
 
 

@@ -27,7 +27,8 @@ namespace core.UseCase.ConvertData
             dateComp.Dat = dateOut;
             db.DateComp.Add(dateComp);
             var ret = new FileChargeModel();
-            
+
+            int i = 0;
             foreach (var t in lines)
             {
                 var le = t.Length;
@@ -37,7 +38,8 @@ namespace core.UseCase.ConvertData
                     break;
                 }
 
-                var sa = BuildSap(t);
+                i++;
+                var sa = BuildSap(t, i);
                 if (sa == null)
                 {
                     ret.Message = NodatesValid;
@@ -52,7 +54,7 @@ namespace core.UseCase.ConvertData
             return ret;
         }
 
-        private SapModel BuildSap(string line)
+        private SapModel BuildSap(string line, int id)
         {
             var dif = 0;
             if (line.Length != LengthLine)
@@ -61,12 +63,14 @@ namespace core.UseCase.ConvertData
 
             }
 
-            SapModel sapModel = new SapModel();
+            //SapModel sapModel = new SapModel();
+            SapModel sapModel = new SapModel { Id = id };
             var propertyInfos = sapModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             int i = 0;
             foreach (PropertyInfo prop in propertyInfos)
             {
-                
+                if (prop.Name == "Id")
+                    continue;
                 var length = dif != 0 && prop.Name == "NombreCadena" ? GetMaxLength(prop) - dif : GetMaxLength(prop);
                 prop.SetValue(sapModel, line.Substring(i, length), null);
                 i += length;
