@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using core.Entities.ConvertData;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace core.UseCase.ConvertData
             var dateComp = new DateCompModel();
             dateComp.Dat = dateOut;
             db.DateComp.Add(dateComp);
-            var ret = new FileChargeModel();
+            var ret = new FileChargeModel {List = new List<SapModel>()};
 
             int i = 0;
             foreach (var t in lines)
