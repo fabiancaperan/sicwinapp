@@ -132,10 +132,12 @@ namespace core.UseCase.Exito
                     .WithDegreeOfParallelism(4)
                     .Where(s =>
                         (!lstFiidTarStep2.Contains(s
-                                .Fiid_Emisor) /*|| (s.Fiid_Emisor == "0808" && (s.Id_Fran_Hija + s.Filler_Fran_Hija) == "000")*/
+                                .Fiid_Emisor) || (s.Fiid_Emisor == "0808" && (s.Id_Fran_Hija + s.Filler_Fran_Hija) == "000")
                         ) &&
-                        (s.Id_Fran_Hija + s.Filler_Fran_Hija) != "000" &&
-                        !lstRedPriv.Contains((s.Adquirida_Por + s.Adquirida_Para))).ToList();
+                        ((s.Id_Fran_Hija + s.Filler_Fran_Hija) != "000" &&
+                         !lstRedPriv.Contains((s.Adquirida_Por + s.Adquirida_Para))
+                         )
+                        ).ToList();
 
                     filter.ForEach((s) =>
 

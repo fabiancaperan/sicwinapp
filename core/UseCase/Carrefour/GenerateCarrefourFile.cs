@@ -29,11 +29,9 @@ namespace core.UseCase.Carrefour
         private const string _2 = "2";
         private const string Space = " ";
 
-        public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades)
+        public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades, StringBuilder dat)
         {
-            var date = DateTime.Now;
-            var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
-
+            
             var lst = lstSap.Where(s => s.Nit.Trim() == Nit &&
                                         _franquicias.Contains((s.Id_Fran_Hija + s.Filler_Fran_Hija)) &&
                                         s.Cod_Trans.Substring(0, 2) == CodTrans &&

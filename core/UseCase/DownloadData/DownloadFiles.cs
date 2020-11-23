@@ -30,8 +30,13 @@ namespace core.UseCase.DownloadData
             var lstConv = _db.ConveniosModel.ToList();
             var lstCnb = _db.CnbsModel.ToList();
             var lstSap = new SicContext().GetAll();
+            var date = new SicContext().GetDate();
             var lstBinesesp = _db.BinesesModel.ToList();
             var lstRedPrivadas = _db.RedprivadasModel.ToList();
+
+            if (date == null)
+                return false;
+            var dat = new StringBuilder().Append(date.Value.Year).Append(date.Value.Month).Append(date.Value.Day);
             foreach (var commerceType in commerceTypes)
             {
 
@@ -39,27 +44,27 @@ namespace core.UseCase.DownloadData
                 switch (commerceType)
                 {
                     case CommerceType.Comercios:
-                        res = new GenerateComerciosFile().Build(lstSap, lstEntidades);
+                        res = new GenerateComerciosFile().Build(lstSap, lstEntidades, dat);
                         if (res != null && res.Any())
                             ComerciosFiles(rute, res);
                         break;
                     case CommerceType.Falabella:
-                        res = new GenerateFalabellaFile().Build(lstSap, lstFalabella);
+                        res = new GenerateFalabellaFile().Build(lstSap, lstFalabella, dat);
                         if (res != null && res.Any())
                             ComerciosFiles(rute, res);
                         break;
                     case CommerceType.Olimpica:
-                        res = new GenerateOlimpicaFile().Build(lstSap, lstEntidades);
+                        res = new GenerateOlimpicaFile().Build(lstSap, lstEntidades, dat);
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.Exito:
-                        res = new GenerateExitoFile().Build(lstSap, lstEntidades);
+                        res = new GenerateExitoFile().Build(lstSap, lstEntidades, dat);
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.ExitoTarjetasPrivadas:
-                        res = new GenerateConcilationFile().Build(lstSap, lstConv);
+                        res = new GenerateConcilationFile().Build(lstSap, lstConv, dat);
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, res);
                         break;
@@ -69,17 +74,17 @@ namespace core.UseCase.DownloadData
                             ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.Cnb:
-                        res = new GenerateCnb().Build(lstSap, lstEntidades, lstCnb);
+                        res = new GenerateCnb().Build(lstSap, lstEntidades, lstCnb, dat);
                         if (res != null && res.Any())
                             ComerciosFiles(rute, res);
                         break;
                     case CommerceType.CnbSpecial:
-                        res = new GenerateCnbSpecial().Build(lstSap, lstEntidades, lstCnb);
+                        res = new GenerateCnbSpecial().Build(lstSap, lstEntidades, lstCnb, dat);
                         if (res != null && res.Any())
                             ComerciosFiles(rute, res);
                         break;
                     case CommerceType.Cencosud:
-                        res = new GenerateCarrefourFile().Build(lstSap, lstEntidades);
+                        res = new GenerateCarrefourFile().Build(lstSap, lstEntidades, dat);
                         if (res != null && res.Any())
                             ComerciosFiles(rute, res);
                         break;

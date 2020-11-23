@@ -27,11 +27,9 @@ namespace core.UseCase.Cnb
 
 
         
-        public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades, List<CnbsModel> cnbs)
+        public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades, List<CnbsModel> cnbs, StringBuilder dat)
         {
-            var date = DateTime.Now;
-            var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
-
+           
             var lst = lstSap
                        .Join(entidades,
                               post => post.Fiid_Emisor,

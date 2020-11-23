@@ -32,5 +32,10 @@ namespace core.Repository.Sic
             using var db = new CacheContext();
             return db.Sap.ToList();
         }
+        public DateTime? GetDate()
+        {
+            using var db = new CacheContext();
+            return db.DateComp.FirstOrDefault()?.Dat;
+        }
     }
 }

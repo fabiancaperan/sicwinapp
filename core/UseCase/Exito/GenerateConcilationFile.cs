@@ -20,10 +20,8 @@ namespace core.UseCase.Exito
         private readonly List<string> _lstNoCodTrans = new List<string>() { "17", "31", "32", "33", "36", "37", "49", "58", "89" };
         private readonly List<string> _lstTx = new List<string>() { "10", "35", "59", "66", "68" };
 
-        public List<CommerceModel> Build(List<SapModel> lstSap,List<ConveniosModel> lstConv)
+        public List<CommerceModel> Build(List<SapModel> lstSap,List<ConveniosModel> lstConv, StringBuilder dat)
         {
-            var date = DateTime.Now;
-            var dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
             var lst = lstSap
                        .Join(lstConv,
                               post => (post.Id_Fran_Hija + post.Filler_Fran_Hija),
