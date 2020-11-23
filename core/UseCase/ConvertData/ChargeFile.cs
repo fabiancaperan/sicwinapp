@@ -4,6 +4,7 @@ using core.Repository.Sic;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace core.UseCase.ConvertData
@@ -21,6 +22,11 @@ namespace core.UseCase.ConvertData
             }
 
             string[] lines = File.ReadAllLines(path);
+            HashSet<string> hashSets = lines.ToHashSet();
+            if (lines.Length != hashSets.Count)
+            {
+                return "Archivo con líneas duplicadas";
+            }
 
             if (ValidateFormat(lines))
             {

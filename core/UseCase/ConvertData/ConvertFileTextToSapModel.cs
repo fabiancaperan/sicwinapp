@@ -45,10 +45,10 @@ namespace core.UseCase.ConvertData
                     ret.Message = NodatesValid;
                     break;
                 }
-
-                db.Sap.Add(sa);
+                ret.List.Add(sa);
+                //db.Sap.Add(sa);
             }
-
+            db.Sap.AddRange(ret.List);
             db.SaveChanges();
             db.Dispose();
             return ret;

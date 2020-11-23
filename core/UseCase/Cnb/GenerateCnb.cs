@@ -47,7 +47,7 @@ namespace core.UseCase.Cnb
                               .Select(j => new CommerceModel
                               {
                                   Rtl = j.Key.Rtl,
-                                  Nit = 1 + j.Key.Nit,
+                                  Nit = j.Key.Nit,
                                   Line = new StringBuilder().Append("02").Append(dat)
                                                             .Append(_format.Formato(j.FirstOrDefault()?.s.Nit.Trim(), 13, A)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
