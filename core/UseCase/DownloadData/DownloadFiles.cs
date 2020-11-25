@@ -99,6 +99,8 @@ namespace core.UseCase.DownloadData
 
             foreach (CommerceModel item in filelst)
             {
+                if (item.Lst == null || !item.Lst.Any())
+                    return;
                 //string path = Path.Combine(rute, commerceType.ToString() + "\\" + item.Value.FirstOrDefault().Nit.Trim());
                 string path = Path.Combine(rute, item.Nit.Trim());
                 Directory.CreateDirectory(path);
@@ -123,6 +125,8 @@ namespace core.UseCase.DownloadData
 
             foreach (CommerceModel item in filelst)
             {
+                if (item.Lst == null || !item.Lst.Any())
+                    return;
                 string path = Path.Combine(rute, item.Nit.Trim());
                 Directory.CreateDirectory(path);
                 path = Path.Combine(path, item.CodRtl);

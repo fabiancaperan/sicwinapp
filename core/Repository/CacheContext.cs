@@ -12,6 +12,9 @@ namespace core.Repository
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseInMemoryDatabase("sic");
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder options)
+        //    => options.UseSqlite("Data Source=sic1.db");
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SapModel>()

@@ -22,11 +22,11 @@ namespace core.UseCase.ConvertData
             }
 
             string[] lines = File.ReadAllLines(path);
-            HashSet<string> hashSets = lines.ToHashSet();
-            if (lines.Length != hashSets.Count)
-            {
-                return "Archivo con líneas duplicadas";
-            }
+            //HashSet<string> hashSets = lines.ToHashSet();
+            //if (lines.Length != hashSets.Count)
+            //{
+            //    return "Archivo con líneas duplicadas";
+            //}
 
             if (ValidateFormat(lines))
             {

@@ -26,10 +26,10 @@ namespace core.UseCase.Cnb
         private const string Space = " ";
 
 
-        
+
         public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades, List<CnbsModel> cnbs, StringBuilder dat)
         {
-           
+
             var lst = lstSap
                        .Join(entidades,
                               post => post.Fiid_Emisor,
@@ -42,17 +42,20 @@ namespace core.UseCase.Cnb
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
                         .Where(j => EF.Functions.Like(j.s.Cod_RTL, (3 + Right(j.e.fiid, 3) + "%")))
-                              //.Where(j => j.s.Nit.Trim() == _nit)
-                              .GroupBy(g => new { Rtl = g.s.Cod_RTL.Trim(), Nit = g.s.Nit.Trim() })
+                       .OrderBy(o => o.s.Cod_RTL)
+                              .GroupBy(g => new { Nit = g.s.Nit.Trim(),FiidCorto = Right(g.e.fiid, 3) })
                               .Select(j => new CommerceModel
                               {
-                                  Rtl = j.Key.Rtl,
+                                  Rtl = "",
                                   Nit = 1 + j.Key.Nit,
                                   Line = new StringBuilder().Append("02").Append(dat)
-                                                            .Append(_format.Formato(j.FirstOrDefault()?.s.Nit.Trim(), 13, A)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
+                                                            .Append(_format.Formato(j.FirstOrDefault()?.s.Nit.Trim(), 13, A)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.f.nombre.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
-                                  CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
+                                  CodRtl = new StringBuilder().Append("3").Append(j.Key.FiidCorto).Append("000001")
+                                                                .Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.f.nombre.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
+                                  //CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
+                                  //                              .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
                                   FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
@@ -93,7 +96,7 @@ namespace core.UseCase.Cnb
                                  .Append(_format.Formato(l.s.TextoAdicional.Substring(0, 25), 25, A))
                                  .Append(_format.Formato(l.s.Convtrack.Substring(0, 5), 5, N))//MICOMPRA
                                  .Append(_format.Formato(Space, 4, A))//space
-                                                                        //.ToString()
+                                                                      //.ToString()
                                ).ToList()
                               }).ToList();
             return lst;

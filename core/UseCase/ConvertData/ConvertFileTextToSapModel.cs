@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using core.Repository;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace core.UseCase.ConvertData
 {
@@ -19,11 +21,7 @@ namespace core.UseCase.ConvertData
         public FileChargeModel Build(string[] lines, DateTime dateOut)
         {
             using var db = new CacheContext();
-            if (db.Sap.Any())
-            {
-                db.RemoveRange(db.Sap);
-                db.RemoveRange(db.DateComp);
-            }
+            InitDb(db);
             var dateComp = new DateCompModel();
             dateComp.Dat = dateOut;
             db.DateComp.Add(dateComp);
@@ -53,6 +51,21 @@ namespace core.UseCase.ConvertData
             db.SaveChanges();
             db.Dispose();
             return ret;
+        }
+
+        private void InitDb(CacheContext db)
+        {
+
+            //if (!((RelationalDatabaseCreator) db.Database.GetService<IDatabaseCreator>()).Exists())
+            //{
+            //    if (db.Sap.Any())
+            //    {
+            //        db.Database.EnsureDeleted();
+            //        db.Database.EnsureCreated();
+                    db.RemoveRange(db.Sap);
+                    db.RemoveRange(db.DateComp);
+            //    }
+            //}
         }
 
         private SapModel BuildSap(string line, int id)

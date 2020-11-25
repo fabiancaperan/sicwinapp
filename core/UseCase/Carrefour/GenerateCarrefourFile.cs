@@ -49,12 +49,13 @@ namespace core.UseCase.Carrefour
                               .GroupBy(g => g.s.Nit.Trim())
                               .Select(j => new CommerceModel
                               {
-                                  Nit = j.Key,
+                                  Nit = 1+Nit,
                                   Line = new StringBuilder().Append("02").Append(dat)
-                                                            .Append(_format.Formato(j.Key, 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
+                                                            .Append(_format.Formato(Nit, 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ',244)).ToString(),
-                                  CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
-                                                                .Append("-").Append(dat).Append("-").Append(j.Key).ToString(),
+                                  CodRtl = new StringBuilder().Append("CAR").Append(dat).Append(".txt").ToString(),
+                                  //CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
+                                  //                              .Append("-").Append(dat).Append("-").Append(j.Key).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
                                  .Append("01")

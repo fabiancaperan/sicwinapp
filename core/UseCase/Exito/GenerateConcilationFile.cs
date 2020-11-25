@@ -22,6 +22,7 @@ namespace core.UseCase.Exito
 
         public List<CommerceModel> Build(List<SapModel> lstSap,List<ConveniosModel> lstConv, StringBuilder dat)
         {
+            var lstEmisor = lstConv.Select(s => s.emisor).ToList();
             var lst = lstSap
                        .Join(lstConv,
                               post => (post.Id_Fran_Hija + post.Filler_Fran_Hija),
@@ -30,7 +31,10 @@ namespace core.UseCase.Exito
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
                         .Where(j => j.s.Nit.Trim() == Nit &&
-                                    !_lstNoCodTrans.Contains(j.s.Cod_Trans.Substring(0, 2)))
+                                    !_lstNoCodTrans.Contains(j.s.Cod_Trans.Substring(0, 2)) &&
+                                    lstEmisor.Contains(j.s.Id_Fran_Hija + j.s.Filler_Fran_Hija)
+                                    )
+                       .OrderBy(o => o.s.Cod_RTL).ThenBy(o => o.s.FechaTran).ThenBy(o=>o.s.HoraTran).ThenBy(o => o.e.bolsillo)
                               //.GroupBy(g => new { Rtl = g.s.Cod_RTL.Trim(), Nit = g.s.Nit.Trim() })
                               .Select(l =>
 

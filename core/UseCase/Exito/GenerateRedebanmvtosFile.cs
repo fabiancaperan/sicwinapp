@@ -31,8 +31,8 @@ namespace core.UseCase.Exito
                 .AsParallel()
                 .WithDegreeOfParallelism(4)
                 .Where(s => s.Nit.Trim() == Nit &&
-                            Convert.ToInt32(s.Cod_Resp.Substring(0, 3)) > 0 &&
-                            Convert.ToInt32(s.Cod_Resp.Substring(0, 3)) < 9 &&
+                            Convert.ToInt32(s.Cod_Resp.Substring(0, 3)) >= 0 &&
+                            Convert.ToInt32(s.Cod_Resp.Substring(0, 3)) <= 9 &&
                             !_lstNoCodTrans.Contains(s.Cod_Trans.Substring(0, 2))).OrderBy(s=> s.Cod_RTL).ToList();
             var lst = new List<StringBuilder>();
             var lstRedPriv = lstRedPrivadas.Select(s => s.red).ToList();
