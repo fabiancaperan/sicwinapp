@@ -1,6 +1,7 @@
 ﻿using core.Entities.ComerciosData;
 using core.Entities.ConvertData;
 using core.Entities.MasterData;
+using core.Utils.format;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,17 @@ namespace core.UseCase.Exito
         //{
         //    //_format = new FormatFileByType();
         //}
+        private readonly FormatFileByType _format;
+        public GenerateConcilationFile()
+        {
+            _format = new FormatFileByType();
+        }
         private const string Nit = "8909006089";
         private readonly List<string> _lstNoCodTrans = new List<string>() { "17", "31", "32", "33", "36", "37", "49", "58", "89" };
         private readonly List<string> _lstTx = new List<string>() { "10", "35", "59", "66", "68" };
+        private const string Space = " ";
+        private const string N = "N";
+        private const string A = "A";
 
         public List<CommerceModel> Build(List<SapModel> lstSap,List<ConveniosModel> lstConv, StringBuilder dat)
         {
@@ -78,7 +87,8 @@ namespace core.UseCase.Exito
                 Nit = 2 + Nit,
                 Line = "",
                 CodRtl = new StringBuilder().Append("TPRIVADAS").Append(dat).Append(".txt").ToString(),
-                Lst = lst
+                Lst = lst,
+                FinalLine = new StringBuilder().Append("03").Append(_format.Formato(lst.Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString()
             };
             var lstres = new List<CommerceModel> {rs};
             return lstres;
