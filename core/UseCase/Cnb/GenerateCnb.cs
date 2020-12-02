@@ -41,7 +41,14 @@ namespace core.UseCase.Cnb
                               (se, f) => new { se.s, se.e, f })
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
-                        .Where(j => EF.Functions.Like(j.s.Cod_RTL, (3 + Right(j.e.fiid, 3) + "%")))
+                        .ToList()
+                        .Where(j =>
+
+                         j.s.Cod_RTL.Contains((3 + Right(j.e.fiid, 3)))
+                         //sqlserver.Contains(3 + Right(j.e.fiid, 3) + "%", j.s.Cod_RTL)
+                         //DbFunctionsExtensions.Like(j.s.Cod_RTL, 3 + Right(j.e.fiid, 3) + "%")
+                        //EF.Functions.Like(j.s.Cod_RTL, 3 + Right(j.e.fiid, 3) + "%")
+                        )
                        .OrderBy(o => o.s.Cod_RTL)
                               .GroupBy(g => new { Nit = g.s.Nit.Trim(),FiidCorto = Right(g.e.fiid, 3) })
                               .Select(j => new CommerceModel

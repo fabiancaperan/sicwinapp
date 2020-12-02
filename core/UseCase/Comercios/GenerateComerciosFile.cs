@@ -29,7 +29,7 @@ namespace core.UseCase.Comercios
         public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades, StringBuilder dat)
         {
            
-            var lst = lstSap.Where(s => s.Nit.Trim() != Nit.Trim()).OrderBy(s => s.Nit).ThenBy(s=>s.Cod_RTL).Select(s=>s)
+            var lst = lstSap.Where(s => s.Nit.Trim() != Nit.Trim())
                        .Join(entidades,
                               post => post.Fiid_Emisor,
                               meta => meta.fiid,
@@ -38,10 +38,11 @@ namespace core.UseCase.Comercios
                               se => se.s.Fiid_Sponsor,
                               f => f.fiid,
                               (se, f) => new { se.s, se.e, f })
+                        .OrderBy(o => o.s.Nit).ThenBy(o => o.s.Cod_RTL)
                               //.Where(j => j.s.Cod_RTL.Contains(j.e.fiid.PadRight(3)))
                               //.OrderBy(j => j.s.Nit)
                               .GroupBy(g => g.s.Nit.Trim())
-                              .OrderByOrdinal(s=>s.Key)
+                              
                               .Select(j => new CommerceModel
                               {
                                   Nit = j.Key,

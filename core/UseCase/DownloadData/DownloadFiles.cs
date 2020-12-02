@@ -23,13 +23,13 @@ namespace core.UseCase.DownloadData
         {
             _db = new dbContext();
         }
-        public bool Build(string rute, List<CommerceType> commerceTypes)
+        public bool Build(string rute, List<CommerceType> commerceTypes, List<Entities.ConvertData.SapModel> lstSap)
         {
             var lstEntidades = _db.EntidadesModel.ToList();
             var lstFalabella = _db.FalabellaModel.ToList();
             var lstConv = _db.ConveniosModel.ToList();
             var lstCnb = _db.CnbsModel.ToList();
-            var lstSap = new SicContext().GetAll();
+            //var lstSap = new SicContext().GetAll();
             var date = new SicContext().GetDate();
             var lstBinesesp = _db.BinesesModel.ToList();
             var lstRedPrivadas = _db.RedprivadasModel.ToList();

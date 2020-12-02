@@ -10,13 +10,13 @@
 		<None Include="appsettings.json" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
 		<PackageReference Include="System.DirectoryServices.Protocols" Version="5.0.0" />
-		<PackageReference Include="System.Runtime.Caching" Version="4.7.0" />
+		<PackageReference Include="System.Runtime.Caching" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

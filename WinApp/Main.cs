@@ -12,10 +12,14 @@ namespace WinApp
 {
     public partial class Main : Form
     {
+        private List<core.Entities.ConvertData.SapModel> lst;
         public Main()
         {
+            
             InitializeComponent();
             checkedListBox1.DataSource = Enum.GetValues(typeof(core.Repository.Types.CommerceType));
+            //init test
+            button3.Enabled = true;
             for (int count = 0; count < checkedListBox1.Items.Count; count++)
             {
                 checkedListBox1.SetItemChecked(count, true);
@@ -79,15 +83,16 @@ namespace WinApp
                 if (textBoxInput.Text != "")
                 {
                     var ret = new ChargeFile().Build(textBoxInput.Text);
-                    if (ret == "TRUE")
+                    if (ret.Message == "TRUE")
                     {
+                        lst = ret.List;
                         var txtCheck = "Se ha cargado correctamente";
                         MessageBox.Show(txtCheck);
                         button3.Enabled = true;
                     }
                     else
                     {
-                        MessageBox.Show(ret);
+                        MessageBox.Show(ret.Message);
                     }
                 }
                 else
@@ -133,7 +138,7 @@ namespace WinApp
 
         private void button3_Click(object sender, EventArgs e)
         {
-            try
+             try
             {
                 var rute = textBox2.Text;
                 List<core.Repository.Types.CommerceType> subfolder = checkedListBox1.CheckedItems.OfType<core.Repository.Types.CommerceType>().ToList();
@@ -143,7 +148,7 @@ namespace WinApp
                     {
                         button2.Enabled = false;
                         Cursor = Cursors.WaitCursor; // change cursor to hourglass type
-                        var res = new DownloadFiles().Build(rute, subfolder);
+                        var res = new DownloadFiles().Build(rute, subfolder, lst);
                         if (res)
                         {
                             var txtFine = "Se ha generado con Éxito";

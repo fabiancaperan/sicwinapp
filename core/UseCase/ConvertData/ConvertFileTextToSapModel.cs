@@ -7,6 +7,7 @@ using System.Reflection;
 using core.Repository;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using EFCore.BulkExtensions;
 
 namespace core.UseCase.ConvertData
 {
@@ -25,8 +26,10 @@ namespace core.UseCase.ConvertData
             var dateComp = new DateCompModel();
             dateComp.Dat = dateOut;
             db.DateComp.Add(dateComp);
-            var ret = new FileChargeModel {List = new List<SapModel>()};
+            var ret = new FileChargeModel { List = new List<SapModel>() };
 
+            //var lst = new List<List<SapModel>>();
+            //var numbatch = 50000;
             int i = 0;
             foreach (var t in lines)
             {
@@ -45,27 +48,48 @@ namespace core.UseCase.ConvertData
                     break;
                 }
                 ret.List.Add(sa);
+                //if ((i % numbatch) == 0)
+                //{
+                //    lst.Add(ret.List);
+                //    ret.List = new List<SapModel>();
+                //}
+                //ret.List.Add(sa);
                 //db.Sap.Add(sa);
+               
+                
             }
-            db.Sap.AddRange(ret.List);
-            db.SaveChanges();
-            db.Dispose();
+            //var bulkConfig = new BulkConfig()
+            //{
+            //    SetOutputIdentity = true,
+            //    PreserveInsertOrder = true
+            //};
+            //db.BulkInsert(ret.List, bulkConfig);
+            //lst.ForEach(s =>
+            //{
+            //    db.BulkInsert(s, bulkConfig);
+            //    //db.Sap.AddRange(s);
+            //    //db.SaveChanges();
+            //});
+            //db.Sap.AddRange(ret.List);
+
+
+            //db.Dispose();
             return ret;
         }
 
         private void InitDb(CacheContext db)
         {
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
 
-            //if (!((RelationalDatabaseCreator) db.Database.GetService<IDatabaseCreator>()).Exists())
-            //{
-            //    if (db.Sap.Any())
-            //    {
-            //        db.Database.EnsureDeleted();
-            //        db.Database.EnsureCreated();
-                    db.RemoveRange(db.Sap);
-                    db.RemoveRange(db.DateComp);
-            //    }
-            //}
+
+            if (db.Sap.Any())
+            {
+
+                db.RemoveRange(db.Sap);
+                db.RemoveRange(db.DateComp);
+            }
+
         }
 
         private SapModel BuildSap(string line, int id)

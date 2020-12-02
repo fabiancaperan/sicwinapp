@@ -13,12 +13,14 @@ namespace core.UseCase.ConvertData
     {
         private const int LengthPath = 11;
 
-        public string Build(string path)
+        public FileChargeModel Build(string path)
         {
+            var fileCharge = new FileChargeModel();
             var ret =ValidatePath(path, out var dateOut);
             if (ret != String.Empty)
             {
-                return ret;
+                fileCharge.Message = ret;
+                return fileCharge;
             }
 
             string[] lines = File.ReadAllLines(path);
@@ -30,17 +32,18 @@ namespace core.UseCase.ConvertData
 
             if (ValidateFormat(lines))
             {
-                FileChargeModel fileChargeModel = new ConvertFileTextToSapModel().Build(lines, dateOut);
-                if (!string.IsNullOrEmpty(fileChargeModel.Message))
+                fileCharge = new ConvertFileTextToSapModel().Build(lines, dateOut);
+                if (!string.IsNullOrEmpty(fileCharge.Message))
                 {
-                    return fileChargeModel.Message;
+                    return fileCharge;
                 }
 
-                //new SicContext().Save(fileChargeModel.List, dateOut);
-                return "TRUE";
+                new SicContext().Save(dateOut);
+                fileCharge.Message = "TRUE";
+                return fileCharge;
             }
-
-            return "Archivo no válido";
+            fileCharge.Message = "Archivo no válido";
+            return fileCharge;
 
         }
 

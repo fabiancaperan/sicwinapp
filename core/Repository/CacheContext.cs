@@ -9,11 +9,15 @@ namespace core.Repository
         public DbSet<SapModel> Sap { get; set; }
         public DbSet<DateCompModel> DateComp { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseInMemoryDatabase("sic");
-
         //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //    => options.UseSqlite("Data Source=sic1.db");
+        //    => options.UseInMemoryDatabase("sic");
+        private string stringConnect = "Data Source=DESKTOP-7OU0QJ0\\MSSQLSERVER01;Initial Catalog=SIC;Integrated Security=True";
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            options.UseSqlServer(stringConnect);
+        }
+
+        //=> options.UseSqlite("Data Source=sic1.db");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
