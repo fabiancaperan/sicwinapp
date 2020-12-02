@@ -38,16 +38,16 @@ namespace core.UseCase.Comercios
                               se => se.s.Fiid_Sponsor,
                               f => f.fiid,
                               (se, f) => new { se.s, se.e, f })
-                        .OrderBy(o => o.s.Nit).ThenBy(o => o.s.Cod_RTL)
                               //.Where(j => j.s.Cod_RTL.Contains(j.e.fiid.PadRight(3)))
                               //.OrderBy(j => j.s.Nit)
+                              .OrderBy(o => o.s.Nit).ThenBy(o => o.s.Cod_RTL)
                               .GroupBy(g => g.s.Nit.Trim())
                               
                               .Select(j => new CommerceModel
                               {
                                   Nit = j.Key,
                                   Line = new StringBuilder().Append("02").Append(dat)
-                                                            .Append(_format.Formato(j.Key, 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
+                                                            .Append(_format.Formato(j.Key, 13, N)).Append(_format.Formato(RemoveSpecialCharactersWithSpace(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.Key).ToString(),
@@ -105,6 +105,16 @@ namespace core.UseCase.Comercios
 
             input = r.Replace(input, String.Empty);
             input = input.Replace(" ", "_");
+            return input;
+        }
+
+        private string RemoveSpecialCharactersWithSpace(string input)
+        {
+
+            Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+            input = r.Replace(input, String.Empty);
+            //input = input.Replace(" ", " ");
             return input;
         }
 
