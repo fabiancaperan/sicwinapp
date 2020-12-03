@@ -5,9 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using core.Repository;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
-using EFCore.BulkExtensions;
+
 
 namespace core.UseCase.ConvertData
 {
