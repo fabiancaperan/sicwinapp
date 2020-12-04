@@ -13,19 +13,18 @@ namespace core.UseCase.Exito
     public class GenerateRedebanmvtosFile
     {
         private readonly FormatFileByType _format;
-        private readonly StringBuilder _dat;
+        private StringBuilder _dat = new StringBuilder();
         public GenerateRedebanmvtosFile()
         {
-            var date = DateTime.Now;
-            _dat = new StringBuilder().Append(date.Year).Append(date.Month).Append(date.Day);
             _format = new FormatFileByType();
         }
         private const string Nit = "8909006089";
         private const string N = "N";
         private readonly List<string> _lstNoCodTrans = new List<string>() { "17", "45", "49", "58", "59" };
 
-        public List<CommerceModel> Build(List<SapModel> lstSap, List<BinesespModel> lstBinesesp, List<RedprivadasModel> lstRedPrivadas)
+        public List<CommerceModel> Build(List<SapModel> lstSap, List<BinesespModel> lstBinesesp, List<RedprivadasModel> lstRedPrivadas, StringBuilder dat)
         {
+            _dat = dat;
 
             var lstByNit = lstSap
                 .AsParallel()
@@ -46,9 +45,9 @@ namespace core.UseCase.Exito
 
             foreach (var g in lstByNit.GroupBy(g=>g.Cod_RTL))
             {
-                lst.Add(BuildStep1(g.ToList(), g.Key));
-                lst.Add(BuildStep2(g.ToList(), lstFiidTarStep2, lstRedPriv, g.Key));
-                lst.Add(BuildStep3(g.ToList(), lstFiidTarStep3, lstRedPriv, g.Key));
+                lst.Add(BuildStep1(g.ToList(), g.Key.Trim()));
+                lst.Add(BuildStep2(g.ToList(), lstFiidTarStep2, lstRedPriv, g.Key.Trim()));
+                lst.Add(BuildStep3(g.ToList(), lstFiidTarStep3, lstRedPriv, g.Key.Trim()));
 
             }
            
@@ -76,7 +75,7 @@ namespace core.UseCase.Exito
 
                               {
                                   {
-                                      var val = Convert.ToInt64(s.Valor);
+                                      var val = Convert.ToInt64(s.Valor.Substring(0,10));
 
                                       if (s.Tipo_Mensaje.Substring(1, 3) == "210")
                                       {
@@ -114,7 +113,7 @@ namespace core.UseCase.Exito
                 .Append("\t")
                 .Append(_format.Formato(num.ToString(), 12, N))
                 .Append("\t")
-                .Append(_format.Formato(total.ToString(CultureInfo.InvariantCulture), 12, N))
+                .Append(_format.Formato(total.ToString(), 12, N))
                 .Append("\t")
                 .Append("01")
                 .Append("\t")
@@ -131,9 +130,8 @@ namespace core.UseCase.Exito
                     .AsParallel()
                     .WithDegreeOfParallelism(4)
                     .Where(s =>
-                        (!lstFiidTarStep2.Contains(s
-                                .Fiid_Emisor) || (s.Fiid_Emisor == "0808" && (s.Id_Fran_Hija + s.Filler_Fran_Hija) == "000")
-                        ) &&
+                        (!lstFiidTarStep2.Contains(s.Fiid_Emisor) || (s.Fiid_Emisor == "0808" && (s.Id_Fran_Hija + s.Filler_Fran_Hija) == "000")
+                       ) &&
                         ((s.Id_Fran_Hija + s.Filler_Fran_Hija) != "000" &&
                          !lstRedPriv.Contains((s.Adquirida_Por + s.Adquirida_Para))
                          )
@@ -143,7 +141,7 @@ namespace core.UseCase.Exito
 
                     {
                         {
-                            var val = Convert.ToInt64(s.Valor);
+                            var val = Convert.ToInt64(s.Valor.Substring(0, 10));
 
                             if (s.Tipo_Mensaje.Substring(1, 3) == "210")
                             {
@@ -179,7 +177,7 @@ namespace core.UseCase.Exito
                         .Append("\t")
                         .Append(_format.Formato(num.ToString(), 12, N))
                         .Append("\t")
-                        .Append(_format.Formato(total.ToString(CultureInfo.InvariantCulture), 12, N))
+                        .Append(_format.Formato(total.ToString(), 12, N))
                         .Append("\t")
                         .Append("01")
                         .Append("\t")
@@ -204,7 +202,7 @@ namespace core.UseCase.Exito
 
                               {
                                   {
-                                      var val = Convert.ToInt64(s.Valor);
+                                      var val = Convert.ToInt64(s.Valor.Substring(0, 10));
 
                                       if (s.Tipo_Mensaje.Substring(1, 3) == "210")
                                       {
@@ -239,7 +237,7 @@ namespace core.UseCase.Exito
                 .Append("\t")
                 .Append(_format.Formato(num.ToString(), 12, N))
                 .Append("\t")
-                .Append(_format.Formato(total.ToString(CultureInfo.InvariantCulture), 12, N))
+                .Append(_format.Formato(total.ToString(), 12, N))
                 .Append("\t")
                 .Append("01")
                 .Append("\t")

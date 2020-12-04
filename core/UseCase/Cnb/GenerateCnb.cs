@@ -2,7 +2,6 @@
 using core.Entities.ConvertData;
 using core.Entities.MasterData;
 using core.Utils.format;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,12 +89,7 @@ namespace core.UseCase.Cnb
                         .WithDegreeOfParallelism(4)
                         .Where(j =>
                          Regex.IsMatch(j.s.Cod_RTL, LikeToRegular(3 + Right(j.e.fiid, 3) + "%"))
-                         //j.s.Cod_RTL.Contains((3 + Right(j.e.fiid, 3))) 
                          && j.f.nit!=null && j.f.fiid!=null
-                         
-                         //sqlserver.Contains(3 + Right(j.e.fiid, 3) + "%", j.s.Cod_RTL)
-                         //DbFunctionsExtensions.Like(j.s.Cod_RTL, 3 + Right(j.e.fiid, 3) + "%")
-                        //EF.Functions.Like(j.s.Cod_RTL, 3 + Right(j.e.fiid, 3) + "%")
                         )
                               .GroupBy(g => new { fiid = g.e.fiid, nit = g.e.nit})
                               .OrderBy(o => o.Key.fiid)
@@ -109,8 +103,6 @@ namespace core.UseCase.Cnb
                                   CodRtl = new StringBuilder().Append("3").Append(Right(j.Key.fiid,3)).Append("000001")
                                                                 .Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.f.nombre.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.f.nit.Trim()).ToString(),
-                                  //CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
-                                  //                              .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
                                   FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
                                   Lst = j.OrderBy(o => long.Parse(o.s.Cod_RTL.Trim())).Select(l =>
                                   new StringBuilder()
@@ -162,7 +154,7 @@ namespace core.UseCase.Cnb
         }
 
 
-        private String LikeToRegular(String value)
+        private string LikeToRegular(string value)
         {
             return "^" + Regex.Escape(value).Replace("_", ".").Replace("%", ".*") + "$";
         }

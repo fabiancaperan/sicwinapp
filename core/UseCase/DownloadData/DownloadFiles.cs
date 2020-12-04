@@ -37,6 +37,7 @@ namespace core.UseCase.DownloadData
             if (date == null)
                 return false;
             var dat = new StringBuilder().Append(date.Value.Year).Append(date.Value.Month).Append(date.Value.Day);
+            var datmvtos = new StringBuilder().Append(date.Value.Day).Append(date.Value.Month).Append(date.Value.Year);
             foreach (var commerceType in commerceTypes)
             {
 
@@ -69,7 +70,7 @@ namespace core.UseCase.DownloadData
                             ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.ExitoRedebanmvtos:
-                        res = new GenerateRedebanmvtosFile().Build(lstSap, lstBinesesp, lstRedPrivadas);
+                        res = new GenerateRedebanmvtosFile().Build(lstSap, lstBinesesp, lstRedPrivadas, datmvtos);
                         if (res != null && res.Any())
                             ComerciosFileRtc(rute, res);
                         break;
