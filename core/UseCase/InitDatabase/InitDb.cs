@@ -22,6 +22,7 @@ namespace core.UseCase.InitDatabase
                 db.CnbsModel.AddRange(UploadCnbs());
                 db.RedprivadasModel.AddRange(Uploadredprivadas());
                 db.ConveniosModel.AddRange(Uploadconvenios());
+                db.BinesespModel.AddRange(UploadBinesesp());
                 db.SaveChanges();
             }
 
@@ -261,6 +262,24 @@ namespace core.UseCase.InitDatabase
                           {'Id':'26','Nemo':'CONVSAA','diaini':'LU','Numdías':7,'Descripcion':'Comfandi Muj Ahorr','emisor':'057 ','NIT':'8903032085','tiponegocio':'2054','tipotrans':2,'Servidor':'localhost','Usuario':'1','Clave':'','COD_CONCEPTO':'SA','bolsillo':1}
                         ]";
             List<ConveniosModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ConveniosModel>>(json);
+            return lst;
+        }
+
+        private List<BinesespModel> UploadBinesesp()
+        {
+            var json = @"[{'Fiid':'0806','NombreTar':'CODENSA                                           '},
+                          {'Fiid':'0808','NombreTar':'PREPAGO                                           '},
+                          {'Fiid':'0819','NombreTar':'COMFENALCO                                        '},
+                          {'Fiid':'0820','NombreTar':'COOMEVA                                           '},
+                          {'Fiid':'0828','NombreTar':'ASOPAGOS                                          '},
+                          {'Fiid':'0822','NombreTar':'COMBARRANQUILLA                                   '},
+                          {'Fiid':'0823','NombreTar':'COMFAMILIAR ATLANTICO                             '},
+                          {'Fiid':'0825','NombreTar':'COMFENALCO ANTIOQUIA                              '},
+                          {'Fiid':'0814','NombreTar':'COMFAMA                                           '},
+                          {'Fiid':'0815','NombreTar':'FESA ASSENDA                                      '},
+                          {'Fiid':'0821','NombreTar':'TUYA ALKOSTO                                      '}
+                        ]";
+            List<BinesespModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BinesespModel>>(json);
             return lst;
         }
 

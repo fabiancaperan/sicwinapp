@@ -31,7 +31,7 @@ namespace core.UseCase.DownloadData
             var lstCnb = _db.CnbsModel.ToList();
             //var lstSap = new SicContext().GetAll();
             var date = new SicContext().GetDate();
-            var lstBinesesp = _db.BinesesModel.ToList();
+            var lstBinesesp = _db.BinesespModel.ToList();
             var lstRedPrivadas = _db.RedprivadasModel.ToList();
 
             if (date == null)
