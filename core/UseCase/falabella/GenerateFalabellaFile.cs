@@ -27,46 +27,43 @@ namespace core.UseCase.Falabella
 
         public List<CommerceModel> Build(List<SapModel> lstSap, List<FalabellaModel> falabella, StringBuilder date)
         {
-
-            long total = 0;
             var dat = getDat();
 
-            var lstFilter = lstSap
-                .Join(falabella,
+            var lstFilter = falabella
+                .Join(lstSap,
+                    meta => meta.CODIGO_UNICO,
                     post => post.Cod_RTL.Trim(),
-                    meta => _format.Formato(meta.CODIGO_UNICO.Substring(0, 10), 10, A),
-                    (s, e) => new { s, e })
+                    (e, s) => new { e, s })
                 .Where(j => j.s.Nit.Trim() == Nit &&
-                            Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) >= 0 &&
-                            Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) <= 9 &&
-                            j.s.Num_Autoriza != string.Empty)
-                .OrderByDescending(o => o.s.Tipo_Mensaje).Select(m => new SapModel()
+                            j.e.CODIGO_UNICO == j.s.Cod_RTL.Trim() &&
+                           // _format.Formato(j.e.CODIGO_UNICO.Substring(0, 10), 10, A)== j.s.Cod_RTL.Trim()&&
+                            Convert.ToInt32(j.s.Cod_Resp) >= 0 &&
+                            Convert.ToInt32(j.s.Cod_Resp) <= 9 &&
+                            j.s.Num_Autoriza.Trim() != string.Empty)
+                .Select(m => new SapModel()
                 {
                     Cod_RTL = m.s.Cod_RTL.Trim(),
                     //usamos Nombre cadena como localFalabella
                     NombreCadena = m.e.LOCAL_FALABELLA,
                     Cod_Trans = m.s.Cod_Trans,
                     FechaCompra = m.s.FechaCompra,
+                    Adquirida_Para = m.s.Adquirida_Para,
+                    Adquirida_Por = m.s.Adquirida_Por,
                     Valor = m.s.Valor
                 })
                 .GroupBy(g => new { g.Cod_RTL, g.NombreCadena }).ToList();
-            var lst = lstSap
-                .Join(falabella,
-                    post => post.Cod_RTL.Trim(),
-                    meta => _format.Formato(meta.CODIGO_UNICO.Substring(0, 10), 10, A),
-                    (s, e) => new {s, e})
-                .Where(j => j.s.Nit.Trim() == Nit &&
-                            Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) > 0 &&
-                            Convert.ToInt32(j.s.Cod_Resp.Substring(0, 3)) < 9 &&
-                            j.s.Num_Autoriza != string.Empty);
+            
             var lstText = new List<StringBuilder>();
-
 
             foreach (var g in lstFilter)
             {
-                lstText.Add(BuildStep1(g.ToList(), dat.ToString(), date.ToString(), g.Key.NombreCadena));
-                lstText.Add(BuildStep2(g.ToList(), dat.ToString(), date.ToString(), g.Key.NombreCadena));
-                lstText.Add(BuildStep3(g.ToList(), dat.ToString(), date.ToString(), g.Key.NombreCadena));
+                var lstOrder = g
+                    //.OrderByDescending(o => o.Tipo_Mensaje)
+                    .ToList();
+                var local = g.Key.NombreCadena.Substring(0, 4);
+                lstText.Add(BuildStep1(lstOrder, dat.ToString(), date.ToString(), local));
+                lstText.Add(BuildStep2(lstOrder, dat.ToString(), date.ToString(), local));
+                lstText.Add(BuildStep3(lstOrder, dat.ToString(), date.ToString(), local));
             }
 
             var rs = new CommerceModel()
@@ -103,10 +100,10 @@ namespace core.UseCase.Falabella
 
             });
             var num = filter.Count();
-            var local = localFalabella.Substring(0, 4);
+            
             var ret = new StringBuilder()
                 .Append("650RE")
-                .Append(local)
+                .Append(localFalabella.Substring(1, 3))
                 .Append("09|")
                 .Append(num)
                 .Append("|")
@@ -115,12 +112,12 @@ namespace core.UseCase.Falabella
                 .Append(total)
                 .Append(".00|RED")
                 .Append(fechaComp)
-                .Append(local)
+                .Append(localFalabella)
                 .Append("09|COP|830070527-1|")
                 .Append(dat)
                 .Append("|IC")
                 .Append(fechaComp)
-                .Append(local)
+                .Append(localFalabella)
                 .Append("09|")
                 .Append(total)
                 .Append(".00|||19|CO|||||||||||FACOLOCREDAR")
@@ -150,11 +147,11 @@ namespace core.UseCase.Falabella
                 }
 
             });
-            var local = localFalabella.Substring(0, 4);
+            
             var num = filter.Count();
             var ret = new StringBuilder()
                 .Append("650RE")
-                .Append(local)
+                .Append(localFalabella.Substring(1,3))
                 .Append("11|")
                 .Append(num)
                 .Append("|")
@@ -163,12 +160,12 @@ namespace core.UseCase.Falabella
                 .Append(total)
                 .Append(".00|RED")
                 .Append(fechaComp)
-                .Append(local)
+                .Append(localFalabella)
                 .Append("11|COP|830070527-1|")
                 .Append(dat)
                 .Append("|IC")
                 .Append(fechaComp)
-                .Append(local)
+                .Append(localFalabella)
                 .Append("11|")
                 .Append(total)
                 .Append(".00|||19|CO|||||||||||FACOLOCREDAR")
@@ -200,10 +197,10 @@ namespace core.UseCase.Falabella
 
             });
             var num = filter.Count();
-            var local = localFalabella.Substring(0, 4);
+            
             var ret = new StringBuilder()
                 .Append("650RE")
-                .Append(local)
+                .Append(localFalabella.Substring(1, 3))
                 .Append("|")
                 .Append(num)
                 .Append("|")
@@ -212,12 +209,12 @@ namespace core.UseCase.Falabella
                 .Append(total)
                 .Append(".00|RED")
                 .Append(fechaComp)
-                .Append(local)
+                .Append(localFalabella)
                 .Append("13|COP|830070527-1|")
                 .Append(dat)
                 .Append("|IC")
                 .Append(fechaComp)
-                .Append(local)
+                .Append(localFalabella)
                 .Append("13|")
                 .Append(total)
                 .Append(".00|||19|CO|||||||||||FACOLOCREDAR")
@@ -236,7 +233,7 @@ namespace core.UseCase.Falabella
                 dayWeek == DayOfWeek.Saturday ? 2 : 0;
             if (dayAdd > 0)
                 today = today.AddDays(dayAdd);
-            var dat = new StringBuilder().Append(today.Year).Append(today.Month).Append(today.Day);
+            var dat = new StringBuilder().Append(today.Year).Append(today.Month).Append(_format.Formato(today.Day.ToString(),2,"N"));
             return dat;
         }
 

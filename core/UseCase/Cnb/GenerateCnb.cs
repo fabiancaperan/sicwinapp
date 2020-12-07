@@ -62,18 +62,10 @@ namespace core.UseCase.Cnb
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
                         .Where(j =>
-
-                         //j.s.Cod_RTL.Contains((3 + Right(j.e.fiid, 3))) &&
-
-
-                         //sqlserver.Contains(3 + Right(j.e.fiid, 3) + "%", j.s.Cod_RTL)
-                         //DbFunctionsExtensions.Like(j.s.Cod_RTL, 3 + Right(j.e.fiid, 3) + "%")
                          Regex.IsMatch(j.s.Cod_RTL, LikeToRegular(3 + Right(j.e.fiid, 3) + "%"))
-
-                        //EF.Functions.Like(j.s.Cod_RTL, 3 + Right(j.e.fiid, 3) + "%")
-                        && j.f.nit != null && j.f.fiid != null
+                         && j.f.nit != null && j.f.fiid != null
                         )
-                              .GroupBy(g => new { fiid = g.e.fiid, nit = g.e.nit ,codrtl = g.s.Cod_RTL }).ToList();
+                              .GroupBy(g => new { fiid = g.e.fiid, nit = g.e.nit }).ToList();
             var tesco=test1.Select(s => new { s.Key.nit, c = s.Count() }).ToList();
 
             var lst = lstSap
@@ -104,7 +96,7 @@ namespace core.UseCase.Cnb
                                                                 .Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.f.nombre.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.f.nit.Trim()).ToString(),
                                   FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
-                                  Lst = j.OrderBy(o => long.Parse(o.s.Cod_RTL.Trim())).Select(l =>
+                                  Lst = j.OrderBy(o => o.s.Cod_RTL.Trim()).Select(l =>
                                   new StringBuilder()
                                  .Append("01")
                                  .Append(_format.Formato(l.s.Id_Terminal.Substring(0, 16), 16, A))

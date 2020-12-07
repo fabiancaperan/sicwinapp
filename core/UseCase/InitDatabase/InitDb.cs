@@ -12,7 +12,7 @@ namespace core.UseCase.InitDatabase
         public bool InitDatabase()
         {
             using var db = new dbContext();
-            //db.Database.EnsureDeleted();
+            db.Database.EnsureDeleted();
             if (!((RelationalDatabaseCreator) db.Database.GetService<IDatabaseCreator>()).Exists())
             {
                 db.Database.EnsureDeleted();

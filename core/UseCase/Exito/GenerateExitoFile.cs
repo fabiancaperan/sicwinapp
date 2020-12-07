@@ -41,13 +41,13 @@ namespace core.UseCase.Exito
                         .WithDegreeOfParallelism(4)
                         .Where(j => j.s.Nit.Trim() == Nit &&
                                         j.s.Cod_Trans.Substring(0, 2) != "58")
-                              .GroupBy(g => new { Rtl = g.s.Cod_RTL.Trim(), Nit = g.s.Nit.Trim() })
+                              .GroupBy(g => new { Rtl = g.s.Cod_RTL.Trim(), Nit = g.s.Nit.Trim() }).OrderBy(o => o.Key.Rtl)
                               .Select(j => new CommerceModel
                               {
                                   Rtl = j.Key.Rtl,
                                   Nit = j.Key.Nit,
                                   Line = new StringBuilder().Append("02").Append(dat)
-                                                            .Append(_format.Formato(j.FirstOrDefault()?.s.Nit.Trim(), 13, A)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
+                                                            .Append(_format.Formato(j.Key.Nit.Trim(), 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
