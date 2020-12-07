@@ -37,15 +37,16 @@ namespace core.UseCase.Olimpica
                                f => f.fiid,
                                (se, f) => new { se.s, se.e, f })
                                .GroupBy(g => new { Rtl = g.s.Cod_RTL.Trim(), Nit = g.s.Nit.Trim() })
+                               .OrderBy(o => o.Key.Rtl)
                               .Select(j => new CommerceModel
                               {
                                   Rtl = j.Key.Rtl,
                                   Nit = 1+j.Key.Nit,
                                   Line = new StringBuilder().Append("02").Append(dat)
-                                                            .Append(_format.Formato(j.FirstOrDefault()?.s.Nit.Trim(), 13, A)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
+                                                            .Append(_format.Formato(j.Key.Nit, 13, N)).Append(_format.Formato(RemoveSpecialCharactersChangeBySpace(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
-                                  CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
-                                                                .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
+                                  CodRtl = new StringBuilder().Append(j.Key.Rtl).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
+                                                                .Append("-").Append(dat).Append("-").Append(j.Key.Nit).ToString(),
                                   FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
@@ -99,6 +100,15 @@ namespace core.UseCase.Olimpica
 
             input = r.Replace(input, String.Empty);
             input = input.Replace(" ", "_");
+            return input;
+        }
+
+        private string RemoveSpecialCharactersChangeBySpace(string input)
+        {
+
+            Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+            input = r.Replace(input, String.Empty);
             return input;
         }
     }

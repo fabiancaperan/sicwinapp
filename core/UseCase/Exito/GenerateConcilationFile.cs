@@ -34,10 +34,6 @@ namespace core.UseCase.Exito
             double total = 0;
             var lstEmisor = lstConv.Select(s => s.emisor).ToList();
             var lst = lstSap
-                       //.Join(lstConv,
-                       //       post => (post.Id_Fran_Hija + post.Filler_Fran_Hija),
-                       //       meta => meta.emisor.Trim(),
-                       //       (s, e) => new { s, e })
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
                         .Where(s => s.Nit.Trim() == Nit &&

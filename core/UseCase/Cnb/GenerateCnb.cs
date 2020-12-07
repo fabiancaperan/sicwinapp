@@ -28,46 +28,7 @@ namespace core.UseCase.Cnb
 
         public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades, List<CnbsModel> cnbs, StringBuilder dat)
         {
-            var test = lstSap
-                       .Join(entidades,
-                              post => post.Fiid_Emisor,
-                              meta => meta.fiid,
-                              (s, e) => new { s, e })
-                        .Join(entidades,
-                              se => se.s.Fiid_Sponsor,
-                              f => f.fiid,
-                              (se, f) => new { se.s, se.e, f })
-                        .AsParallel()
-                        .WithDegreeOfParallelism(4)
-                        .Where(j =>
-
-                         j.s.Cod_RTL.Contains((3 + Right(j.e.fiid, 3)))
-                         && j.f.nit != null && j.f.fiid != null
-
-                        //sqlserver.Contains(3 + Right(j.e.fiid, 3) + "%", j.s.Cod_RTL)
-                        //DbFunctionsExtensions.Like(j.s.Cod_RTL, 3 + Right(j.e.fiid, 3) + "%")
-                        //EF.Functions.Like(j.s.Cod_RTL, 3 + Right(j.e.fiid, 3) + "%")
-                        )
-                              .GroupBy(g => new { fiid = g.e.fiid}).ToList();
-            var tesc = test.Select(s => new { s.Key.fiid, c = s.Count() }).ToList();
-            var test1 = lstSap
-                       .Join(entidades,
-                              post => post.Fiid_Emisor,
-                              meta => meta.fiid,
-                              (s, e) => new { s, e })
-                        .Join(entidades,
-                              se => se.s.Fiid_Sponsor,
-                              f => f.fiid,
-                              (se, f) => new { se.s, se.e, f })
-                        .AsParallel()
-                        .WithDegreeOfParallelism(4)
-                        .Where(j =>
-                         Regex.IsMatch(j.s.Cod_RTL, LikeToRegular(3 + Right(j.e.fiid, 3) + "%"))
-                         && j.f.nit != null && j.f.fiid != null
-                        )
-                              .GroupBy(g => new { fiid = g.e.fiid, nit = g.e.nit }).ToList();
-            var tesco=test1.Select(s => new { s.Key.nit, c = s.Count() }).ToList();
-
+           
             var lst = lstSap
                        .Join(entidades,
                               post => post.Fiid_Emisor,
@@ -90,7 +51,7 @@ namespace core.UseCase.Cnb
                                   Rtl = "",
                                   Nit = 1 + j.FirstOrDefault().f.nit,
                                   Line = new StringBuilder().Append("02").Append(dat)
-                                                            .Append(_format.Formato(j.FirstOrDefault()?.f.nit.Trim(), 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.f.nombre.Trim()), 30, A))
+                                                            .Append(_format.Formato(j.FirstOrDefault()?.f.nit.Trim(), 13, N)).Append(_format.Formato(RemoveSpecialCharactersChangeBySpace(j.FirstOrDefault()?.f.nombre.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append("3").Append(Right(j.Key.fiid,3)).Append("000001")
                                                                 .Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.f.nombre.Trim()))
@@ -157,6 +118,14 @@ namespace core.UseCase.Cnb
 
             input = r.Replace(input, String.Empty);
             input = input.Replace(" ", "_");
+            return input;
+        }
+        private string RemoveSpecialCharactersChangeBySpace(string input)
+        {
+
+            Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+            input = r.Replace(input, String.Empty);
             return input;
         }
 

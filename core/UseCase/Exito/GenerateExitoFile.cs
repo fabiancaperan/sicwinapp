@@ -47,7 +47,7 @@ namespace core.UseCase.Exito
                                   Rtl = j.Key.Rtl,
                                   Nit = j.Key.Nit,
                                   Line = new StringBuilder().Append("02").Append(dat)
-                                                            .Append(_format.Formato(j.Key.Nit.Trim(), 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
+                                                            .Append(_format.Formato(j.Key.Nit.Trim(), 13, N)).Append(_format.Formato(RemoveSpecialCharactersChangeBySpace(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
@@ -104,6 +104,15 @@ namespace core.UseCase.Exito
 
             input = r.Replace(input, String.Empty);
             input = input.Replace(" ", "_");
+            return input;
+        }
+
+        private string RemoveSpecialCharactersChangeBySpace(string input)
+        {
+
+            Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+            input = r.Replace(input, String.Empty);
             return input;
         }
 
