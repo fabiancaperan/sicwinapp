@@ -32,7 +32,7 @@ namespace core.UseCase.Exito
         public List<CommerceModel> Build(List<SapModel> lstSap,List<ConveniosModel> lstConv, StringBuilder dat)
         {
             double total = 0;
-            var lstEmisor = lstConv.Select(s => s.emisor).ToList();
+            var lstEmisor = lstConv.Select(s => s.emisor.Trim()).ToList();
             var lst = lstSap
                         .AsParallel()
                         .WithDegreeOfParallelism(4)

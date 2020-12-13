@@ -41,8 +41,8 @@ namespace core.UseCase.Cnb
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
                         .Where(j =>
-                         Regex.IsMatch(j.s.Cod_RTL, LikeToRegular(3 + Right(j.e.fiid, 3) + "%"))
-                         && j.f.nit!=null && j.f.fiid!=null
+                         //Regex.IsMatch(j.s.Cod_RTL, LikeToRegular(3 + Right(j.e.fiid, 3) + "%"))&& 
+                         j.f.nit!=null && j.f.fiid!=null
                         )
                               .GroupBy(g => new { fiid = g.e.fiid, nit = g.e.nit})
                               .OrderBy(o => o.Key.fiid)

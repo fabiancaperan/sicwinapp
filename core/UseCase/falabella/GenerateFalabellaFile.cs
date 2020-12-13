@@ -55,15 +55,19 @@ namespace core.UseCase.Falabella
             
             var lstText = new List<StringBuilder>();
 
-            foreach (var g in lstFilter)
+            int i = 0;
+            foreach (var g in lstFilter.OrderBy(s=>s.Key.Cod_RTL))
             {
                 var lstOrder = g
                     //.OrderByDescending(o => o.Tipo_Mensaje)
                     .ToList();
                 var local = g.Key.NombreCadena.Substring(0, 4);
-                lstText.Add(BuildStep1(lstOrder, dat.ToString(), date.ToString(), local));
-                lstText.Add(BuildStep2(lstOrder, dat.ToString(), date.ToString(), local));
-                lstText.Add(BuildStep3(lstOrder, dat.ToString(), date.ToString(), local));
+                lstText.Add(BuildStep1(lstOrder, dat.ToString(), date.ToString(), local, i));
+                i++;
+                lstText.Add(BuildStep2(lstOrder, dat.ToString(), date.ToString(), local, i));
+                i++;
+                lstText.Add(BuildStep3(lstOrder, dat.ToString(), date.ToString(), local, i));
+                i++;
             }
 
             var rs = new CommerceModel()
@@ -78,7 +82,7 @@ namespace core.UseCase.Falabella
             return lstres;
         }
 
-        private StringBuilder BuildStep1(List<SapModel> lstSap, string dat, string dateFile, string localFalabella)
+        private StringBuilder BuildStep1(List<SapModel> lstSap, string dat, string dateFile, string localFalabella, int num)
         {
 
             double total = 0;
@@ -99,7 +103,7 @@ namespace core.UseCase.Falabella
                 }
 
             });
-            var num = filter.Count();
+            //var num = filter.Count();
             
             var ret = new StringBuilder()
                 .Append("650RE")
@@ -127,7 +131,7 @@ namespace core.UseCase.Falabella
 
         }
 
-        private StringBuilder BuildStep2(List<SapModel> lstSap, string dat, string dateFile, string localFalabella)
+        private StringBuilder BuildStep2(List<SapModel> lstSap, string dat, string dateFile, string localFalabella, int num)
         {
 
             double total = 0;
@@ -148,7 +152,7 @@ namespace core.UseCase.Falabella
 
             });
             
-            var num = filter.Count();
+            //var num = filter.Count();
             var ret = new StringBuilder()
                 .Append("650RE")
                 .Append(localFalabella.Substring(1,3))
@@ -175,7 +179,7 @@ namespace core.UseCase.Falabella
 
         }
 
-        private StringBuilder BuildStep3(List<SapModel> lstSap, string dat, string dateFile, string localFalabella)
+        private StringBuilder BuildStep3(List<SapModel> lstSap, string dat, string dateFile, string localFalabella, int num)
         {
 
             double total = 0;
@@ -196,7 +200,7 @@ namespace core.UseCase.Falabella
                 }
 
             });
-            var num = filter.Count();
+            //var num = filter.Count();
             
             var ret = new StringBuilder()
                 .Append("650RE")
