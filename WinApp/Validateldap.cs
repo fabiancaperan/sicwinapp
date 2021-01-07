@@ -29,10 +29,10 @@ namespace WinApp
             {
                 IConfigurationRoot conf = _configuration.Build();
                 var ldap =conf.GetSection("ldap").GetChildren().ToList();
-                int.TryParse(ldap[0].Value, out int port);
-                string domain = ldap[2].Value;
+                int.TryParse(ldap.FirstOrDefault(s => s.Key.Equals("PortServer")).Value, out int port);
+                string domain = ldap.FirstOrDefault(s => s.Key.Equals("Domain")).Value;
 
-                LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier(ldap[1].Value, port),null , AuthType.Basic);
+                LdapConnection connection = new LdapConnection(new LdapDirectoryIdentifier(ldap.FirstOrDefault(s => s.Key.Equals("UrlServer")).Value, port),null , AuthType.Basic);
                 NetworkCredential credential = new NetworkCredential(user+domain, pass);
                 connection.Credential = credential;
                 connection.Bind();

@@ -29,10 +29,7 @@ namespace core.UseCase.Exito
             var lstByNit = lstSap
                 .AsParallel()
                 .WithDegreeOfParallelism(4)
-                .Where(s => s.Nit.Trim() == Nit &&
-                            Convert.ToInt32(s.Cod_Resp) >= 0 &&
-                            Convert.ToInt32(s.Cod_Resp) <= 9 &&
-                            !_lstNoCodTrans.Contains(s.Cod_Trans.Substring(0, 2)))
+                .Where(s => s.Nit.Trim() == Nit)
                 .GroupBy(g => g.Cod_RTL).OrderBy(o => o.Key).ToList();
             var lst = new List<StringBuilder>();
             var lstRedPriv = lstRedPrivadas.Select(s => s.red).ToList();
@@ -46,9 +43,12 @@ namespace core.UseCase.Exito
 
             foreach (var g in lstByNit)
             {
-                lst.Add(BuildStep1(g.ToList(), g.Key.Trim()));
-                lst.Add(BuildStep2(g.ToList(), lstFiidTarStep2, lstRedPriv, g.Key.Trim()));
-                lst.Add(BuildStep3(g.ToList(), lstFiidTarStep3, lstRedPriv, g.Key.Trim()));
+                var lstFilter = g.Where(s => Convert.ToInt32(s.Cod_Resp) >= 0 &&
+                                       Convert.ToInt32(s.Cod_Resp) <= 9 &&
+                                       !_lstNoCodTrans.Contains(s.Cod_Trans.Substring(0, 2))).ToList();
+                lst.Add(BuildStep1(lstFilter, g.Key.Trim()));
+                lst.Add(BuildStep2(lstFilter, lstFiidTarStep2, lstRedPriv, g.Key.Trim()));
+                lst.Add(BuildStep3(lstFilter, lstFiidTarStep3, lstRedPriv, g.Key.Trim()));
 
             }
            
