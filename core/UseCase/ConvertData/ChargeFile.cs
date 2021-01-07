@@ -24,11 +24,12 @@ namespace core.UseCase.ConvertData
             }
 
             string[] lines = File.ReadAllLines(path);
-            //HashSet<string> hashSets = lines.ToHashSet();
-            //if (lines.Length != hashSets.Count)
-            //{
-            //    return "Archivo con líneas duplicadas";
-            //}
+            HashSet<string> hashSets = lines.ToHashSet();
+            if (lines.Length != hashSets.Count)
+            {
+                fileCharge.Message = "Archivo con líneas duplicadas";
+                return fileCharge;
+            }
 
             if (ValidateFormat(lines))
             {
