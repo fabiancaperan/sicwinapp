@@ -15,8 +15,13 @@ namespace WinApp
         private List<core.Entities.ConvertData.SapModel> lst;
         public Main()
         {
-            
+
             InitializeComponent();
+            if (!Program.isAdmin)
+            {
+                button1.Visible = false;
+                //this.Controls.Remove(button1);
+            }
             checkedListBox1.DataSource = Enum.GetValues(typeof(core.Repository.Types.CommerceType));
             //init test
             button3.Enabled = true;
@@ -138,7 +143,7 @@ namespace WinApp
 
         private void button3_Click(object sender, EventArgs e)
         {
-             try
+            try
             {
                 var rute = textBox2.Text;
                 List<core.Repository.Types.CommerceType> subfolder = checkedListBox1.CheckedItems.OfType<core.Repository.Types.CommerceType>().ToList();
@@ -180,9 +185,16 @@ namespace WinApp
 
         private static void MessageError(string message)
         {
-            
+
             //var txtError = "Hubo un error comuniquese con el administrador";
             MessageBox.Show(message);
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            UserAdmin charge = new UserAdmin();
+            charge.Show();
+            this.Hide();
         }
     }
 }

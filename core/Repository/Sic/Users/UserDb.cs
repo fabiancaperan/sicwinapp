@@ -15,6 +15,13 @@ namespace core.Repository.Sic.Users
                 .Select(s => new UserEditModel { userName = s.userName, isAdmin = s.isAdmin }).ToList();
         }
 
+        public UserEditModel GetUser(string name)
+        {
+            using var db = new dbContext();
+            return db.User.Where(s => s.isInactive.Equals(false) && s.userName.Equals(name.Trim()))
+                .Select(s => new UserEditModel { userName = s.userName, isAdmin = s.isAdmin }).FirstOrDefault();
+        }
+
         public bool UpsertUser(string userName, bool isAdmin)
         {
             var isNew = true;
@@ -28,7 +35,7 @@ namespace core.Repository.Sic.Users
             }
             else
             {
-                db.User.Add(new UserModel { userName = userName, isAdmin = isAdmin, DateCreated = DateTime.Now, isInactive = false });
+                db.User.Add(new UserModel { userName = userName.Trim(), isAdmin = isAdmin, DateCreated = DateTime.Now, isInactive = false });
             }
             db.SaveChanges();
             return isNew;

@@ -62,5 +62,12 @@ namespace WinApp
                 MessageBox.Show(userName + " se ha actualizado correctamente");
             dataGridView1.DataSource = _userDb.GetUsers();
         }
+
+        private void Volver_Click(object sender, EventArgs e)
+        {
+            Main charge = new Main();
+            charge.Show();
+            this.Hide();
+        }
     }
 }

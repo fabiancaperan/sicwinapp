@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-
+using core.Repository.Sic.Users;
 
 namespace WinApp
 {
@@ -10,9 +10,12 @@ namespace WinApp
     {
         private const string ErrorMessage = "Hubo un error comuniquese con el administrador";
 
+        private readonly UserDb _userDb;
+
         public Login()
         {
             InitializeComponent();
+            _userDb = new UserDb();
         }
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -89,6 +92,13 @@ namespace WinApp
             try
             {
                 Cursor = Cursors.WaitCursor; // change cursor to hourglass type
+                var user = _userDb.GetUser(textuser.Text);
+                Program.isAdmin = user.isAdmin;
+                if (user == null) 
+                {
+                    MessageBox.Show("usuario no registrado en la aplicación");
+                    return;
+                }
                 const string admin = "admin";
                 if (textuser.Text == admin)
                 {
