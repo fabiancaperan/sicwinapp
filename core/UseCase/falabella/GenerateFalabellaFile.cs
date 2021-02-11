@@ -55,7 +55,7 @@ namespace core.UseCase.Falabella
             
             var lstText = new List<StringBuilder>();
 
-            int i = 0;
+            int i = 1;
             foreach (var g in lstFilter.OrderBy(s=>s.Key.Cod_RTL))
             {
                 var lstOrder = g
@@ -237,7 +237,12 @@ namespace core.UseCase.Falabella
                 dayWeek == DayOfWeek.Saturday ? 2 : 0;
             if (dayAdd > 0)
                 today = today.AddDays(dayAdd);
-            var dat = new StringBuilder().Append(today.Year).Append(today.Month).Append(_format.Formato(today.Day.ToString(),2,"N"));
+            var dat = new StringBuilder()
+                .Append(today.Year)
+                .Append(_format.Formato(today.Month.ToString(), 2, "N"))
+                //.Append(today.Month > 9 ? today.Month.ToString() : ("0" + today.Month))
+                //.Append(today.Month)
+                .Append(_format.Formato(today.Day.ToString(),2,"N"));
             return dat;
         }
 

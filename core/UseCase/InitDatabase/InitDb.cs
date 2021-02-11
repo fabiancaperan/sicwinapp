@@ -114,7 +114,7 @@ namespace core.UseCase.InitDatabase
                           {'FIID':'0979','NOMBRE':'FONDO ADMIN PSP REMOTO   '},
                           {'FIID':'0983','NOMBRE':'RECARGA                  '},
                           {'FIID':'3205','NOMBRE':'ENTIDAD3205              '},
-                          {'FIID':'3902','NOMBRE':'AMERICAN EXPRESS         '},
+                          {'FIID':'3902','NOMBRE':'AMERICAN EXPRESS         ','NIT':'                         '},
                           {'FIID':'7777','NOMBRE':'Donaciones               '},
                           {'FIID':'7778','NOMBRE':'Donaciones               '},
                           {'FIID':'9190','NOMBRE':'COLPATRIA - HOMCENTER      '},

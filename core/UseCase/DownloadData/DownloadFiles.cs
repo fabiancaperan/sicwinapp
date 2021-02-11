@@ -36,8 +36,13 @@ namespace core.UseCase.DownloadData
 
             if (date == null)
                 return false;
-            var dat = new StringBuilder().Append(date.Value.Year).Append(date.Value.Month).Append(date.Value.Day);
-            var datmvtos = new StringBuilder().Append(date.Value.Day).Append(date.Value.Month).Append(date.Value.Year);
+            var dat = new StringBuilder().Append(date.Value.Year)
+                .Append(date.Value.Month > 9 ? date.Value.Month.ToString():("0" + date.Value.Month))
+                .Append(date.Value.Day > 9 ? date.Value.Day.ToString() : ("0" + date.Value.Day));
+            var datmvtos = new StringBuilder()
+                .Append(date.Value.Day > 9 ? date.Value.Day.ToString() : ("0" + date.Value.Day))
+                .Append(date.Value.Month > 9 ? date.Value.Month.ToString() : ("0" + date.Value.Month))
+                .Append(date.Value.Year);
             foreach (var commerceType in commerceTypes)
             {
 
