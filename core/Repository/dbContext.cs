@@ -1,4 +1,5 @@
 ﻿using core.Entities.MasterData;
+using core.Entities.UserData;
 using Microsoft.EntityFrameworkCore;
 
 namespace core.Repository
@@ -18,6 +19,8 @@ namespace core.Repository
         public DbSet<BinesespModel> BinesespModel { get; set; }
 
         public DbSet<FestivoModel> FestivoModel { get; set; }
+
+        public DbSet<UserModel> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=sic.db");

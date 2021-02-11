@@ -3,17 +3,19 @@ using core.Repository;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Storage;
+using core.Entities.UserData;
+using System;
 
 namespace core.UseCase.InitDatabase
 {
     public class InitDb
     {
-      
+
         public bool InitDatabase()
         {
             using var db = new dbContext();
-            db.Database.EnsureDeleted();
-            if (!((RelationalDatabaseCreator) db.Database.GetService<IDatabaseCreator>()).Exists())
+            //db.Database.EnsureDeleted();
+            if (!((RelationalDatabaseCreator)db.Database.GetService<IDatabaseCreator>()).Exists())
             {
                 db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
@@ -23,13 +25,19 @@ namespace core.UseCase.InitDatabase
                 db.RedprivadasModel.AddRange(Uploadredprivadas());
                 db.ConveniosModel.AddRange(Uploadconvenios());
                 db.BinesespModel.AddRange(UploadBinesesp());
+                db.User.Add(UploadUserAdmin());
                 db.SaveChanges();
             }
 
             return true;
         }
 
-        private List<EntidadesModel> UploadEntidades() 
+        private UserModel UploadUserAdmin()
+        {
+            return new UserModel { userName = "admin", isAdmin = true, isInactive = false, DateCreated = DateTime.Now };
+        }
+
+        private List<EntidadesModel> UploadEntidades()
         {
             var json = @"[{'FIID':'0832','NOMBRE':'NUEVA ENTIDAD            ','NIT':'                         '},
                           {'FIID':'0059','NOMBRE':'NUEVA ENTIDAD            ','NIT':'                         '},

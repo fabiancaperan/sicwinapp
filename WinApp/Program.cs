@@ -16,7 +16,8 @@ namespace WinApp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             new core.UseCase.InitDatabase.InitDb().InitDatabase();
-            Application.Run(new Login());
+            //Application.Run(new Login());
+            Application.Run(new UserAdmin());
             //Application.Run(new chargeFile());
             //Application.Run(new login());
             //Application.Run(new DowloadFiles());

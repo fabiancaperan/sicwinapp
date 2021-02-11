@@ -133,9 +133,9 @@
             this.panel2.Controls.Add(this.textBox2);
             this.panel2.Controls.Add(this.button3);
             this.panel2.Controls.Add(this.checkedListBox1);
-            this.panel2.Location = new System.Drawing.Point(298, 99);
+            this.panel2.Location = new System.Drawing.Point(315, 99);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(502, 351);
+            this.panel2.Size = new System.Drawing.Size(485, 351);
             this.panel2.TabIndex = 3;
             // 
             // pictureBox3
@@ -162,7 +162,7 @@
             // 
             this.button4.BackColor = System.Drawing.Color.AliceBlue;
             this.button4.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.button4.Location = new System.Drawing.Point(358, 57);
+            this.button4.Location = new System.Drawing.Point(332, 57);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(125, 41);
             this.button4.TabIndex = 0;
@@ -172,7 +172,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(40, 57);
+            this.textBox2.Location = new System.Drawing.Point(23, 57);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(288, 23);
             this.textBox2.TabIndex = 5;
@@ -186,7 +186,7 @@
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button3.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button3.Location = new System.Drawing.Point(354, 202);
+            this.button3.Location = new System.Drawing.Point(332, 201);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(129, 46);
             this.button3.TabIndex = 3;
@@ -197,7 +197,7 @@
             // checkedListBox1
             // 
             this.checkedListBox1.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.checkedListBox1.Location = new System.Drawing.Point(40, 101);
+            this.checkedListBox1.Location = new System.Drawing.Point(23, 100);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(288, 238);
             this.checkedListBox1.TabIndex = 0;
@@ -222,7 +222,7 @@
             this.panel3.Controls.Add(this.label2);
             this.panel3.Location = new System.Drawing.Point(0, 99);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(301, 351);
+            this.panel3.Size = new System.Drawing.Size(328, 351);
             this.panel3.TabIndex = 5;
             // 
             // pictureBox2
