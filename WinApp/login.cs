@@ -93,12 +93,13 @@ namespace WinApp
             {
                 Cursor = Cursors.WaitCursor; // change cursor to hourglass type
                 var user = _userDb.GetUser(textuser.Text);
-                Program.isAdmin = user.isAdmin;
+                
                 if (user == null) 
                 {
-                    MessageBox.Show("usuario no registrado en la aplicación");
+                    MessageBox.Show("Usuario no registrado en la aplicación");
                     return;
                 }
+                Program.isAdmin = user.isAdmin;
                 const string admin = "admin";
                 if (textuser.Text == admin)
                 {
