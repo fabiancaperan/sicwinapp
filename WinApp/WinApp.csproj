@@ -10,11 +10,16 @@
 		<None Include="appsettings.json" CopyToOutputDirectory="Always" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="Karambolo.Extensions.Logging.File" Version="3.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="1.7.0" />
 		<PackageReference Include="System.DirectoryServices.Protocols" Version="5.0.0" />
 	</ItemGroup>
 
@@ -41,6 +46,11 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</Content>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="nlog.config">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

@@ -62,6 +62,7 @@ namespace WinApp
                 if (ext != "")
                 {
                     const string txtExtension = "El archivo no debe tener extensión";
+                    Program.logInfo(txtExtension);
                     MessageBox.Show(txtExtension);
                 }
                 else
@@ -92,11 +93,13 @@ namespace WinApp
                     {
                         lst = ret.List;
                         var txtCheck = "Se ha cargado correctamente";
+                        Program.logInfo("el archivo " + textBoxInput.Text + " " + txtCheck);
                         MessageBox.Show(txtCheck);
                         button3.Enabled = true;
                     }
                     else
                     {
+                        Program.logInfo(ret.Message);
                         MessageBox.Show(ret.Message);
                     }
                 }
@@ -111,23 +114,25 @@ namespace WinApp
             }
             catch (InvalidOperationException ex)
             {
-                var mess =
-                    "The instance of entity type 'SapModel' cannot be tracked because another instance with the same key value for";
+                var mess = "The instance of entity type 'SapModel' cannot be tracked because another instance with the same key value for";
                 var message = ex.Message;
                 if (ex.Message.Contains(mess))
                 {
                     message = "El Arhivo tiene lineas duplicadas";
+                    Program.logInfo(message);
                 }
 
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
-                MessageError(message);
+                MessageError();
+                Program.logInfo(message);
             }
             catch (Exception ex)
             {
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
-                MessageError(ex.Message);
+                Program.logError(ex);
+                MessageError();
             }
         }
 
@@ -156,19 +161,25 @@ namespace WinApp
                         var res = new DownloadFiles().Build(rute, subfolder, lst);
                         if (res)
                         {
-                            var txtFine = "Se ha generado con Éxito";
+                            var txtFine = "Se ha generado con Éxito ";
+                            subfolder.ForEach(s =>
+                            {
+                                Program.logInfo(txtFine+"el archivo "+s);
+                            });
                             MessageBox.Show(txtFine);
                         }
                     }
                     else
                     {
                         var selectItem = "Debe seleccionar al menos un item";
+                        Program.logInfo(selectItem+" para generar el archivo");
                         MessageBox.Show(selectItem);
                     }
                 }
                 else
                 {
-                    var selectRute = "No a seleccionado una ruta";
+                    var selectRute = "No a seleccionado una ruta ";
+                    Program.logInfo(selectRute + "para generar el archivo");
                     MessageBox.Show(selectRute);
                 }
                 Cursor = Cursors.Arrow; // change cursor to normal type
@@ -179,19 +190,21 @@ namespace WinApp
             {
                 button2.Enabled = true;
                 Cursor = Cursors.Arrow; // change cursor to normal type
-                MessageError(ex.Message);
+                Program.logError(ex);
+                MessageError();
             }
         }
 
-        private static void MessageError(string message)
+        private static void MessageError()
         {
 
-            //var txtError = "Hubo un error comuniquese con el administrador";
-            MessageBox.Show(message);
+            var txtError = "Hubo un error comuniquese con el administrador";
+            MessageBox.Show(txtError);
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            Program.logInfo("El usuario abre la sección Administrador");
             UserAdmin charge = new UserAdmin();
             charge.Show();
             this.Hide();

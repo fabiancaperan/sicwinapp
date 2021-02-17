@@ -45,11 +45,15 @@ namespace WinApp
             var userName = textBox1.Text.Trim();
             if (_userDb.DeleteUsers(userName))
             {
+                Program.logInfo(userName + " se ha eliminado correctamente");
                 MessageBox.Show(userName + " se ha eliminado correctamente");
                 dataGridView1.DataSource = _userDb.GetUsers();
             }
             else
+            {
+                Program.logInfo(userName + " no existe como usuario para eliminar");
                 MessageBox.Show(userName + " no existe como usuario");
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -57,9 +61,15 @@ namespace WinApp
             var userName = textBox1.Text.Trim();
             var isAdmin = checkBox1.Checked;
             if (_userDb.UpsertUser(userName, isAdmin))
+            {
+                Program.logInfo(userName + " se ha creado correctamente");
                 MessageBox.Show(userName + " se ha creado correctamente");
+            }
             else
+            {
+                Program.logInfo(userName + " se ha actualizado correctamente");
                 MessageBox.Show(userName + " se ha actualizado correctamente");
+            }
             dataGridView1.DataSource = _userDb.GetUsers();
         }
 

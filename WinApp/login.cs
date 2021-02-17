@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using core.Repository.Sic.Users;
+using Microsoft.Extensions.Logging;
 
 namespace WinApp
 {
@@ -12,10 +13,13 @@ namespace WinApp
 
         private readonly UserDb _userDb;
 
-        public Login()
+        private readonly ILogger _logger;
+
+        public Login(ILogger<Login> logger)
         {
             InitializeComponent();
             _userDb = new UserDb();
+            _logger = logger;
         }
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -89,22 +93,28 @@ namespace WinApp
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Program.userName = textuser.Text;
+
             try
             {
+                //throw new InvalidOperationException("Logfile cannot be read-only");
                 Cursor = Cursors.WaitCursor; // change cursor to hourglass type
                 var user = _userDb.GetUser(textuser.Text);
-                
-                if (user == null) 
+
+                if (user == null)
                 {
+                    Program.logInfo("Usuario no registrado en la aplicación");
                     MessageBox.Show("Usuario no registrado en la aplicación");
                     return;
                 }
-                Program.isAdmin = user.isAdmin;
+
                 const string admin = "admin";
                 if (textuser.Text == admin)
                 {
                     if (textpass.Text == admin)
                     {
+                        Program.isAdmin = user.isAdmin;
+                        Program.logInfo("Usuario autenticado");
                         Main charge = new Main();
                         charge.Show();
                         this.Hide();
@@ -114,11 +124,18 @@ namespace WinApp
                 else
                 {
                     string login = "LOGIN";
-                   
+
                     var res = new ValidateLdap().Validate(textuser.Text, textpass.Text);
-                    
+
                     MessageBox.Show(res);
-                    if (login != res) return;
+                    if (login != res)
+                    {
+                        Program.logInfo(res);
+                        return;
+                    }
+
+                    Program.isAdmin = user.isAdmin;
+                    Program.logInfo("Usuario autenticado");
                     Main charge = new Main();
                     charge.Show();
                     this.Hide();
@@ -128,6 +145,9 @@ namespace WinApp
             catch (Exception ex)
             {
                 Cursor = Cursors.Arrow; // change cursor to normal type
+                Program.logError(ex);
+                //_logger.LogError(ex.Message + ex.StackTrace, textuser.Text);
+                //Program._log.Log<Exception>(NLog.LogLevel.Error,ex.Message,ex);
                 MessageError(ex);
             }
         }
@@ -138,19 +158,19 @@ namespace WinApp
             MessageBox.Show(ErrorMessage);
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            string login = "LOGIN";
-            Cursor = Cursors.WaitCursor; // change cursor to hourglass type
-            var res = new ValidateLdap().Validate(textuser.Text, textpass.Text);
-            Cursor = Cursors.Arrow; // change cursor to normal type
-            MessageBox.Show(res);
-            if (login != res) return;
-            Main charge = new Main();
-            charge.Show();
-            this.Hide();
+        //private void button3_Click(object sender, EventArgs e)
+        //{
+        //    string login = "LOGIN";
+        //    Cursor = Cursors.WaitCursor; // change cursor to hourglass type
+        //    var res = new ValidateLdap().Validate(textuser.Text, textpass.Text);
+        //    Cursor = Cursors.Arrow; // change cursor to normal type
+        //    MessageBox.Show(res);
+        //    if (login != res) return;
+        //    Main charge = new Main();
+        //    charge.Show();
+        //    this.Hide();
 
 
-        }
+        //}
     }
 }
