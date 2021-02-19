@@ -31,8 +31,6 @@ namespace WinApp
                .ConfigureServices((hostContext, services) =>
                {
                    services.AddScoped<Login>();
-                   //services.AddScoped<IBusinessLayer, BusinessLayer>();
-                   //services.AddSingleton<IDataAccessLayer, CDataAccessLayer>();
                    services.AddLogging(option =>
                    {
                        option.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
@@ -53,6 +51,7 @@ namespace WinApp
                 }
                 catch (Exception ex)
                 {
+                    logError(ex);
                     Console.WriteLine("Error Occured");
                 }
 

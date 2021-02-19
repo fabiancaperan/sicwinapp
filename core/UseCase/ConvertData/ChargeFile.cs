@@ -16,7 +16,7 @@ namespace core.UseCase.ConvertData
         public FileChargeModel Build(string path)
         {
             var fileCharge = new FileChargeModel();
-            var ret =ValidatePath(path, out var dateOut);
+            var ret = ValidatePath(path, out var dateOut);
             if (ret != String.Empty)
             {
                 fileCharge.Message = ret;
@@ -54,9 +54,9 @@ namespace core.UseCase.ConvertData
                 return true;
             return false;
         }
-        private string ValidatePath(string path, out DateTime dateOut)
+        public string ValidatePath(string path, out DateTime dateOut)
         {
-            dateOut= new DateTime();
+            dateOut = new DateTime();
             var filename = Path.GetFileName(path);
             if (filename.Length != LengthPath)
             {
@@ -64,7 +64,7 @@ namespace core.UseCase.ConvertData
                 return formatNoValid;
             }
 
-            if (!ValidateDate(filename,out dateOut))
+            if (!ValidateDate(filename, out dateOut))
             {
                 var message = "Fecha de archivo no válida";
                 return message;
@@ -75,11 +75,22 @@ namespace core.UseCase.ConvertData
 
         private bool ValidateDate(string filename, out DateTime dateOut)
         {
-            var dat =filename.Substring(4, 6);
-            var dateString = $"{dat.Substring(4, 2)}/{dat.Substring(2, 2)} /{dat.Substring(0,2)}";
+            var dat = filename.Substring(4, 6);
+            var year = 0;
+            var month = 0;
+            var day = 0;
 
-            return (DateTime.TryParse(dateString, CultureInfo.CurrentCulture, DateTimeStyles.None, out dateOut));
 
+            if (Int32.TryParse("20"+dat.Substring(0, 2), out year) &&
+                Int32.TryParse(dat.Substring(2, 2), out month) &&
+                Int32.TryParse(dat.Substring(4, 2), out day)
+                )
+            {
+                dateOut = new DateTime(year, month, day);
+                return true;
+            }
+            dateOut = DateTime.Now;
+            return false;
         }
     }
 }

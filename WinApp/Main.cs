@@ -67,6 +67,18 @@ namespace WinApp
                 }
                 else
                 {
+                    DateTime dat = DateTime.Today;
+                    var res = new ChargeFile().ValidatePath(search.FileName, out dat);
+                    if (res != String.Empty)
+                    {
+                        Program.logInfo(res);
+                        MessageBox.Show(res);
+                        textBoxInput.Text = String.Empty;
+                        return;
+
+                    }
+                    Program.logInfo("La fecha del archivo es " + dat.ToString("yyyy-MM-dd"));
+                    MessageBox.Show("La fecha del archivo es " + dat.ToString("yyyy-MM-dd"));
                     textBoxInput.Text = search.FileName;
                     textBoxInput.Enabled = true;
                 }
@@ -164,7 +176,7 @@ namespace WinApp
                             var txtFine = "Se ha generado con Éxito ";
                             subfolder.ForEach(s =>
                             {
-                                Program.logInfo(txtFine+"el archivo "+s);
+                                Program.logInfo(txtFine + "el archivo " + s);
                             });
                             MessageBox.Show(txtFine);
                         }
@@ -172,7 +184,7 @@ namespace WinApp
                     else
                     {
                         var selectItem = "Debe seleccionar al menos un item";
-                        Program.logInfo(selectItem+" para generar el archivo");
+                        Program.logInfo(selectItem + " para generar el archivo");
                         MessageBox.Show(selectItem);
                     }
                 }
