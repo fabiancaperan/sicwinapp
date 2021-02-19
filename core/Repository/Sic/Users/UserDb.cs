@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using core.Entities.UserData;
 
 namespace core.Repository.Sic.Users
@@ -10,14 +9,14 @@ namespace core.Repository.Sic.Users
     {
         public List<UserEditModel> GetUsers()
         {
-            using var db = new dbContext();
+            using var db = new SicDbContext();
             return db.User.Where(s => s.isInactive.Equals(false))
                 .Select(s => new UserEditModel { userName = s.userName, isAdmin = s.isAdmin }).ToList();
         }
 
         public UserEditModel GetUser(string name)
         {
-            using var db = new dbContext();
+            using var db = new SicDbContext();
             return db.User.Where(s => s.isInactive.Equals(false) && s.userName.Equals(name.Trim()))
                 .Select(s => new UserEditModel { userName = s.userName, isAdmin = s.isAdmin }).FirstOrDefault();
         }
@@ -25,7 +24,7 @@ namespace core.Repository.Sic.Users
         public bool UpsertUser(string userName, bool isAdmin)
         {
             var isNew = true;
-            using var db = new dbContext();
+            using var db = new SicDbContext();
             var user = db.User.FirstOrDefault(s => s.userName.Equals(userName));
             if (user != null)
             {
@@ -43,7 +42,7 @@ namespace core.Repository.Sic.Users
 
         public bool DeleteUsers(string userName)
         {
-            using var db = new dbContext();
+            using var db = new SicDbContext();
             var user = db.User.FirstOrDefault(s => s.userName.Equals(userName));
             if (user != null)
             {

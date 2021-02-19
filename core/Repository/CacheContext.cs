@@ -22,7 +22,7 @@ namespace core.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SapModel>()
-                .HasKey(c => new { c.Id});
+                .HasKey(c => new { c.Id });
             //modelBuilder.Entity<SapModel>()
             //    .HasKey(c => new { c.Nit, c.HoraTran, c.Tipo_Mensaje, c.Num_Secuen, c.Valor, c.Num_Autoriza, c.RefUniversal });
         }

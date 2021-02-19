@@ -36,14 +36,14 @@ namespace core.Utils.format
             }
         }
 
-        private string formatA( int tamaño, string campo)
+        private string formatA(int tamaño, string campo)
         {
             var format = campo.Trim();
-            while(format.Length < tamaño)
+            while (format.Length < tamaño)
                 format += Space;
             return format;
         }
-        private string FormatN(int tamaño,string campo) 
+        private string FormatN(int tamaño, string campo)
         {
             string format = Vacio;
             if (!long.TryParse(campo.Trim(), out _valor))
@@ -53,7 +53,7 @@ namespace core.Utils.format
                 format = Raya;
                 campo = (_valor * Unonegativo).ToString();
             }
-            while(format.Length < (tamaño - campo.Trim().Length))
+            while (format.Length < (tamaño - campo.Trim().Length))
                 format += Zero;
             format += campo.Trim();
             return format;

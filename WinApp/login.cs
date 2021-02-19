@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using core.Repository.Sic.Users;
-using Microsoft.Extensions.Logging;
 
 namespace WinApp
 {
@@ -13,13 +12,10 @@ namespace WinApp
 
         private readonly UserDb _userDb;
 
-        private readonly ILogger _logger;
-
-        public Login(ILogger<Login> logger)
+        public Login()
         {
             InitializeComponent();
             _userDb = new UserDb();
-            _logger = logger;
         }
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -93,7 +89,7 @@ namespace WinApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Program.userName = textuser.Text;
+            Program.UserName = textuser.Text;
 
             try
             {
@@ -103,8 +99,9 @@ namespace WinApp
 
                 if (user == null)
                 {
-                    Program.logInfo("Usuario no registrado en la aplicación");
-                    MessageBox.Show("Usuario no registrado en la aplicación");
+                    var userNoRegistry = "Usuario no registrado en la aplicación";
+                    Program.LogInfo(userNoRegistry);
+                    MessageBox.Show(userNoRegistry);
                     return;
                 }
 
@@ -113,8 +110,8 @@ namespace WinApp
                 {
                     if (textpass.Text == admin)
                     {
-                        Program.isAdmin = user.isAdmin;
-                        Program.logInfo("Usuario autenticado");
+                        Program.IsAdmin = user.isAdmin;
+                        Program.LogInfo("Usuario autenticado");
                         Main charge = new Main();
                         charge.Show();
                         this.Hide();
@@ -130,12 +127,12 @@ namespace WinApp
                     MessageBox.Show(res);
                     if (login != res)
                     {
-                        Program.logInfo(res);
+                        Program.LogInfo(res);
                         return;
                     }
 
-                    Program.isAdmin = user.isAdmin;
-                    Program.logInfo("Usuario autenticado");
+                    Program.IsAdmin = user.isAdmin;
+                    Program.LogInfo("Usuario autenticado");
                     Main charge = new Main();
                     charge.Show();
                     this.Hide();
@@ -145,7 +142,7 @@ namespace WinApp
             catch (Exception ex)
             {
                 Cursor = Cursors.Arrow; // change cursor to normal type
-                Program.logError(ex);
+                Program.LogError(ex);
                 //_logger.LogError(ex.Message + ex.StackTrace, textuser.Text);
                 //Program._log.Log<Exception>(NLog.LogLevel.Error,ex.Message,ex);
                 MessageError(ex);

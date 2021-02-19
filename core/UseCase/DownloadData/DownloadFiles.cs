@@ -1,4 +1,8 @@
-﻿using core.Entities.ComerciosData;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using core.Entities.ComerciosData;
 using core.Repository;
 using core.Repository.Sic;
 using core.Repository.Types;
@@ -9,35 +13,31 @@ using core.UseCase.Comercios;
 using core.UseCase.Exito;
 using core.UseCase.Falabella;
 using core.UseCase.Olimpica;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace core.UseCase.DownloadData
 {
     public class DownloadFiles
     {
-        private readonly dbContext _db;
+        private readonly SicDbContext _sicDb;
         public DownloadFiles()
         {
-            _db = new dbContext();
+            _sicDb = new SicDbContext();
         }
         public bool Build(string rute, List<CommerceType> commerceTypes, List<Entities.ConvertData.SapModel> lstSap)
         {
-            var lstEntidades = _db.EntidadesModel.ToList();
-            var lstFalabella = _db.FalabellaModel.ToList();
-            var lstConv = _db.ConveniosModel.ToList();
-            var lstCnb = _db.CnbsModel.ToList();
+            var lstEntidades = _sicDb.EntidadesModel.ToList();
+            var lstFalabella = _sicDb.FalabellaModel.ToList();
+            var lstConv = _sicDb.ConveniosModel.ToList();
+            var lstCnb = _sicDb.CnbsModel.ToList();
             //var lstSap = new SicContext().GetAll();
             var date = new SicContext().GetDate();
-            var lstBinesesp = _db.BinesespModel.ToList();
-            var lstRedPrivadas = _db.RedprivadasModel.ToList();
+            var lstBinesesp = _sicDb.BinesespModel.ToList();
+            var lstRedPrivadas = _sicDb.RedprivadasModel.ToList();
 
             if (date == null)
                 return false;
             var dat = new StringBuilder().Append(date.Value.Year)
-                .Append(date.Value.Month > 9 ? date.Value.Month.ToString():("0" + date.Value.Month))
+                .Append(date.Value.Month > 9 ? date.Value.Month.ToString() : ("0" + date.Value.Month))
                 .Append(date.Value.Day > 9 ? date.Value.Day.ToString() : ("0" + date.Value.Day));
             var datmvtos = new StringBuilder()
                 .Append(date.Value.Day > 9 ? date.Value.Day.ToString() : ("0" + date.Value.Day))
@@ -80,7 +80,7 @@ namespace core.UseCase.DownloadData
                             ComerciosFileRtc(rute, res);
                         break;
                     case CommerceType.Cnb:
-                        res = new GenerateCnb().Build(lstSap, lstEntidades, lstCnb, dat);
+                        res = new GenerateCnb().Build(lstSap, lstEntidades, dat);
                         if (res != null && res.Any())
                             ComerciosFiles(rute, res);
                         break;
@@ -144,7 +144,7 @@ namespace core.UseCase.DownloadData
                 //data
                 item.Lst.ForEach(s => { writer.WriteLine(s); });
                 //num regis
-                if (item.FinalLine!= null && item.FinalLine.Trim() != string.Empty)
+                if (item.FinalLine != null && item.FinalLine.Trim() != string.Empty)
                     writer.WriteLine(item.FinalLine);
             }
         }

@@ -1,14 +1,14 @@
-﻿using core.Entities.ConvertData;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using core.Entities.ConvertData;
 
 namespace core.Repository.Sic
 {
 
     public class SicContext
     {
-        public bool Save(List<SapModel> lstSic , DateTime dat)
+        public bool Save(List<SapModel> lstSic, DateTime dat)
         {
             using var db = new CacheContext();
             // Create
@@ -19,15 +19,14 @@ namespace core.Repository.Sic
                 db.RemoveRange(db.DateComp);
             }
 
-            var dateComp = new DateCompModel();
-            dateComp.Dat = dat;
+            var dateComp = new DateCompModel {Dat = dat};
             db.DateComp.Add(dateComp);
             db.Sap.AddRange(lstSic);
-                
+
             return db.SaveChanges() > 0;
         }
 
-        public bool Save( DateTime dat)
+        public bool Save(DateTime dat)
         {
             using var db = new CacheContext();
             // Create
@@ -38,10 +37,9 @@ namespace core.Repository.Sic
                 db.RemoveRange(db.DateComp);
             }
 
-            var dateComp = new DateCompModel();
-            dateComp.Dat = dat;
+            var dateComp = new DateCompModel {Dat = dat};
             db.DateComp.Add(dateComp);
-            
+
 
             return db.SaveChanges() > 0;
         }

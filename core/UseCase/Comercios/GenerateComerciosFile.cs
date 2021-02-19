@@ -1,13 +1,12 @@
-﻿using core.Entities.ComerciosData;
-using core.Entities.ConvertData;
-using core.Entities.MasterData;
-using core.Utils.format;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore.Internal;
+using core.Entities.ComerciosData;
+using core.Entities.ConvertData;
+using core.Entities.MasterData;
+using core.Utils.format;
 
 namespace core.UseCase.Comercios
 {
@@ -28,7 +27,7 @@ namespace core.UseCase.Comercios
 
         public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades, StringBuilder dat)
         {
-           
+
             var lst = lstSap.Where(s => s.Nit.Trim() != Nit.Trim())
                        .Join(entidades,
                               post => post.Fiid_Emisor,
@@ -42,7 +41,7 @@ namespace core.UseCase.Comercios
                               //.OrderBy(j => j.s.Nit)
                               .OrderBy(o => o.s.Nit).ThenBy(o => o.s.Cod_RTL)
                               .GroupBy(g => g.s.Nit.Trim())
-                              
+
                               .Select(j => new CommerceModel
                               {
                                   Nit = j.Key,
@@ -51,7 +50,7 @@ namespace core.UseCase.Comercios
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.Key).ToString(),
-                                  FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
+                                  FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count.ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
                                  .Append("01")
@@ -107,16 +106,5 @@ namespace core.UseCase.Comercios
             input = input.Replace(" ", "_");
             return input;
         }
-
-        private string RemoveSpecialCharactersWithSpace(string input)
-        {
-
-            Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
-
-            input = r.Replace(input, String.Empty);
-            //input = input.Replace(" ", " ");
-            return input;
-        }
-
     }
 }

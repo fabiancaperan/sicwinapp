@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using core.Entities.ConvertData;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using core.Entities.ConvertData;
 using core.Repository;
 
 
@@ -21,8 +21,7 @@ namespace core.UseCase.ConvertData
         {
             using var db = new CacheContext();
             InitDb(db);
-            var dateComp = new DateCompModel();
-            dateComp.Dat = dateOut;
+            var dateComp = new DateCompModel {Dat = dateOut};
             db.DateComp.Add(dateComp);
             var ret = new FileChargeModel { List = new List<SapModel>() };
 
@@ -53,8 +52,8 @@ namespace core.UseCase.ConvertData
                 //}
                 //ret.List.Add(sa);
                 //db.Sap.Add(sa);
-               
-                
+
+
             }
             //var bulkConfig = new BulkConfig()
             //{

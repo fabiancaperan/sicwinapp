@@ -1,23 +1,21 @@
-﻿using core.UseCase.ConvertData;
-using core.UseCase.DownloadData;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.EntityFrameworkCore;
+using core.UseCase.ConvertData;
+using core.UseCase.DownloadData;
 
 namespace WinApp
 {
     public partial class Main : Form
     {
-        private List<core.Entities.ConvertData.SapModel> lst;
+        private List<core.Entities.ConvertData.SapModel> _lst;
         public Main()
         {
 
             InitializeComponent();
-            if (!Program.isAdmin)
+            if (!Program.IsAdmin)
             {
                 button1.Visible = false;
                 //this.Controls.Remove(button1);
@@ -62,23 +60,24 @@ namespace WinApp
                 if (ext != "")
                 {
                     const string txtExtension = "El archivo no debe tener extensión";
-                    Program.logInfo(txtExtension);
+                    Program.LogInfo(txtExtension);
                     MessageBox.Show(txtExtension);
                 }
                 else
                 {
-                    DateTime dat = DateTime.Today;
-                    var res = new ChargeFile().ValidatePath(search.FileName, out dat);
+                    var res = new ChargeFile().ValidatePath(search.FileName, out DateTime dat);
                     if (res != String.Empty)
                     {
-                        Program.logInfo(res);
+                        Program.LogInfo(res);
                         MessageBox.Show(res);
                         textBoxInput.Text = String.Empty;
                         return;
 
                     }
-                    Program.logInfo("La fecha del archivo es " + dat.ToString("yyyy-MM-dd"));
-                    MessageBox.Show("La fecha del archivo es " + dat.ToString("yyyy-MM-dd"));
+
+                    var msj = "La fecha del archivo es " + dat.ToString("yyyy-MM-dd");
+                    Program.LogInfo(msj);
+                    MessageBox.Show(msj);
                     textBoxInput.Text = search.FileName;
                     textBoxInput.Enabled = true;
                 }
@@ -103,15 +102,15 @@ namespace WinApp
                     var ret = new ChargeFile().Build(textBoxInput.Text);
                     if (ret.Message == "TRUE")
                     {
-                        lst = ret.List;
+                        _lst = ret.List;
                         var txtCheck = "Se ha cargado correctamente";
-                        Program.logInfo("el archivo " + textBoxInput.Text + " " + txtCheck);
+                        Program.LogInfo("el archivo " + textBoxInput.Text + " " + txtCheck);
                         MessageBox.Show(txtCheck);
                         button3.Enabled = true;
                     }
                     else
                     {
-                        Program.logInfo(ret.Message);
+                        Program.LogInfo(ret.Message);
                         MessageBox.Show(ret.Message);
                     }
                 }
@@ -131,19 +130,19 @@ namespace WinApp
                 if (ex.Message.Contains(mess))
                 {
                     message = "El Arhivo tiene lineas duplicadas";
-                    Program.logInfo(message);
+                    Program.LogInfo(message);
                 }
 
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
                 MessageError();
-                Program.logInfo(message);
+                Program.LogInfo(message);
             }
             catch (Exception ex)
             {
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
-                Program.logError(ex);
+                Program.LogError(ex);
                 MessageError();
             }
         }
@@ -166,17 +165,17 @@ namespace WinApp
                 List<core.Repository.Types.CommerceType> subfolder = checkedListBox1.CheckedItems.OfType<core.Repository.Types.CommerceType>().ToList();
                 if (rute != "")
                 {
-                    if (subfolder.Count() != 0)
+                    if (subfolder.Count != 0)
                     {
                         button2.Enabled = false;
                         Cursor = Cursors.WaitCursor; // change cursor to hourglass type
-                        var res = new DownloadFiles().Build(rute, subfolder, lst);
+                        var res = new DownloadFiles().Build(rute, subfolder, _lst);
                         if (res)
                         {
                             var txtFine = "Se ha generado con Éxito ";
                             subfolder.ForEach(s =>
                             {
-                                Program.logInfo(txtFine + "el archivo " + s);
+                                Program.LogInfo(txtFine + "el archivo " + s);
                             });
                             MessageBox.Show(txtFine);
                         }
@@ -184,14 +183,14 @@ namespace WinApp
                     else
                     {
                         var selectItem = "Debe seleccionar al menos un item";
-                        Program.logInfo(selectItem + " para generar el archivo");
+                        Program.LogInfo(selectItem + " para generar el archivo");
                         MessageBox.Show(selectItem);
                     }
                 }
                 else
                 {
                     var selectRute = "No a seleccionado una ruta ";
-                    Program.logInfo(selectRute + "para generar el archivo");
+                    Program.LogInfo(selectRute + "para generar el archivo");
                     MessageBox.Show(selectRute);
                 }
                 Cursor = Cursors.Arrow; // change cursor to normal type
@@ -202,7 +201,7 @@ namespace WinApp
             {
                 button2.Enabled = true;
                 Cursor = Cursors.Arrow; // change cursor to normal type
-                Program.logError(ex);
+                Program.LogError(ex);
                 MessageError();
             }
         }
@@ -216,7 +215,7 @@ namespace WinApp
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            Program.logInfo("El usuario abre la sección Administrador");
+            Program.LogInfo("El usuario abre la sección Administrador");
             UserAdmin charge = new UserAdmin();
             charge.Show();
             this.Hide();

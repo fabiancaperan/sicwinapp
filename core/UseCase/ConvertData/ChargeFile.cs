@@ -1,11 +1,9 @@
 ﻿using System;
-using core.Entities.ConvertData;
-using core.Repository.Sic;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using core.Entities.ConvertData;
+using core.Repository.Sic;
 
 namespace core.UseCase.ConvertData
 {
@@ -76,14 +74,9 @@ namespace core.UseCase.ConvertData
         private bool ValidateDate(string filename, out DateTime dateOut)
         {
             var dat = filename.Substring(4, 6);
-            var year = 0;
-            var month = 0;
-            var day = 0;
-
-
-            if (Int32.TryParse("20"+dat.Substring(0, 2), out year) &&
-                Int32.TryParse(dat.Substring(2, 2), out month) &&
-                Int32.TryParse(dat.Substring(4, 2), out day)
+            if (Int32.TryParse("20" + dat.Substring(0, 2), out int year) &&
+                Int32.TryParse(dat.Substring(2, 2), out int month) &&
+                Int32.TryParse(dat.Substring(4, 2), out int day)
                 )
             {
                 dateOut = new DateTime(year, month, day);

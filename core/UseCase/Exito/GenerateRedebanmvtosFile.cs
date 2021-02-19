@@ -1,12 +1,12 @@
-﻿using core.Entities.ComerciosData;
-using core.Entities.ConvertData;
-using core.Entities.MasterData;
-using core.Utils.format;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using core.Entities.ComerciosData;
+using core.Entities.ConvertData;
+using core.Entities.MasterData;
+using core.Utils.format;
 
 namespace core.UseCase.Exito
 {
@@ -33,7 +33,7 @@ namespace core.UseCase.Exito
                 .GroupBy(g => g.Cod_RTL).OrderBy(o => o.Key).ToList();
             var lst = new List<StringBuilder>();
             var lstRedPriv = lstRedPrivadas.Select(s => s.red).ToList();
-            
+
             var lstFiidTarStep2 = lstBinesesp.Where(s => s.Fiid != "0808").Select(s => s.Fiid).ToList();
             lstFiidTarStep2.Add("0821");
             lstFiidTarStep2.Add("0808");
@@ -51,7 +51,7 @@ namespace core.UseCase.Exito
                 lst.Add(BuildStep3(lstFilter, lstFiidTarStep3, lstRedPriv, g.Key.Trim()));
 
             }
-           
+
             var rs = new CommerceModel()
             {
                 Rtl = "",
@@ -76,7 +76,7 @@ namespace core.UseCase.Exito
 
                               {
                                   {
-                                      var val = Convert.ToInt64(s.Valor.Substring(0,10));
+                                      var val = Convert.ToInt64(s.Valor.Substring(0, 10));
 
                                       if (s.Tipo_Mensaje.Substring(1, 3) == "210")
                                       {
@@ -102,11 +102,11 @@ namespace core.UseCase.Exito
                                       }
 
 
-                                      
+
                                   }
 
                               });
-            var num = filter.Count();
+            var num = filter.Count;
             var ret = new StringBuilder()
                 .Append(codRtl)//COD_COMER
                 .Append("\t")
@@ -114,7 +114,7 @@ namespace core.UseCase.Exito
                 .Append("\t")
                 .Append(_format.Formato(num.ToString(), 12, N))
                 .Append("\t")
-                .Append(_format.Formato(total.ToString(), 12, N))
+                .Append(_format.Formato(total.ToString(CultureInfo.InvariantCulture), 12, N))
                 .Append("\t")
                 .Append("01")
                 .Append("\t")
@@ -124,14 +124,14 @@ namespace core.UseCase.Exito
 
         private StringBuilder BuildStep2(List<SapModel> lstSap, List<string> lstFiidTarStep2, List<string> lstRedPriv, string codRtl)
         {
-            
+
             double total = 0;
             //INCONSISTENCIA DE FILTRO CON (s.Id_Fran_Hija + s.Filler_Fran_Hija) == Y != "000"
-            var filter =lstSap
+            var filter = lstSap
                     .AsParallel()
                     .WithDegreeOfParallelism(4)
                     .Where(s =>
-                        (!lstFiidTarStep2.Contains(s.Fiid_Emisor) 
+                        (!lstFiidTarStep2.Contains(s.Fiid_Emisor)
                         || (s.Fiid_Emisor == "0808" && (s.Id_Fran_Hija + s.Filler_Fran_Hija) == "000")
                        ) &&
                         !((s.Id_Fran_Hija + s.Filler_Fran_Hija) != "000" &&
@@ -139,57 +139,57 @@ namespace core.UseCase.Exito
                          )
                         ).ToList();
 
-                    filter.ForEach((s) =>
+            filter.ForEach((s) =>
 
+            {
+                {
+                    var val = Convert.ToInt64(s.Valor.Substring(0, 10));
+
+                    if (s.Tipo_Mensaje.Substring(1, 3) == "210")
                     {
+                        if (s.Cod_Trans.Substring(0, 2) == "14")
                         {
-                            var val = Convert.ToInt64(s.Valor.Substring(0, 10));
-
-                            if (s.Tipo_Mensaje.Substring(1, 3) == "210")
-                            {
-                                if (s.Cod_Trans.Substring(0, 2) == "14")
-                                {
-                                    total -= val;
-                                }
-                                else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
-                                {
-                                    total += val;
-                                }
-                            }
-                            else if (s.Tipo_Mensaje.Substring(1, 3) == "420")
-                            {
-                                if (s.Cod_Trans.Substring(0, 2) == "14")
-                                {
-                                    total += val;
-                                }
-                                else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
-                                {
-                                    total -= val;
-                                }
-                            }
+                            total -= val;
                         }
+                        else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
+                        {
+                            total += val;
+                        }
+                    }
+                    else if (s.Tipo_Mensaje.Substring(1, 3) == "420")
+                    {
+                        if (s.Cod_Trans.Substring(0, 2) == "14")
+                        {
+                            total += val;
+                        }
+                        else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
+                        {
+                            total -= val;
+                        }
+                    }
+                }
 
-                    });
+            });
 
-                    var num = filter.Count();
-                    StringBuilder ret = new StringBuilder()
-                        .Append(codRtl)//COD_COMER
-                        .Append("\t")
-                        .Append(_dat)
-                        .Append("\t")
-                        .Append(_format.Formato(num.ToString(), 12, N))
-                        .Append("\t")
-                        .Append(_format.Formato(total.ToString(), 12, N))
-                        .Append("\t")
-                        .Append("01")
-                        .Append("\t")
-                        .Append("01");
+            var num = filter.Count;
+            StringBuilder ret = new StringBuilder()
+                .Append(codRtl)//COD_COMER
+                .Append("\t")
+                .Append(_dat)
+                .Append("\t")
+                .Append(_format.Formato(num.ToString(), 12, N))
+                .Append("\t")
+                .Append(_format.Formato(total.ToString(CultureInfo.InvariantCulture), 12, N))
+                .Append("\t")
+                .Append("01")
+                .Append("\t")
+                .Append("01");
             return ret;
         }
 
         private StringBuilder BuildStep3(List<SapModel> lstSap, List<string> lstFiidTarStep3, List<string> lstRedPriv, string codRtl)
         {
-            
+
             double total = 0;
             //INCONSISTENCIA DE FILTRO CON (s.Id_Fran_Hija + s.Filler_Fran_Hija) == Y != "000"
             var filter = lstSap
@@ -231,7 +231,7 @@ namespace core.UseCase.Exito
                                   }
 
                               });
-            var num = filter.Count();
+            var num = filter.Count;
             var res = new StringBuilder()
                 .Append(codRtl)//COD_COMER
                 .Append("\t")
@@ -239,7 +239,7 @@ namespace core.UseCase.Exito
                 .Append("\t")
                 .Append(_format.Formato(num.ToString(), 12, N))
                 .Append("\t")
-                .Append(_format.Formato(total.ToString(), 12, N))
+                .Append(_format.Formato(total.ToString(CultureInfo.InvariantCulture), 12, N))
                 .Append("\t")
                 .Append("01")
                 .Append("\t")

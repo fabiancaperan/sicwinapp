@@ -187,7 +187,6 @@ namespace WinApp
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button eliminar;
         private System.Windows.Forms.Panel panel2;

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using core.Entities.UserData;
 using core.Repository.Sic.Users;
 
 namespace WinApp
@@ -15,8 +13,10 @@ namespace WinApp
             _userDb = new UserDb();
             InitializeComponent();
             dataGridView1.DataSource = _userDb.GetUsers();
-            dataGridView1.Columns[0].HeaderText = "Usuario";
-            dataGridView1.Columns[1].HeaderText = "Administrador";
+            var headerText = "Usuario";
+            dataGridView1.Columns[0].HeaderText = headerText;
+            var administrador = "Administrador";
+            dataGridView1.Columns[1].HeaderText = administrador;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -28,9 +28,9 @@ namespace WinApp
         {
             if (e.RowIndex < 0)
                 return;
-            Boolean readOnly = (sender as DataGridView).SelectedCells[0].ReadOnly;
+            _ = ((DataGridView) sender).SelectedCells[0].ReadOnly;
             var userName = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-            var isAdmin = Boolean.Parse(dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString());
+            var isAdmin = Boolean.Parse(dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString() ?? string.Empty);
             textBox1.Text = userName;
             checkBox1.Checked = isAdmin;
 
@@ -45,14 +45,16 @@ namespace WinApp
             var userName = textBox1.Text.Trim();
             if (_userDb.DeleteUsers(userName))
             {
-                Program.logInfo(userName + " se ha eliminado correctamente");
-                MessageBox.Show(userName + " se ha eliminado correctamente");
+                var delete = " se ha eliminado correctamente";
+                Program.LogInfo(userName + delete);
+                MessageBox.Show(userName + delete);
                 dataGridView1.DataSource = _userDb.GetUsers();
             }
             else
             {
-                Program.logInfo(userName + " no existe como usuario para eliminar");
-                MessageBox.Show(userName + " no existe como usuario");
+                var noExist = " no existe como usuario";
+                Program.LogInfo(userName + " no existe como usuario para eliminar");
+                MessageBox.Show(userName + noExist);
             }
         }
 
@@ -62,13 +64,15 @@ namespace WinApp
             var isAdmin = checkBox1.Checked;
             if (_userDb.UpsertUser(userName, isAdmin))
             {
-                Program.logInfo(userName + " se ha creado correctamente");
-                MessageBox.Show(userName + " se ha creado correctamente");
+                var created = " se ha creado correctamente";
+                Program.LogInfo(userName + created);
+                MessageBox.Show(userName + created);
             }
             else
             {
-                Program.logInfo(userName + " se ha actualizado correctamente");
-                MessageBox.Show(userName + " se ha actualizado correctamente");
+                var msj = " se ha actualizado correctamente";
+                Program.LogInfo(userName + msj);
+                MessageBox.Show(userName + msj);
             }
             dataGridView1.DataSource = _userDb.GetUsers();
         }

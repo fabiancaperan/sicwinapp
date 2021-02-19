@@ -1,19 +1,19 @@
-﻿using core.Entities.MasterData;
+﻿using System;
+using System.Collections.Generic;
+using core.Entities.MasterData;
+using core.Entities.UserData;
 using core.Repository;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Storage;
-using core.Entities.UserData;
-using System;
 
 namespace core.UseCase.InitDatabase
 {
     public class InitDb
     {
 
-        public bool InitDatabase()
+        public void InitDatabase()
         {
-            using var db = new dbContext();
+            using var db = new SicDbContext();
             //db.Database.EnsureDeleted();
             if (!((RelationalDatabaseCreator)db.Database.GetService<IDatabaseCreator>()).Exists())
             {
@@ -28,8 +28,6 @@ namespace core.UseCase.InitDatabase
                 db.User.Add(UploadUserAdmin());
                 db.SaveChanges();
             }
-
-            return true;
         }
 
         private UserModel UploadUserAdmin()
@@ -288,67 +286,6 @@ namespace core.UseCase.InitDatabase
                           {'Fiid':'0821','NombreTar':'TUYA ALKOSTO                                      '}
                         ]";
             List<BinesespModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BinesespModel>>(json);
-            return lst;
-        }
-
-        private List<FestivoModel> Uploadfestivo()
-        {
-            var json = @"[{'FESTIVO':'20100104','DIAHABIL':'20100104'},
-                          {'FESTIVO':'20100112','DIAHABIL':'20100112'},
-                          {'FESTIVO':'20100118','DIAHABIL':'20100118'},
-                          {'FESTIVO':'20100125','DIAHABIL':'20100125'},
-                          {'FESTIVO':'20100201','DIAHABIL':'20100201'},
-                          {'FESTIVO':'20100208','DIAHABIL':'20100208'},
-                          {'FESTIVO':'20100215','DIAHABIL':'20100215'},
-                          {'FESTIVO':'20100222','DIAHABIL':'20100222'},
-                          {'FESTIVO':'20100301','DIAHABIL':'20100301'},
-                          {'FESTIVO':'20100308','DIAHABIL':'20100308'},
-                          {'FESTIVO':'20100315','DIAHABIL':'20100315'},
-                          {'FESTIVO':'20100323','DIAHABIL':'20100323'},
-                          {'FESTIVO':'20100329','DIAHABIL':'20100329'},
-                          {'FESTIVO':'20100405','DIAHABIL':'20100405'},
-                          {'FESTIVO':'20100412','DIAHABIL':'20100412'},
-                          {'FESTIVO':'20100419','DIAHABIL':'20100419'},
-                          {'FESTIVO':'20100426','DIAHABIL':'20100426'},
-                          {'FESTIVO':'20100503','DIAHABIL':'20100503'},
-                          {'FESTIVO':'20100510','DIAHABIL':'20100510'},
-                          {'FESTIVO':'20100518','DIAHABIL':'20100518'},
-                          {'FESTIVO':'20100524','DIAHABIL':'20100524'},
-                          {'FESTIVO':'20100528','DIAHABIL':'20100528'},
-                          {'FESTIVO':'20100531','DIAHABIL':'20100531'},
-                          {'FESTIVO':'20100608','DIAHABIL':'20100608'},
-                          {'FESTIVO':'20100615','DIAHABIL':'20100615'},
-                          {'FESTIVO':'20100621','DIAHABIL':'20100621'},
-                          {'FESTIVO':'20100706','DIAHABIL':'20100706'},
-                          {'FESTIVO':'20100712','DIAHABIL':'20100712'},
-                          {'FESTIVO':'20100719','DIAHABIL':'20100719'},
-                          {'FESTIVO':'20100721','DIAHABIL':'20100721'},
-                          {'FESTIVO':'20100726','DIAHABIL':'20100726'},
-                          {'FESTIVO':'20100802','DIAHABIL':'20100802'},
-                          {'FESTIVO':'20100809','DIAHABIL':'20100809'},
-                          {'FESTIVO':'20100811','DIAHABIL':'20100811'},
-                          {'FESTIVO':'20100817','DIAHABIL':'20100817'},
-                          {'FESTIVO':'20100823','DIAHABIL':'20100823'},
-                          {'FESTIVO':'20100830','DIAHABIL':'20100830'},
-                          {'FESTIVO':'20100906','DIAHABIL':'20100906'},
-                          {'FESTIVO':'20100913','DIAHABIL':'20100913'},
-                          {'FESTIVO':'20100920','DIAHABIL':'20100920'},
-                          {'FESTIVO':'20100927','DIAHABIL':'20100927'},
-                          {'FESTIVO':'20101004','DIAHABIL':'20101004'},
-                          {'FESTIVO':'20101019','DIAHABIL':'20101019'},
-                          {'FESTIVO':'20101025','DIAHABIL':'20101025'},
-                          {'FESTIVO':'20101102','DIAHABIL':'20101102'},
-                          {'FESTIVO':'20101108','DIAHABIL':'20101108'},
-                          {'FESTIVO':'20101116','DIAHABIL':'20101116'},
-                          {'FESTIVO':'20101122','DIAHABIL':'20101122'},
-                          {'FESTIVO':'20101129','DIAHABIL':'20101129'},
-                          {'FESTIVO':'20101206','DIAHABIL':'20101206'},
-                          {'FESTIVO':'20101209','DIAHABIL':'20101209'},
-                          {'FESTIVO':'20101213','DIAHABIL':'20101213'},
-                          {'FESTIVO':'20101220','DIAHABIL':'20101220'},
-                          {'FESTIVO':'20101227','DIAHABIL':'20101227'}
-                        ]";
-            List<FestivoModel> lst = Newtonsoft.Json.JsonConvert.DeserializeObject<List<FestivoModel>>(json);
             return lst;
         }
     }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace core.Repository.Sic.Users
+﻿namespace core.Repository.Sic.Users
 {
     public class UserEditModel
     {

@@ -1,12 +1,12 @@
-﻿using core.Entities.ComerciosData;
-using core.Entities.ConvertData;
-using core.Entities.MasterData;
-using core.Utils.format;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using core.Entities.ComerciosData;
+using core.Entities.ConvertData;
+using core.Entities.MasterData;
+using core.Utils.format;
 
 namespace core.UseCase.Olimpica
 {
@@ -41,13 +41,13 @@ namespace core.UseCase.Olimpica
                               .Select(j => new CommerceModel
                               {
                                   Rtl = j.Key.Rtl,
-                                  Nit = 1+j.Key.Nit,
+                                  Nit = 1 + j.Key.Nit,
                                   Line = new StringBuilder().Append("02").Append(dat)
                                                             .Append(_format.Formato(j.Key.Nit, 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.Key.Rtl).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.Key.Nit).ToString(),
-                                  FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
+                                  FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count.ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
                                  .Append("01")
@@ -87,7 +87,7 @@ namespace core.UseCase.Olimpica
                                  .Append(_format.Formato(l.s.TextoAdicional.Substring(0, 25), 25, A))
                                  .Append(_format.Formato(l.s.Convtrack.Substring(0, 5), 5, N))//MICOMPRA
                                  .Append(_format.Formato(Space, 4, A))//space
-                                                                        //.ToString()
+                                                                      //.ToString()
                                ).ToList()
                               }).ToList();
             return lst;
@@ -100,15 +100,6 @@ namespace core.UseCase.Olimpica
 
             input = r.Replace(input, String.Empty);
             input = input.Replace(" ", "_");
-            return input;
-        }
-
-        private string RemoveSpecialCharactersChangeBySpace(string input)
-        {
-
-            Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
-
-            input = r.Replace(input, String.Empty);
             return input;
         }
     }

@@ -12,7 +12,7 @@ namespace core.Entities.ConvertData
         [Display(Name = "Tipo Registro")]
         [MaxLength(2)]
         public string TipoRegistro { get; set; }
-        
+
         [Display(Name = "Fecha Compra")]
         [MaxLength(8)]
         public string FechaCompra { get; set; }
@@ -57,11 +57,11 @@ namespace core.Entities.ConvertData
         [Display(Name = "Num_Tarjeta")]
         [MaxLength(4)]
         public string Num_Tarjeta { get; set; }
-        
+
         [Display(Name = "Tipo_Mensaje")]
         [MaxLength(4)]
         public string Tipo_Mensaje { get; set; }
-        
+
         [Display(Name = "Cod_Trans")]
         [MaxLength(6)]
         public string Cod_Trans { get; set; }
@@ -116,7 +116,7 @@ namespace core.Entities.ConvertData
 
         [Display(Name = "Iva")]
         [MaxLength(8)]
-        public string Iva {get; set; }
+        public string Iva { get; set; }
 
         [Display(Name = "Id_Fran_Hija")]
         [MaxLength(1)]
@@ -133,7 +133,7 @@ namespace core.Entities.ConvertData
         [Display(Name = "Base_Devol_Iva")]
         [MaxLength(12)]
         public string Base_Devol_Iva { get; set; }
-        
+
         [Display(Name = "RefUniversal")]
         [MaxLength(23)]
         public string RefUniversal { get; set; }

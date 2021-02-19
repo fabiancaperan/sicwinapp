@@ -8,11 +8,11 @@ using NLog.Extensions.Logging;
 
 namespace WinApp
 {
-    public class Program
+    public static class Program
     {
-        public static bool isAdmin = false;
-        public static string userName = String.Empty;
-        public static Logger _log;
+        public static bool IsAdmin = false;
+        public static string UserName = String.Empty;
+        private static Logger Log;
 
         /// <summary>
         ///  The main entry point for the application.
@@ -39,27 +39,29 @@ namespace WinApp
                });
             var host = builder.Build();
 
-            using (var serviceScope = host.Services.CreateScope())
+            using var serviceScope = host.Services.CreateScope();
             {
                 var services = serviceScope.ServiceProvider;
                 try
                 {
                     var login = services.GetRequiredService<Login>();
-                    _log = LogManager.GetLogger(typeof(Program).Name);
+                    Log = LogManager.GetLogger(nameof(Program));
                     Application.Run(login);
-                    Console.WriteLine("Success");
+                    var success = "Success";
+                    Console.WriteLine(success);
                 }
                 catch (Exception ex)
                 {
-                    logError(ex);
-                    Console.WriteLine("Error Occured");
+                    LogError(ex);
+                    var errorOccured = "Error Occured";
+                    Console.WriteLine(errorOccured);
                 }
 
             }
         }
 
-        public static void logError(Exception ex) => _log.Log<Exception>(NLog.LogLevel.Error, userName + ";" + ex.Message + ex.StackTrace, ex);
-        public static void logInfo(string msj) => _log.Log(NLog.LogLevel.Info, userName + ";" + msj);
+        public static void LogError(Exception ex) => Log.Log<Exception>(NLog.LogLevel.Error, UserName + ";" + ex.Message + ex.StackTrace, ex);
+        public static void LogInfo(string msj) => Log.Log(NLog.LogLevel.Info, UserName + ";" + msj);
     }
 
 }

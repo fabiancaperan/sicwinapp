@@ -1,12 +1,12 @@
-﻿using core.Entities.ComerciosData;
-using core.Entities.ConvertData;
-using core.Entities.MasterData;
-using core.Utils.format;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using core.Entities.ComerciosData;
+using core.Entities.ConvertData;
+using core.Entities.MasterData;
+using core.Utils.format;
 
 namespace core.UseCase.Carrefour
 {
@@ -31,7 +31,7 @@ namespace core.UseCase.Carrefour
 
         public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades, StringBuilder dat)
         {
-            
+
             var lst = lstSap.Where(s => s.Nit.Trim() == Nit &&
                                         _franquicias.Contains((s.Id_Fran_Hija + s.Filler_Fran_Hija)) &&
                                         s.Cod_Trans.Substring(0, 2) == CodTrans &&
@@ -49,10 +49,10 @@ namespace core.UseCase.Carrefour
                               .GroupBy(g => g.s.Nit.Trim())
                               .Select(j => new CommerceModel
                               {
-                                  Nit = 1+Nit,
+                                  Nit = 1 + Nit,
                                   Line = new StringBuilder().Append("02").Append(dat)
                                                             .Append(_format.Formato(Nit, 13, N)).Append(_format.Formato(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()), 30, A))
-                                                            .Append("RMC").Append(new String(' ',244)).ToString(),
+                                                            .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append("CAR").Append(dat).Append(".txt").ToString(),
                                   //CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
                                   //                              .Append("-").Append(dat).Append("-").Append(j.Key).ToString(),
@@ -95,7 +95,7 @@ namespace core.UseCase.Carrefour
                                  .Append(_format.Formato(l.s.TextoAdicional.Substring(0, 25), 25, A))
                                  .Append(_format.Formato(l.s.Convtrack.Substring(0, 5), 5, N))//MICOMPRA
                                  .Append(_format.Formato(Space, 4, A))//space
-                                                                        //.ToString()
+                                                                      //.ToString()
                                ).ToList()
                               }).ToList();
 
@@ -104,7 +104,7 @@ namespace core.UseCase.Carrefour
 
         private string RemoveSpecialCharacters(string input)
         {
-            
+
             Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
             input = r.Replace(input, String.Empty);

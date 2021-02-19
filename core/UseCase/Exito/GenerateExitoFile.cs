@@ -1,12 +1,12 @@
-﻿using core.Entities.ComerciosData;
-using core.Entities.ConvertData;
-using core.Entities.MasterData;
-using core.Utils.format;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using core.Entities.ComerciosData;
+using core.Entities.ConvertData;
+using core.Entities.MasterData;
+using core.Utils.format;
 
 namespace core.UseCase.Exito
 {
@@ -27,7 +27,7 @@ namespace core.UseCase.Exito
 
         public List<CommerceModel> Build(List<SapModel> lstSap, List<EntidadesModel> entidades, StringBuilder dat)
         {
-            
+
             var lst = lstSap
                        .Join(entidades,
                               post => post.Fiid_Emisor,
@@ -51,7 +51,7 @@ namespace core.UseCase.Exito
                                                             .Append("RMC").Append(new String(' ', 244)).ToString(),
                                   CodRtl = new StringBuilder().Append(j.FirstOrDefault()?.s.Cod_RTL.Trim()).Append("-").Append(RemoveSpecialCharacters(j.FirstOrDefault()?.s.NombreCadena.Trim()))
                                                                 .Append("-").Append(dat).Append("-").Append(j.FirstOrDefault()?.s.Nit.Trim()).ToString(),
-                                  FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count().ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
+                                  FinalLine = new StringBuilder().Append("03").Append(_format.Formato(j.ToList().Count.ToString(), 8, N)).Append(_format.Formato(Space, 290, A)).ToString(),
                                   Lst = j.Select(l =>
                                   new StringBuilder()
                                  .Append("01")
@@ -91,7 +91,7 @@ namespace core.UseCase.Exito
                                  .Append(_format.Formato(l.s.TextoAdicional.Substring(0, 25), 25, A))
                                  .Append(_format.Formato(l.s.Convtrack.Substring(0, 5), 5, N))//MICOMPRA
                                  .Append(_format.Formato(Space, 4, A))//space
-                                                                        //.ToString()
+                                                                      //.ToString()
                                ).ToList()
                               }).ToList();
             return lst;
@@ -104,15 +104,6 @@ namespace core.UseCase.Exito
 
             input = r.Replace(input, String.Empty);
             input = input.Replace(" ", "_");
-            return input;
-        }
-
-        private string RemoveSpecialCharactersChangeBySpace(string input)
-        {
-
-            Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
-
-            input = r.Replace(input, String.Empty);
             return input;
         }
 
