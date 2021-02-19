@@ -74,9 +74,12 @@ namespace core.UseCase.ConvertData
         private bool ValidateDate(string filename, out DateTime dateOut)
         {
             var dat = filename.Substring(4, 6);
-            if (Int32.TryParse("20" + dat.Substring(0, 2), out int year) &&
-                Int32.TryParse(dat.Substring(2, 2), out int month) &&
-                Int32.TryParse(dat.Substring(4, 2), out int day)
+            int month;
+            int day;
+            int year;
+            if (Int32.TryParse("20" + dat.Substring(0, 2), out year) &&
+                Int32.TryParse(dat.Substring(2, 2), out month) &&
+                Int32.TryParse(dat.Substring(4, 2), out day)
                 )
             {
                 dateOut = new DateTime(year, month, day);

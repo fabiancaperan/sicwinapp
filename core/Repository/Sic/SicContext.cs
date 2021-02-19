@@ -19,7 +19,7 @@ namespace core.Repository.Sic
                 db.RemoveRange(db.DateComp);
             }
 
-            var dateComp = new DateCompModel {Dat = dat};
+            var dateComp = new DateCompModel { Dat = dat };
             db.DateComp.Add(dateComp);
             db.Sap.AddRange(lstSic);
 
@@ -37,7 +37,7 @@ namespace core.Repository.Sic
                 db.RemoveRange(db.DateComp);
             }
 
-            var dateComp = new DateCompModel {Dat = dat};
+            var dateComp = new DateCompModel { Dat = dat };
             db.DateComp.Add(dateComp);
 
 
