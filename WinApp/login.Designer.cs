@@ -70,7 +70,7 @@
             this.textuser.Location = new System.Drawing.Point(309, 113);
             this.textuser.Name = "textuser";
             this.textuser.Size = new System.Drawing.Size(408, 29);
-            this.textuser.TabIndex = 1;
+            this.textuser.TabIndex = 0;
             this.textuser.Text = "USUARIO";
             this.textuser.Enter += new System.EventHandler(this.textuser_Enter);
             this.textuser.Leave += new System.EventHandler(this.textuser_Leave);

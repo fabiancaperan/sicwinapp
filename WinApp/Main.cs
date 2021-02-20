@@ -31,7 +31,16 @@ namespace WinApp
 
         private void Main_Load(object sender, EventArgs e)
         {
+            sender.ToString();
+        }
 
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+        private void Main_Closing(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
 
         private void button1_Click(object sender, EventArgs e)

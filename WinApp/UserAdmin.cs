@@ -28,7 +28,7 @@ namespace WinApp
         {
             if (e.RowIndex < 0)
                 return;
-            _ = ((DataGridView) sender).SelectedCells[0].ReadOnly;
+            _ = ((DataGridView)sender).SelectedCells[0].ReadOnly;
             var userName = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
             var isAdmin = Boolean.Parse(dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString() ?? string.Empty);
             textBox1.Text = userName;
@@ -82,6 +82,16 @@ namespace WinApp
             Main charge = new Main();
             charge.Show();
             this.Hide();
+        }
+
+        private void UserAdmin_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void UserAdmin_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

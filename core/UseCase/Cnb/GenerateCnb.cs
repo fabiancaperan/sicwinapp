@@ -32,7 +32,7 @@ namespace core.UseCase.Cnb
             fiids.ForEach(s =>
             {
                 var lstFilter = lstSap.Where(l => Regex.IsMatch(l.Cod_RTL, LikeToRegular(3 + Right(s.fiid, 3) + "%")))
-                .OrderBy(s => s.Cod_RTL).ToList();
+                .OrderBy(o => o.Cod_RTL).ToList();
                 if (lstFilter.Any())
                 {
 

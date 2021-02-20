@@ -12,7 +12,7 @@ namespace WinApp
     {
         public static bool IsAdmin = false;
         public static string UserName = String.Empty;
-        private static Logger Log;
+        private static Logger _log;
 
         /// <summary>
         ///  The main entry point for the application.
@@ -45,7 +45,7 @@ namespace WinApp
                 try
                 {
                     var login = services.GetRequiredService<Login>();
-                    Log = LogManager.GetLogger(nameof(Program));
+                    _log = LogManager.GetLogger(nameof(Program));
                     Application.Run(login);
                     var success = "Success";
                     Console.WriteLine(success);
@@ -60,8 +60,8 @@ namespace WinApp
             }
         }
 
-        public static void LogError(Exception ex) => Log.Log<Exception>(NLog.LogLevel.Error, UserName + ";" + ex.Message + ex.StackTrace, ex);
-        public static void LogInfo(string msj) => Log.Log(NLog.LogLevel.Info, UserName + ";" + msj);
+        public static void LogError(Exception ex) => _log.Log<Exception>(NLog.LogLevel.Error, UserName + ";" + ex.Message + ex.StackTrace, ex);
+        public static void LogInfo(string msj) => _log.Log(NLog.LogLevel.Info, UserName + ";" + msj);
     }
 
 }
