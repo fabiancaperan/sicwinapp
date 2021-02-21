@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using core.Entities.ConvertData;
 using core.Repository.Sic;
 
@@ -22,10 +23,11 @@ namespace core.UseCase.ConvertData
             }
 
             string[] lines = File.ReadAllLines(path);
-            HashSet<string> hashSets = lines.ToHashSet();
-            if (lines.Length != hashSets.Count)
+            HashSet<string> hashSets = LinesDuplicate(lines);
+            var numDuplicates = lines.Length - hashSets.Count;
+            if (numDuplicates != 0)
             {
-                fileCharge.Message = "Archivo con líneas duplicadas";
+                fileCharge.Message = "Archivo con " + numDuplicates + " líneas duplicadas";
                 return fileCharge;
             }
 
@@ -46,9 +48,44 @@ namespace core.UseCase.ConvertData
 
         }
 
-        private bool ValidateFormat(string[] lines)
+        private HashSet<string> LinesDuplicate(IEnumerable<string> lines)
         {
-            if (lines.Length > 0)
+            HashSet<string> hashSets = new HashSet<string>();
+            List<string> duplicates = new List<string>();
+            foreach (var line in lines)
+            {
+                if (!hashSets.Add(line))
+                {
+                    duplicates.Add(line);
+                }
+            }
+            if (duplicates.Any())
+                SaveDuplicates(duplicates);
+            return hashSets;
+        }
+
+        private void SaveDuplicates(List<string> duplicates)
+        {
+            var rute = Directory.GetCurrentDirectory();
+
+            var path = Path.Combine(rute, "duplicates");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            path = Path.Combine(path, "duplicates");
+            if (Directory.Exists(path))
+                Directory.Delete(path);
+            using FileStream stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
+            using StreamWriter writer = new StreamWriter(stream, Encoding.UTF8);
+            duplicates.ForEach(s =>
+            {
+                if (writer != null) writer.WriteLine(s);
+            });
+        }
+
+
+        private bool ValidateFormat(IReadOnlyCollection<string> lines)
+        {
+            if (lines.Count > 0)
                 return true;
             return false;
         }

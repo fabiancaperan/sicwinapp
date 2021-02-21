@@ -40,7 +40,7 @@ namespace WinApp
         }
         private void Main_Closing(object sender, FormClosedEventArgs e)
         {
-            Application.Exit();
+            Application.Exit(); 
         }
 
         private void button1_Click(object sender, EventArgs e)
