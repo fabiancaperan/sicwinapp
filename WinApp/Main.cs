@@ -17,7 +17,7 @@ namespace WinApp
             InitializeComponent();
             if (!Program.IsAdmin)
             {
-                button1.Visible = false;
+                Users.Visible = false;
                 //this.Controls.Remove(button1);
             }
             checkedListBox1.DataSource = Enum.GetValues(typeof(core.Repository.Types.CommerceType));
@@ -31,7 +31,7 @@ namespace WinApp
 
         private void Main_Load(object sender, EventArgs e)
         {
-            sender.ToString();
+            
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -40,7 +40,7 @@ namespace WinApp
         }
         private void Main_Closing(object sender, FormClosedEventArgs e)
         {
-            Application.Exit(); 
+            Application.Exit();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -100,15 +100,28 @@ namespace WinApp
 
         private void btnCharge_Click(object sender, EventArgs e)
         {
+
+            //_waitForm.Show();
+            //loading.BringToFront();
+            
+            loading.Visible = true;
+            loading.Dock = DockStyle.Fill;
+            loading.Refresh();
+            if (Program.IsAdmin)
+                Users.Enabled = false;
+            Cursor = Cursors.Arrow;
+
             try
             {
                 button2.Enabled = false;
-                Cursor = Cursors.WaitCursor; // change cursor to hourglass type
+                //Cursor = Cursors.WaitCursor; // change cursor to hourglass type
 
 
                 if (textBoxInput.Text != "")
                 {
                     var ret = new ChargeFile().Build(textBoxInput.Text);
+                    //_waitForm.Close();
+
                     if (ret.Message == "TRUE")
                     {
                         _lst = ret.List;
@@ -126,15 +139,19 @@ namespace WinApp
                 else
                 {
                     const string selectFile = "Debe seleccionar un archivo para cargar";
+                    //_waitForm.Close();
+                    Cursor = Cursors.Arrow;
                     MessageBox.Show(selectFile);
                 }
+
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
 
             }
             catch (InvalidOperationException ex)
             {
-                var mess = "The instance of entity type 'SapModel' cannot be tracked because another instance with the same key value for";
+                var mess =
+                    "The instance of entity type 'SapModel' cannot be tracked because another instance with the same key value for";
                 var message = ex.Message;
                 if (ex.Message.Contains(mess))
                 {
@@ -154,6 +171,12 @@ namespace WinApp
                 Program.LogError(ex);
                 MessageError();
             }
+            finally
+            {
+                loading.Visible = false;
+                if (Program.IsAdmin)
+                    Users.Enabled = true;
+            }
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -168,24 +191,32 @@ namespace WinApp
 
         private void button3_Click(object sender, EventArgs e)
         {
+            if (Program.IsAdmin)
+                Users.Enabled = false;
+            loading.Visible = true;
+            loading.Dock = DockStyle.Fill;
+            loading.BringToFront();
+            loading.Refresh();
+            //_waitForm.Show();
+
+            Cursor = Cursors.WaitCursor;
             try
             {
                 var rute = textBox2.Text;
-                List<core.Repository.Types.CommerceType> subfolder = checkedListBox1.CheckedItems.OfType<core.Repository.Types.CommerceType>().ToList();
+                List<core.Repository.Types.CommerceType> subfolder =
+                    checkedListBox1.CheckedItems.OfType<core.Repository.Types.CommerceType>().ToList();
                 if (rute != "")
                 {
                     if (subfolder.Count != 0)
                     {
                         button2.Enabled = false;
-                        Cursor = Cursors.WaitCursor; // change cursor to hourglass type
+                        // change cursor to hourglass type
                         var res = new DownloadFiles().Build(rute, subfolder, _lst);
                         if (res)
                         {
                             var txtFine = "Se ha generado con Éxito ";
-                            subfolder.ForEach(s =>
-                            {
-                                Program.LogInfo(txtFine + "el archivo " + s);
-                            });
+                            subfolder.ForEach(s => { Program.LogInfo(txtFine + "el archivo " + s); });
+                            Cursor = Cursors.Arrow;
                             MessageBox.Show(txtFine);
                         }
                     }
@@ -193,6 +224,7 @@ namespace WinApp
                     {
                         var selectItem = "Debe seleccionar al menos un item";
                         Program.LogInfo(selectItem + " para generar el archivo");
+                        Cursor = Cursors.Arrow;
                         MessageBox.Show(selectItem);
                     }
                 }
@@ -200,8 +232,10 @@ namespace WinApp
                 {
                     var selectRute = "No a seleccionado una ruta ";
                     Program.LogInfo(selectRute + "para generar el archivo");
+                    Cursor = Cursors.Arrow;
                     MessageBox.Show(selectRute);
                 }
+
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 button2.Enabled = true;
 
@@ -209,9 +243,15 @@ namespace WinApp
             catch (Exception ex)
             {
                 button2.Enabled = true;
-                Cursor = Cursors.Arrow; // change cursor to normal type
                 Program.LogError(ex);
+                Cursor = Cursors.Arrow;
                 MessageError();
+            }
+            finally
+            {
+                loading.Visible = false;
+                if (Program.IsAdmin)
+                    Users.Enabled = true;
             }
         }
 

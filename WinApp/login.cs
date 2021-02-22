@@ -11,7 +11,6 @@ namespace WinApp
         private const string ErrorMessage = "Hubo un error comuniquese con el administrador";
 
         private readonly UserDb _userDb;
-
         public Login()
         {
             InitializeComponent();
@@ -89,6 +88,10 @@ namespace WinApp
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //_waitForm.Show();
+            loading.Visible = true;
+            loading.Dock = DockStyle.Fill;
+            loading.BringToFront();
             Program.UserName = textuser.Text;
 
             try
@@ -101,15 +104,46 @@ namespace WinApp
                 {
                     var userNoRegistry = "Usuario no registrado en la aplicación";
                     Program.LogInfo(userNoRegistry);
+                    //_waitForm.Close();
+                    //Cursor = Cursors.Arrow;
                     MessageBox.Show(userNoRegistry);
-                    return;
+                    //return;
                 }
-
-                const string admin = "admin";
-                if (textuser.Text == admin)
+                else
                 {
-                    if (textpass.Text == admin)
+                    const string admin = "admin";
+                    if (textuser.Text == admin)
                     {
+                        if (textpass.Text == admin)
+                        {
+                            Program.IsAdmin = user.isAdmin;
+                            Program.LogInfo("Usuario autenticado");
+                            Main charge = new Main();
+                            charge.Show();
+                            this.Hide();
+                        }
+                        else
+                        {
+                            var passNoValid = "Contraseña inválida";
+                            Program.LogInfo(passNoValid);
+                            MessageBox.Show(passNoValid);
+                        }
+                    }
+
+                    else
+                    {
+                        string login = "LOGIN";
+
+                        var res = new ValidateLdap().Validate(textuser.Text, textpass.Text);
+                        //_waitForm.Close();
+                        Cursor = Cursors.Arrow;
+                        MessageBox.Show(res);
+                        if (login != res)
+                        {
+                            Program.LogInfo(res);
+                            return;
+                        }
+
                         Program.IsAdmin = user.isAdmin;
                         Program.LogInfo("Usuario autenticado");
                         Main charge = new Main();
@@ -118,34 +152,20 @@ namespace WinApp
                     }
                 }
 
-                else
-                {
-                    string login = "LOGIN";
-
-                    var res = new ValidateLdap().Validate(textuser.Text, textpass.Text);
-
-                    MessageBox.Show(res);
-                    if (login != res)
-                    {
-                        Program.LogInfo(res);
-                        return;
-                    }
-
-                    Program.IsAdmin = user.isAdmin;
-                    Program.LogInfo("Usuario autenticado");
-                    Main charge = new Main();
-                    charge.Show();
-                    this.Hide();
-                }
                 Cursor = Cursors.Arrow; // change cursor to normal type
+                //_waitForm.Close();
             }
             catch (Exception ex)
             {
                 Cursor = Cursors.Arrow; // change cursor to normal type
                 Program.LogError(ex);
-                //_logger.LogError(ex.Message + ex.StackTrace, textuser.Text);
-                //Program._log.Log<Exception>(NLog.LogLevel.Error,ex.Message,ex);
+                //_waitForm.Close();
+                Cursor = Cursors.Arrow;
                 MessageError(ex);
+            }
+            finally
+            {
+                loading.Visible = false;
             }
         }
 
@@ -155,19 +175,5 @@ namespace WinApp
             MessageBox.Show(ErrorMessage);
         }
 
-        //private void button3_Click(object sender, EventArgs e)
-        //{
-        //    string login = "LOGIN";
-        //    Cursor = Cursors.WaitCursor; // change cursor to hourglass type
-        //    var res = new ValidateLdap().Validate(textuser.Text, textpass.Text);
-        //    Cursor = Cursors.Arrow; // change cursor to normal type
-        //    MessageBox.Show(res);
-        //    if (login != res) return;
-        //    Main charge = new Main();
-        //    charge.Show();
-        //    this.Hide();
-
-
-        //}
     }
 }
