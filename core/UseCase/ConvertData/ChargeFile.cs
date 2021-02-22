@@ -28,7 +28,6 @@ namespace core.UseCase.ConvertData
             if (numDuplicates != 0)
             {
                 fileCharge.Message = "Archivo con " + numDuplicates + " líneas duplicadas";
-                return fileCharge;
             }
 
             if (ValidateFormat(lines))
