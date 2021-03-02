@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using core.Entities.ConvertData;
 using core.Repository;
 
@@ -38,7 +39,7 @@ namespace core.UseCase.ConvertData
                 }
 
                 i++;
-                var sa = BuildSap(t, i);
+                var sa = BuildSap(RemoveSpecialCharacters(t), i);
                 if (sa == null)
                 {
                     ret.Message = NodatesValid;
@@ -117,6 +118,16 @@ namespace core.UseCase.ConvertData
         {
             MaxLengthAttribute attrMaxLength = (MaxLengthAttribute)propInfo.GetCustomAttributes(typeof(MaxLengthAttribute), false).FirstOrDefault();
             return attrMaxLength?.Length ?? 0;
+        }
+
+        private string RemoveSpecialCharacters(string input)
+        {
+
+            Regex r = new Regex("(?:[^a-z0-9 ]|(?<=['\"])s)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+            input = r.Replace(input, " ");
+            
+            return input;
         }
     }
 }

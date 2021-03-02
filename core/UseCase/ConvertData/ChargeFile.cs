@@ -22,12 +22,20 @@ namespace core.UseCase.ConvertData
                 return fileCharge;
             }
 
-            string[] lines = File.ReadAllLines(path);
-            HashSet<string> hashSets = LinesDuplicate(lines);
-            var numDuplicates = lines.Length - hashSets.Count;
-            if (numDuplicates != 0)
+            var lines = File.ReadAllLines(path);
+            string[] hashSets = LinesDuplicate(lines);
+            var numDuplicates = lines.Length - hashSets.Length;
+            if (numDuplicates != 0 && ValidateFormat(lines))
             {
-                fileCharge.Message = "Archivo con " + numDuplicates + " líneas duplicadas";
+                fileCharge = new ConvertFileTextToSapModel().Build(hashSets, dateOut);
+                if (!string.IsNullOrEmpty(fileCharge.Message))
+                {
+                    return fileCharge;
+                }
+                new SicContext().Save(dateOut);
+                fileCharge.IsTrue = true;
+                fileCharge.Message = "Archivo con " + numDuplicates + " líneas duplicadas, se ha cargado correctamente";
+                return fileCharge;
             }
 
             if (ValidateFormat(lines))
@@ -39,7 +47,8 @@ namespace core.UseCase.ConvertData
                 }
 
                 new SicContext().Save(dateOut);
-                fileCharge.Message = "TRUE";
+                fileCharge.IsTrue = true;
+                fileCharge.Message = "Se ha cargado correctamente";
                 return fileCharge;
             }
             fileCharge.Message = "Archivo no válido";
@@ -47,7 +56,7 @@ namespace core.UseCase.ConvertData
 
         }
 
-        private HashSet<string> LinesDuplicate(IEnumerable<string> lines)
+        private string[] LinesDuplicate(IEnumerable<string> lines)
         {
             HashSet<string> hashSets = new HashSet<string>();
             List<string> duplicates = new List<string>();
@@ -60,7 +69,7 @@ namespace core.UseCase.ConvertData
             }
             if (duplicates.Any())
                 SaveDuplicates(duplicates);
-            return hashSets;
+            return hashSets.ToArray();
         }
 
         private void SaveDuplicates(List<string> duplicates)

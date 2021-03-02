@@ -31,9 +31,10 @@ namespace core.UseCase.Falabella
                     (e, s) => new { e, s })
                 .Where(j => j.s.Nit.Trim() == Nit &&
                             j.e.CODIGO_UNICO == j.s.Cod_RTL.Trim() &&
+                            int.TryParse(j.s.Cod_Resp, out int res) &&
                             // _format.Formato(j.e.CODIGO_UNICO.Substring(0, 10), 10, A)== j.s.Cod_RTL.Trim()&&
-                            Convert.ToInt32(j.s.Cod_Resp) >= 0 &&
-                            Convert.ToInt32(j.s.Cod_Resp) <= 9 &&
+                            res >= 0 &&
+                            res <= 9 &&
                             j.s.Num_Autoriza.Trim() != string.Empty)
                 .Select(m => new SapModel()
                 {
@@ -93,8 +94,10 @@ namespace core.UseCase.Falabella
                 {
                     fechaComp = s.FechaCompra.Substring(0, 8);
                     var codTrans = s.Cod_Trans.Substring(0, 2);
-                    var valor = Convert.ToInt64(s.Valor.Substring(0, 10));
-                    total += codTrans == "14" ? -(valor) : valor;
+                    if (long.TryParse(s.Valor.Substring(0, 10), out var valor))
+                    {
+                        total += codTrans == "14" ? -(valor) : valor;
+                    }
                 }
 
             });
@@ -141,8 +144,10 @@ namespace core.UseCase.Falabella
                 {
                     fechaComp = s.FechaCompra.Substring(0, 8);
                     var codTrans = s.Cod_Trans.Substring(0, 2);
-                    var valor = Convert.ToInt64(s.Valor.Substring(0, 10));
-                    total += codTrans == "14" ? -(valor) : valor;
+                    if (long.TryParse(s.Valor.Substring(0, 10), out var valor))
+                    {
+                        total += codTrans == "14" ? -(valor) : valor;
+                    }
                 }
 
             });
@@ -190,8 +195,10 @@ namespace core.UseCase.Falabella
                 {
                     fechaComp = s.FechaCompra.Substring(0, 8);
                     var codTrans = s.Cod_Trans.Substring(0, 2);
-                    var valor = Convert.ToInt64(s.Valor.Substring(0, 10));
-                    total += codTrans == "14" ? -(valor) : valor;
+                    if (long.TryParse(s.Valor.Substring(0, 10), out var valor))
+                    {
+                        total += codTrans == "14" ? -(valor) : valor;
+                    }
                 }
 
             });
@@ -235,8 +242,6 @@ namespace core.UseCase.Falabella
             var dat = new StringBuilder()
                 .Append(today.Year)
                 .Append(_format.Formato(today.Month.ToString(), 2, "N"))
-                //.Append(today.Month > 9 ? today.Month.ToString() : ("0" + today.Month))
-                //.Append(today.Month)
                 .Append(_format.Formato(today.Day.ToString(), 2, "N"));
             return dat;
         }

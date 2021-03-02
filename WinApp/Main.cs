@@ -122,12 +122,11 @@ namespace WinApp
                     var ret = new ChargeFile().Build(textBoxInput.Text);
                     //_waitForm.Close();
 
-                    if (ret.Message == "TRUE")
+                    if (ret.IsTrue)
                     {
                         _lst = ret.List;
-                        var txtCheck = "Se ha cargado correctamente";
-                        Program.LogInfo("el archivo " + textBoxInput.Text + " " + txtCheck);
-                        MessageBox.Show(txtCheck);
+                        Program.LogInfo("el archivo " + textBoxInput.Text + " " + ret.Message);
+                        MessageBox.Show(ret.Message);
                         button3.Enabled = true;
                     }
                     else

@@ -35,8 +35,9 @@ namespace core.UseCase.Carrefour
             var lst = lstSap.Where(s => s.Nit.Trim() == Nit &&
                                         _franquicias.Contains((s.Id_Fran_Hija + s.Filler_Fran_Hija)) &&
                                         s.Cod_Trans.Substring(0, 2) == CodTrans &&
-                                        Convert.ToInt16(s.Cod_Resp.Substring(0, 3)) >= CodResMin &&
-                                        Convert.ToInt16(s.Cod_Resp.Substring(0, 3)) <= CodResMax
+                                        short.TryParse(s.Cod_Resp.Substring(0, 3),out var res)&&
+                                        res >= CodResMin &&
+                                        res <= CodResMax
                                    )
                        .Join(entidades,
                               post => post.Fiid_Emisor,

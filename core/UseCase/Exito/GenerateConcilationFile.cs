@@ -20,12 +20,16 @@ namespace core.UseCase.Exito
         {
             double total = 0;
             var lstEmisor = lstConv.Select(s => s.emisor.Trim()).ToList();
+            double res;
+            long reslong;
             var lst = lstSap
                         .AsParallel()
                         .WithDegreeOfParallelism(4)
                         .Where(s => s.Nit.Trim() == Nit &&
                                     !_lstNoCodTrans.Contains(s.Cod_Trans.Substring(0, 2)) &&
-                                    lstEmisor.Contains(s.Id_Fran_Hija + s.Filler_Fran_Hija)
+                                    lstEmisor.Contains(s.Id_Fran_Hija + s.Filler_Fran_Hija)&&
+                                    double.TryParse(s.Valor, out res) &&
+                                    long.TryParse(s.Num_Secuen.Trim(), out reslong)
                                     )
                        .OrderBy(o => o.Cod_RTL).ThenBy(o => o.FechaTran).ThenBy(o => o.HoraTran)
                               //.ThenBy(o => o.e.bolsillo)

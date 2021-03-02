@@ -43,8 +43,10 @@ namespace core.UseCase.Exito
 
             foreach (var g in lstByNit)
             {
-                var lstFilter = g.Where(s => Convert.ToInt32(s.Cod_Resp) >= 0 &&
-                                       Convert.ToInt32(s.Cod_Resp) <= 9 &&
+                var lstFilter = g.Where(s =>
+                    int.TryParse(s.Cod_Resp, out var codres) &&
+                    codres >= 0 &&
+                    codres <= 9 &&
                                        !_lstNoCodTrans.Contains(s.Cod_Trans.Substring(0, 2))).ToList();
                 lst.Add(BuildStep1(lstFilter, g.Key.Trim()));
                 lst.Add(BuildStep2(lstFilter, lstFiidTarStep2, lstRedPriv, g.Key.Trim()));
@@ -76,30 +78,29 @@ namespace core.UseCase.Exito
 
                               {
                                   {
-                                      var val = Convert.ToInt64(s.Valor.Substring(0, 10));
-
-                                      if (s.Tipo_Mensaje.Substring(1, 3) == "210")
-                                      {
-                                          if (s.Cod_Trans.Substring(0, 2) == "14")
+                                      if (long.TryParse(s.Valor.Substring(0, 10), out var val))
+                                          if (s.Tipo_Mensaje.Substring(1, 3) == "210")
                                           {
-                                              total -= val;
+                                              if (s.Cod_Trans.Substring(0, 2) == "14")
+                                              {
+                                                  total -= val;
+                                              }
+                                              else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
+                                              {
+                                                  total += val;
+                                              }
                                           }
-                                          else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
+                                          else if (s.Tipo_Mensaje.Substring(1, 3) == "420")
                                           {
-                                              total += val;
+                                              if (s.Cod_Trans.Substring(0, 2) == "14")
+                                              {
+                                                  total += val;
+                                              }
+                                              else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
+                                              {
+                                                  total -= val;
+                                              }
                                           }
-                                      }
-                                      else if (s.Tipo_Mensaje.Substring(1, 3) == "420")
-                                      {
-                                          if (s.Cod_Trans.Substring(0, 2) == "14")
-                                          {
-                                              total += val;
-                                          }
-                                          else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
-                                          {
-                                              total -= val;
-                                          }
-                                      }
 
 
 
@@ -143,30 +144,29 @@ namespace core.UseCase.Exito
 
             {
                 {
-                    var val = Convert.ToInt64(s.Valor.Substring(0, 10));
-
-                    if (s.Tipo_Mensaje.Substring(1, 3) == "210")
-                    {
-                        if (s.Cod_Trans.Substring(0, 2) == "14")
+                    if (long.TryParse(s.Valor.Substring(0, 10), out var val))
+                        if (s.Tipo_Mensaje.Substring(1, 3) == "210")
                         {
-                            total -= val;
+                            if (s.Cod_Trans.Substring(0, 2) == "14")
+                            {
+                                total -= val;
+                            }
+                            else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
+                            {
+                                total += val;
+                            }
                         }
-                        else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
+                        else if (s.Tipo_Mensaje.Substring(1, 3) == "420")
                         {
-                            total += val;
+                            if (s.Cod_Trans.Substring(0, 2) == "14")
+                            {
+                                total += val;
+                            }
+                            else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
+                            {
+                                total -= val;
+                            }
                         }
-                    }
-                    else if (s.Tipo_Mensaje.Substring(1, 3) == "420")
-                    {
-                        if (s.Cod_Trans.Substring(0, 2) == "14")
-                        {
-                            total += val;
-                        }
-                        else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53")
-                        {
-                            total -= val;
-                        }
-                    }
                 }
 
             });
@@ -204,30 +204,29 @@ namespace core.UseCase.Exito
 
                               {
                                   {
-                                      var val = Convert.ToInt64(s.Valor.Substring(0, 10));
-
-                                      if (s.Tipo_Mensaje.Substring(1, 3) == "210")
-                                      {
-                                          if (s.Cod_Trans.Substring(0, 2) == "14" || s.Cod_Trans.Substring(0, 2) == "45")
+                                      if (long.TryParse(s.Valor.Substring(0, 10), out var val))
+                                          if (s.Tipo_Mensaje.Substring(1, 3) == "210")
                                           {
-                                              total -= val;
+                                              if (s.Cod_Trans.Substring(0, 2) == "14" || s.Cod_Trans.Substring(0, 2) == "45")
+                                              {
+                                                  total -= val;
+                                              }
+                                              else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53" || s.Cod_Trans.Substring(0, 2) == "15")
+                                              {
+                                                  total += val;
+                                              }
                                           }
-                                          else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53" || s.Cod_Trans.Substring(0, 2) == "15")
+                                          else if (s.Tipo_Mensaje.Substring(1, 3) == "420")
                                           {
-                                              total += val;
+                                              if (s.Cod_Trans.Substring(0, 2) == "14" || s.Cod_Trans.Substring(0, 2) == "45")
+                                              {
+                                                  total += val;
+                                              }
+                                              else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53" || s.Cod_Trans.Substring(0, 2) == "15")
+                                              {
+                                                  total -= val;
+                                              }
                                           }
-                                      }
-                                      else if (s.Tipo_Mensaje.Substring(1, 3) == "420")
-                                      {
-                                          if (s.Cod_Trans.Substring(0, 2) == "14" || s.Cod_Trans.Substring(0, 2) == "45")
-                                          {
-                                              total += val;
-                                          }
-                                          else if (s.Cod_Trans.Substring(0, 2) == "10" || s.Cod_Trans.Substring(0, 2) == "53" || s.Cod_Trans.Substring(0, 2) == "15")
-                                          {
-                                              total -= val;
-                                          }
-                                      }
                                   }
 
                               });
